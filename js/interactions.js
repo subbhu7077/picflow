@@ -198,16 +198,7 @@
     const result =
       await client
         .from("comments")
-        .select(`
-          id,
-          comment,
-          user_id,
-          created_at,
-          profiles (
-            username,
-            avatar_url
-          )
-        `)
+        .select("id, comment, user_id, created_at")
         .eq("post_id", postId)
         .order(
           "created_at",
@@ -391,9 +382,29 @@
           `;
 
 
-          const username =
-            item.profiles?.username ||
-            "User";
+          let username = "User";
+
+          try {
+            const profileResult =
+              await client
+                .from("profiles")
+                .select("username")
+                .eq("id", item.user_id)
+                .maybeSingle();
+
+            if (
+              profileResult.data &&
+              profileResult.data.username
+            ) {
+              username =
+                profileResult.data.username;
+            }
+          } catch (e) {
+            console.error(
+              "Profile name error:",
+              e
+            );
+          }
 
 
           row.innerHTML = `
