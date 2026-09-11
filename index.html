@@ -7,177 +7,197 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: #000; color: #fff; padding-bottom: 55px; overflow-x: hidden; }
+    body { background: #000; color: #fff; padding-bottom: 58px; overflow-x: hidden; }
 
-    .app-wrap { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
+    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
     /* Top Bar */
     header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1c1c1c; z-index: 90; }
     .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; }
-    .top-icons { display: flex; gap: 20px; font-size: 21px; align-items: center; }
-    .top-icons i { cursor: pointer; }
+    .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; position: relative; }
+    .header-actions i { cursor: pointer; position: relative; }
+    .badge { position: absolute; top: -6px; right: -8px; background: #ed4956; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; font-family: sans-serif; }
 
-    /* Tabs */
-    .tab-page { display: none; }
-    .tab-page.active { display: block; }
+    /* Views */
+    .tab-section { display: none; }
+    .tab-section.active { display: block; }
 
     /* Stories */
-    .stories-bar { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #1c1c1c; background: #000; }
-    .stories-bar::-webkit-scrollbar { display: none; }
-    .story-card { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
-    .story-ring-box { width: 66px; height: 66px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
-    .story-ring-box.self-ring { background: transparent; border: 1.5px dashed #555; }
-    .story-img-circle { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #000; background: #111; }
-    .story-plus { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #fff; }
+    .stories-scroller { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #1c1c1c; background: #000; }
+    .stories-scroller::-webkit-scrollbar { display: none; }
+    .story-slot { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
+    .story-ring-wrap { width: 66px; height: 66px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
+    .story-ring-wrap.self-empty { background: transparent; border: 1.5px dashed #444; }
+    .story-thumb-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; background: #181818; }
+    .story-add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
+
+    /* Mind Bar (Screenshot wala feature) */
+    .whats-on-mind { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #141414; background: #080808; cursor: pointer; }
+    .mind-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+    .mind-input-faux { flex: 1; background: #1c1c1c; border-radius: 20px; padding: 9px 16px; color: #777; font-size: 13px; }
 
     /* Feed Posts */
-    .feed-container { display: flex; flex-direction: column; }
-    .post-card { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; }
-    .post-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
-    .post-head-user { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .post-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
-    .post-name { font-size: 13px; font-weight: 600; }
-    .post-more { color: #888; cursor: pointer; font-size: 16px; }
+    .post-wall { display: flex; flex-direction: column; }
+    .post-block { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; }
+    .post-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
+    .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+    .post-author { font-size: 13px; font-weight: 600; }
+    .post-more-btn { color: #888; cursor: pointer; font-size: 16px; }
 
-    .post-media { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .post-media img { width: 100%; height: 100%; object-fit: cover; }
-    .heart-pop { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
-    .heart-pop.active { opacity: 0.95; transform: scale(1.15); }
+    .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #0d0d0d; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .post-stage img { width: 100%; height: 100%; object-fit: cover; }
+    .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
+    .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
 
-    .post-actions-row { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; }
-    .post-actions-left { display: flex; gap: 18px; }
-    .post-actions-row i { cursor: pointer; transition: transform 0.1s ease; }
-    .post-actions-row i:active { transform: scale(1.2); }
+    .post-action-bar { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; }
+    .post-action-left { display: flex; gap: 18px; }
+    .post-action-bar i { cursor: pointer; transition: transform 0.1s ease; }
+    .post-action-bar i:active { transform: scale(1.2); }
     .liked-red { color: #ed4956 !important; }
-    .saved-white { color: #fff !important; }
+    .saved-gold { color: #fff !important; }
 
-    .post-info { padding: 0 14px; font-size: 13px; line-height: 1.4; }
-    .likes-text { font-weight: 600; margin-bottom: 4px; }
-    .caption-text span { font-weight: 600; margin-right: 6px; }
-    .comments-tray { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
-    .comment-line span { font-weight: 600; margin-right: 6px; }
-    .time-text { font-size: 10px; color: #777; margin-top: 4px; text-transform: uppercase; }
+    .post-caption-box { padding: 0 14px; font-size: 13px; line-height: 1.4; }
+    .likes-stat { font-weight: 600; margin-bottom: 4px; }
+    .caption-content span { font-weight: 600; margin-right: 6px; }
+    .view-comments-btn { color: #777; font-size: 12px; margin-top: 5px; cursor: pointer; }
+    .comments-stack { margin-top: 5px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+    .comment-entry span { font-weight: 600; margin-right: 6px; }
+    .date-indicator { font-size: 10px; color: #666; margin-top: 5px; text-transform: uppercase; }
 
-    .comment-input-area { display: flex; padding: 8px 14px; border-top: 1px solid #141414; margin-top: 8px; }
-    .comment-input-area input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
-    .comment-input-area button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; font-size: 13px; }
+    .quick-comment-bar { display: flex; padding: 8px 14px; border-top: 1px solid #141414; margin-top: 8px; }
+    .quick-comment-bar input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
+    .quick-comment-bar button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; font-size: 13px; }
 
     /* Explore Tab */
     .explore-search-wrap { padding: 12px 14px; }
-    .explore-search-box { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 14px; }
-    .explore-mosaic { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-    .explore-mosaic img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; }
+    .explore-search-input { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 14px; }
+    .explore-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .explore-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; }
 
     /* Reels Tab */
-    .reel-stage { height: calc(100vh - 110px); position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 4px; border-radius: 8px; }
-    .reel-backdrop { width: 100%; height: 100%; object-fit: cover; }
-    .reel-meta { position: absolute; bottom: 20px; left: 14px; right: 70px; z-index: 10; }
-    .reel-creator { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .reel-creator img { width: 32px; height: 32px; border-radius: 50%; }
-    .reel-controls { position: absolute; bottom: 30px; right: 14px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
-    .reel-action-btn { display: flex; flex-direction: column; align-items: center; font-size: 24px; gap: 4px; cursor: pointer; }
-    .reel-action-btn span { font-size: 12px; }
+    .reels-fullscreen { height: calc(100vh - 115px); position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 4px; border-radius: 8px; }
+    .reels-bg-photo { width: 100%; height: 100%; object-fit: cover; }
+    .reels-meta-bar { position: absolute; bottom: 20px; left: 14px; right: 70px; z-index: 10; }
+    .reels-creator { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .reels-creator img { width: 32px; height: 32px; border-radius: 50%; }
+    .reels-sidebar { position: absolute; bottom: 30px; right: 14px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
+    .reels-btn-wrap { display: flex; flex-direction: column; align-items: center; font-size: 24px; gap: 4px; cursor: pointer; }
+    .reels-btn-wrap span { font-size: 12px; }
 
     /* Notifications Tab */
-    .notif-wrap { display: flex; flex-direction: column; }
-    .notif-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #141414; font-size: 13px; }
-    .notif-user-box { display: flex; align-items: center; gap: 12px; }
-    .notif-user-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
-    .notif-follow-btn { background: #0095f6; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; }
+    .notifications-holder { display: flex; flex-direction: column; }
+    .notif-card { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #141414; font-size: 13px; }
+    .notif-left-data { display: flex; align-items: center; gap: 12px; }
+    .notif-pfp { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+    .notif-btn-action { background: #0095f6; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; }
 
     /* Profile Tab */
-    .profile-shell { padding: 18px 16px; }
-    .profile-head-info { display: flex; align-items: center; justify-content: space-between; }
-    .profile-big-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
-    .profile-metrics { display: flex; gap: 22px; text-align: center; }
-    .profile-metrics strong { display: block; font-size: 16px; }
-    .profile-metrics span { font-size: 12px; color: #888; }
-    .profile-about { margin-top: 14px; }
-    .profile-about h4 { font-size: 14px; }
-    .profile-about p { font-size: 13px; color: #aaa; margin-top: 2px; }
-    .profile-edit-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
+    .profile-canvas { padding: 18px 16px; }
+    .profile-bio-header { display: flex; align-items: center; justify-content: space-between; }
+    .profile-hero-pic { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
+    .profile-metrics-deck { display: flex; gap: 22px; text-align: center; }
+    .profile-metrics-deck strong { display: block; font-size: 16px; }
+    .profile-metrics-deck span { font-size: 12px; color: #888; }
+    .profile-bio-textblock { margin-top: 14px; }
+    .profile-bio-textblock h4 { font-size: 14px; }
+    .profile-bio-textblock p { font-size: 13px; color: #aaa; margin-top: 2px; }
+    .profile-control-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
 
-    /* Bottom Nav Bar */
-    nav.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
-    nav.bottom-nav i { font-size: 21px; color: #fff; cursor: pointer; }
-    .profile-dock-img { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; cursor: pointer; }
+    /* Bottom Dock Bar */
+    nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
+    nav.bottom-dock i { font-size: 21px; color: #fff; cursor: pointer; }
+    .profile-dock-icon { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; cursor: pointer; }
 
-    /* Modals */
-    .app-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
-    .modal-sheet { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #2a2a2a; }
-    .modal-sheet h3 { margin-bottom: 14px; font-size: 16px; }
-    .modal-sheet input, .modal-sheet textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
-    .modal-confirm-btn { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-    .modal-x { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
+    /* Common Modals */
+    .modal-overlay-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+    .modal-sheet-inner { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #2a2a2a; }
+    .modal-sheet-inner h3 { margin-bottom: 14px; font-size: 16px; }
+    .modal-sheet-inner input, .modal-sheet-inner textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
+    .btn-theme-blue { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
 
-    /* Story Viewer */
-    #storyViewer { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
-    .story-prog-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
-    .story-prog-fill { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
-    .story-head-author { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
-    .story-head-author img { width: 34px; height: 34px; border-radius: 50%; }
-    #storyDisplayImg { width: 100%; height: 100%; object-fit: contain; }
+    /* Fullscreen Story Viewer */
+    #storyViewerApp { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
+    .story-progress-wire { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
+    .story-progress-meter { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
+    .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
+    .story-author-tag img { width: 34px; height: 34px; border-radius: 50%; }
+    #storyViewerTargetImg { width: 100%; height: 100%; object-fit: contain; }
 
-    /* Direct Messages Sheet */
-    .chat-drawer { display: none; position: fixed; inset: 0; background: #000; z-index: 250; flex-direction: column; max-width: 480px; margin: 0 auto; }
-    .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1c1c1c; }
-    .chat-stream { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-    .msg-bubble { max-width: 75%; padding: 9px 14px; border-radius: 16px; font-size: 13px; line-height: 1.3; }
-    .msg-bubble.mine { align-self: flex-end; background: #3797f0; color: #fff; }
-    .msg-bubble.theirs { align-self: flex-start; background: #262626; color: #fff; }
-    .chat-input-row { display: flex; padding: 10px; border-top: 1px solid #1c1c1c; gap: 10px; background: #000; }
-    .chat-input-row input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
-    .chat-input-row button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    /* DM Drawer */
+    .dm-messenger-drawer { display: none; position: fixed; inset: 0; background: #000; z-index: 250; flex-direction: column; max-width: 480px; margin: 0 auto; }
+    .dm-top-panel { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1c1c1c; }
+    .dm-chat-scroll { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .chat-bubble { max-width: 75%; padding: 9px 14px; border-radius: 16px; font-size: 13px; line-height: 1.3; }
+    .chat-bubble.me { align-self: flex-end; background: #3797f0; color: #fff; }
+    .chat-bubble.them { align-self: flex-start; background: #262626; color: #fff; }
+    .chat-input-deck { display: flex; padding: 10px; border-top: 1px solid #1c1c1c; gap: 10px; background: #000; }
+    .chat-input-deck input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
+    .chat-input-deck button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
 
-<div class="app-wrap">
-  <!-- Top Bar -->
+<div class="app-root">
+  <!-- Top Navigation Header -->
   <header>
-    <div class="logo" onclick="switchTab('feedTab')">PicFlow</div>
-    <div class="top-icons">
-      <i class="fa-solid fa-magnifying-glass" onclick="switchTab('exploreTab')"></i>
-      <i class="fa-regular fa-heart" onclick="switchTab('notifTab')"></i>
-      <i class="fa-brands fa-facebook-messenger" onclick="openChat()"></i>
+    <div class="logo" onclick="switchView('feedTab')">PicFlow</div>
+    <div class="header-actions">
+      <i class="fa-solid fa-magnifying-glass" onclick="switchView('exploreTab')"></i>
+      <i class="fa-regular fa-heart" onclick="switchView('notifTab')">
+        <span class="badge" id="notifBadge">3</span>
+      </i>
+      <i class="fa-brands fa-facebook-messenger" onclick="openMessenger()">
+        <span class="badge" id="msgBadge">2</span>
+      </i>
     </div>
   </header>
 
   <!-- TAB 1: FEED -->
-  <section id="feedTab" class="tab-page active">
-    <div class="stories-bar" id="storiesContainer"></div>
-    <div class="feed-container" id="feedContainer"></div>
+  <section id="feedTab" class="tab-section active">
+    <!-- Stories Carousel -->
+    <div class="stories-scroller" id="storiesTray"></div>
+
+    <!-- Screenshot Wala "What's on your mind?" Box -->
+    <div class="whats-on-mind" onclick="openCreatePostSheet()">
+      <img src="https://picsum.photos/200/200?random=1" class="mind-avatar" id="mindBarAvatar" />
+      <div class="mind-input-faux">What's on your mind?</div>
+    </div>
+
+    <!-- Feed Wall -->
+    <div class="post-wall" id="postsContainer"></div>
   </section>
 
   <!-- TAB 2: EXPLORE -->
-  <section id="exploreTab" class="tab-page">
+  <section id="exploreTab" class="tab-section">
     <div class="explore-search-wrap">
-      <input type="text" class="explore-search-box" id="exploreSearchInput" placeholder="🔍 Search posts or creators..." oninput="handleExploreSearch()" />
+      <input type="text" class="explore-search-input" id="exploreSearchBox" placeholder="🔍 Search creators, photos..." oninput="handleExploreSearchLive()" />
     </div>
-    <div class="explore-mosaic" id="exploreContainer"></div>
+    <div class="explore-grid-wall" id="exploreGridWall"></div>
   </section>
 
   <!-- TAB 3: REELS -->
-  <section id="reelsTab" class="tab-page">
-    <div class="reel-stage">
-      <img src="https://picsum.photos/600/1000?random=111" class="reel-backdrop" id="activeReelImg" />
-      <div class="reel-meta">
-        <div class="reel-creator">
+  <section id="reelsTab" class="tab-section">
+    <div class="reels-fullscreen">
+      <img src="https://picsum.photos/600/1000?random=601" class="reels-bg-photo" id="reelBgMedia" />
+      <div class="reels-meta-bar">
+        <div class="reels-creator">
           <img src="https://picsum.photos/100/100?random=1" />
-          <strong id="activeReelUser">@subbhu_vibes</strong>
+          <strong id="reelCreatorTag">@subbhu_vibes</strong>
         </div>
-        <p id="activeReelText">Midnight drive vibes 🌃🚗 #picflow #reels</p>
+        <p id="reelTitle">Drive into the neon lights 🚗✨ #picflow #master</p>
       </div>
-      <div class="reel-controls">
-        <div class="reel-action-btn" onclick="toggleReelHeart()">
+      <div class="reels-sidebar">
+        <div class="reels-btn-wrap" onclick="toggleReelHeart()">
           <i class="fa-solid fa-heart" id="reelHeartIcon" style="color: #fff;"></i>
-          <span id="activeReelLikes">4.5k</span>
+          <span id="reelLikesStat">4.8k</span>
         </div>
-        <div class="reel-action-btn" onclick="alert('Comment on Reel: Awesome video!')">
+        <div class="reels-btn-wrap" onclick="alert('Comment added on reel!')">
           <i class="fa-regular fa-comment"></i>
-          <span>210</span>
+          <span>312</span>
         </div>
-        <div class="reel-action-btn" onclick="nextReelCard()">
+        <div class="reels-btn-wrap" onclick="advanceNextReel()">
           <i class="fa-solid fa-angles-down"></i>
           <span>Next</span>
         </div>
@@ -186,99 +206,101 @@
   </section>
 
   <!-- TAB 4: NOTIFICATIONS -->
-  <section id="notifTab" class="tab-page">
-    <div class="notif-wrap" id="notifContainer"></div>
+  <section id="notifTab" class="tab-section">
+    <div class="notifications-holder" id="notifListContainer"></div>
   </section>
 
   <!-- TAB 5: PROFILE -->
-  <section id="profileTab" class="tab-page">
-    <div class="profile-shell">
-      <div class="profile-head-info">
-        <img src="https://picsum.photos/200/200?random=1" class="profile-big-avatar" id="profileHeaderImg" />
-        <div class="profile-metrics">
-          <div><strong id="profilePostCount">0</strong><span>Posts</span></div>
-          <div><strong id="profileFollowersCount">612</strong><span>Followers</span></div>
-          <div><strong id="profileFollowingCount">340</strong><span>Following</span></div>
+  <section id="profileTab" class="tab-section">
+    <div class="profile-canvas">
+      <div class="profile-bio-header">
+        <img src="https://picsum.photos/200/200?random=1" class="profile-hero-pic" id="profileHeroPic" />
+        <div class="profile-metrics-deck">
+          <div><strong id="profilePostCountNumber">0</strong><span>Posts</span></div>
+          <div><strong id="profileFollowersNum">650</strong><span>Followers</span></div>
+          <div><strong id="profileFollowingNum">328</strong><span>Following</span></div>
         </div>
       </div>
-      <div class="profile-about">
-        <h4 id="profileDisplayName">Subbhu7077</h4>
-        <p id="profileBioText">Tech Creator | Visual Storyteller ⚡</p>
+      <div class="profile-bio-textblock">
+        <h4 id="profileHeroName">Subbhu7077</h4>
+        <p id="profileHeroBio">Photographer | Tech Enthusiast ⚡</p>
       </div>
-      <button class="profile-edit-btn" onclick="openProfileEditModal()">Edit Profile</button>
+      <button class="profile-control-btn" onclick="openProfileEditSheet()">Edit Profile</button>
     </div>
-    <div class="explore-mosaic" id="profileGrid"></div>
+    <div class="explore-grid-wall" id="profileGridWall"></div>
   </section>
 
-  <!-- Bottom App Dock -->
-  <nav class="bottom-nav">
-    <i class="fa-solid fa-house" onclick="switchTab('feedTab')"></i>
-    <i class="fa-solid fa-magnifying-glass" onclick="switchTab('exploreTab')"></i>
-    <i class="fa-regular fa-square-plus" onclick="openNewPostModal()"></i>
-    <i class="fa-solid fa-clapperboard" onclick="switchTab('reelsTab')"></i>
-    <img src="https://picsum.photos/200/200?random=1" class="profile-dock-img" id="profileDockThumb" onclick="switchTab('profileTab')" />
+  <!-- Bottom App Navigation Dock -->
+  <nav class="bottom-dock">
+    <i class="fa-solid fa-house" onclick="switchView('feedTab')"></i>
+    <i class="fa-solid fa-magnifying-glass" onclick="switchView('exploreTab')"></i>
+    <i class="fa-regular fa-square-plus" onclick="openCreatePostSheet()"></i>
+    <i class="fa-solid fa-clapperboard" onclick="switchView('reelsTab')"></i>
+    <img src="https://picsum.photos/200/200?random=1" class="profile-dock-icon" id="profileDockAvatar" onclick="switchView('profileTab')" />
   </nav>
 
   <!-- Create Post Modal -->
-  <div class="app-modal" id="newPostModal">
-    <div class="modal-sheet">
-      <i class="fa-solid fa-xmark modal-x" onclick="closeNewPostModal()"></i>
+  <div class="modal-overlay-backdrop" id="createPostModal">
+    <div class="modal-sheet-inner">
+      <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
       <h3>Create New Post</h3>
-      <input type="file" id="newPostFileInput" accept="image/*" />
-      <textarea id="newPostCaptionInput" placeholder="Write a caption..." rows="3"></textarea>
-      <button class="modal-confirm-btn" onclick="submitPostCreation()">Share Post</button>
+      <input type="file" id="postImageUploadInput" accept="image/*" />
+      <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
+      <button class="btn-theme-blue" onclick="dispatchNewPost()">Share to Feed</button>
     </div>
   </div>
 
   <!-- Create Story Modal -->
-  <div class="app-modal" id="newStoryModal">
-    <div class="modal-sheet">
-      <i class="fa-solid fa-xmark modal-x" onclick="closeNewStoryModal()"></i>
+  <div class="modal-overlay-backdrop" id="createStoryModal">
+    <div class="modal-sheet-inner">
+      <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreateStorySheet()"></i>
       <h3>Add to Your Story</h3>
-      <input type="file" id="newStoryFileInput" accept="image/*" />
-      <button class="modal-confirm-btn" onclick="submitStoryCreation()">Share Story</button>
+      <input type="file" id="storyImageUploadInput" accept="image/*" />
+      <button class="btn-theme-blue" onclick="dispatchNewStory()">Share to Story</button>
     </div>
   </div>
 
   <!-- Edit Profile Modal -->
-  <div class="app-modal" id="editProfileModal">
-    <div class="modal-sheet">
-      <i class="fa-solid fa-xmark modal-x" onclick="closeProfileEditModal()"></i>
+  <div class="modal-overlay-backdrop" id="editProfileModal">
+    <div class="modal-sheet-inner">
+      <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeProfileEditSheet()"></i>
       <h3>Edit Profile</h3>
-      <input type="text" id="editProfileNameInput" placeholder="Display Name" />
-      <textarea id="editProfileBioInput" placeholder="Bio" rows="3"></textarea>
-      <button class="modal-confirm-btn" onclick="saveProfileChanges()">Save Profile</button>
+      <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Change Profile Picture</label>
+      <input type="file" id="editProfilePicFile" accept="image/*" />
+      <input type="text" id="editProfileDisplayName" placeholder="Display Name" />
+      <textarea id="editProfileBioDetails" placeholder="Bio description" rows="3"></textarea>
+      <button class="btn-theme-blue" onclick="saveProfileDetails()">Save Profile</button>
     </div>
   </div>
 
-  <!-- Fullscreen Story Viewer -->
-  <div id="storyViewer" onclick="closeStoryViewer()">
-    <div class="story-prog-bar"><div class="story-prog-fill" id="storyProgFill"></div></div>
-    <div class="story-head-author">
-      <img id="storyAuthorImg" src="" />
-      <span id="storyAuthorName">user</span>
+  <!-- Story Player Viewer -->
+  <div id="storyViewerApp" onclick="closeStoryPlayerApp()">
+    <div class="story-progress-wire"><div class="story-progress-meter" id="storyMeterFill"></div></div>
+    <div class="story-author-tag">
+      <img id="storyTargetUserAvatar" src="" />
+      <span id="storyTargetUserName">User</span>
     </div>
-    <img id="storyDisplayImg" src="" />
+    <img id="storyViewerTargetImg" src="" />
   </div>
 
-  <!-- Direct Chat Sheet -->
-  <div class="chat-drawer" id="chatDrawer">
-    <div class="chat-header">
-      <i class="fa-solid fa-arrow-left" style="font-size: 20px; cursor: pointer;" onclick="closeChat()"></i>
+  <!-- Direct Messages Sheet -->
+  <div class="dm-messenger-drawer" id="dmDrawer">
+    <div class="dm-top-panel">
+      <i class="fa-solid fa-arrow-left" style="font-size: 20px; cursor: pointer;" onclick="closeMessenger()"></i>
       <h4>Direct Messages</h4>
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
-    <div class="chat-stream" id="chatStream">
-      <div class="msg-bubble theirs">Hey Subbhu! Welcome to PicFlow Messenger ⚡</div>
-      <div class="msg-bubble theirs">Everything is connected and fully working!</div>
+    <div class="dm-chat-scroll" id="dmChatScroll">
+      <div class="chat-bubble them">Hey Subbhu! Welcome to PicFlow Messenger ⚡</div>
+      <div class="chat-bubble them">Sab buttons fully working hain!</div>
     </div>
-    <div class="chat-input-row">
-      <input type="text" id="chatMsgInput" placeholder="Message..." onkeydown="if(event.key==='Enter') sendChatMessage()" />
-      <button onclick="sendChatMessage()">Send</button>
+    <div class="chat-input-deck">
+      <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
+      <button onclick="dispatchDirectMessage()">Send</button>
     </div>
   </div>
 </div>
 
-<script src="js/master.js?v=master6"></script>
+<script src="js/master.js?v=master7"></script>
 </body>
 </html>
