@@ -1,16 +1,18 @@
 /* =========================================================
-   PICFLOW SAVED POSTS
+   PICFLOW - REAL INSTAGRAM STYLE SAVED POSTS
    ========================================================= */
 
 (function () {
 
-  if (window.picflowSavedLoaded) return;
-  window.picflowSavedLoaded = true;
+  if (window.picflowSavedV2Loaded) return;
+  window.picflowSavedV2Loaded = true;
 
-  function sb() {
-    if (!window.supabase ||
-        !window.SUPABASE_URL ||
-        !window.SUPABASE_PUBLISHABLE_KEY) {
+  function getClient() {
+    if (
+      !window.supabase ||
+      !window.SUPABASE_URL ||
+      !window.SUPABASE_PUBLISHABLE_KEY
+    ) {
       return null;
     }
 
@@ -20,154 +22,368 @@
     );
   }
 
-  async function user() {
-    const client = sb();
+
+  async function getUser() {
+
+    const client = getClient();
+
     if (!client) return null;
 
-    const { data } = await client.auth.getUser();
-    return data?.user || null;
-  }
+    const result =
+      await client.auth.getUser();
 
-  /* SAVE / UNSAVE */
-
-  async function toggleSave(postId, button) {
-
-    const client = sb();
-    const currentUser = await user();
-
-    if (!client || !currentUser) {
-      alert("Please login first.");
-      return;
-    }
-
-    button.disabled = true;
-
-    const existing = await client
-      .from("saved_posts")
-      .select("post_id")
-      .eq("user_id", currentUser.id)
-      .eq("post_id", postId)
-      .maybeSingle();
-
-    if (existing.error) {
-      alert(existing.error.message);
-      button.disabled = false;
-      return;
-    }
-
-    if (existing.data) {
-
-      const result = await client
-        .from("saved_posts")
-        .delete()
-        .eq("user_id", currentUser.id)
-        .eq("post_id", postId);
-
-      if (result.error) {
-        alert(result.error.message);
-      } else {
-        button.textContent = "🔖";
-        button.dataset.saved = "false";
-      }
-
-    } else {
-
-      const result = await client
-        .from("saved_posts")
-        .insert({
-          user_id: currentUser.id,
-          post_id: postId
-        });
-
-      if (result.error) {
-        alert(result.error.message);
-      } else {
-        button.textContent = "📌";
-        button.dataset.saved = "true";
-      }
-    }
-
-    button.disabled = false;
+    return result.data?.user || null;
   }
 
 
-  /* CONNECT SAVE BUTTONS */
+  /* =======================================================
+     CHECK IF POST IS SAVED
+     ======================================================= */
 
-  async function setupSaveButtons() {
+  async function isSaved(postId) {
 
-    const client = sb();
-    const currentUser = await user();
+    const client = getClient();
+    const user = await getUser();
 
-    if (!client || !currentUser) return;
-
-    document
-      .querySelectorAll(".picflow-post-save")
-      .forEach(async function (button) {
-
-        if (button.dataset.savedReady) return;
-
-        const post =
-          button.closest(".picflow-real-post");
-
-        if (!post) return;
-
-        const postId =
-          post.dataset.postId;
-
-        if (!postId) return;
-
-        button.dataset.savedReady = "true";
-
-        const existing =
-          await client
-            .from("saved_posts")
-            .select("post_id")
-            .eq("user_id", currentUser.id)
-            .eq("post_id", postId)
-            .maybeSingle();
-
-        button.textContent =
-          existing.data ? "📌" : "🔖";
-
-        button.dataset.saved =
-          existing.data ? "true" : "false";
-
-        button.onclick = function () {
-          toggleSave(postId, button);
-        };
-
-      });
-  }
-
-
-  /* SAVED POSTS PAGE */
-
-  async function showSavedPosts() {
-
-    const client = sb();
-    const currentUser = await user();
-
-    if (!client || !currentUser) {
-      alert("Please login first.");
-      return;
+    if (!client || !user || !postId) {
+      return false;
     }
 
     const result =
       await client
         .from("saved_posts")
-        .select("post_id, created_at")
-        .eq("user_id", currentUser.id)
-        .order("created_at", {
-          ascending: false
-        });
+        .select("post_id")
+        .eq("user_id", user.id)
+        .eq("post_id", postId)
+        .maybeSingle();
 
     if (result.error) {
-      alert(
-        "Saved posts failed:\n" +
-        result.error.message
+      console.error(
+        "Save check:",
+        result.error
       );
+
+      return false;
+    }
+
+    return !!result.data;
+  }
+
+
+  /* =======================================================
+     SAVE / UNSAVE
+     ======================================================= */
+
+  async function changeSave(
+    postId,
+    button
+  ) {
+
+    const client = getClient();
+    const user = await getUser();
+
+    if (!client || !user) {
+
+      alert(
+        "Please login first."
+      );
+
       return;
     }
+
+    if (!postId) {
+
+      alert(
+        "Post ID missing."
+      );
+
+      return;
+    }
+
+    button.disabled = true;
+
+    const saved =
+      await isSaved(postId);
+
+    let result;
+
+    if (saved) {
+
+      result =
+        await client
+          .from("saved_posts")
+          .delete()
+          .eq(
+            "user_id",
+            user.id
+          )
+          .eq(
+            "post_id",
+            postId
+          );
+
+    } else {
+
+      result =
+        await client
+          .from("saved_posts")
+          .insert({
+            user_id: user.id,
+            post_id: postId
+          });
+
+    }
+
+
+    if (result.error) {
+
+      console.error(
+        "Save error:",
+        result.error
+      );
+
+      alert(
+        "Save failed:\n\n" +
+        result.error.message
+      );
+
+      button.disabled = false;
+
+      return;
+    }
+
+
+    button.dataset.saved =
+      saved ? "false" : "true";
+
+    button.textContent =
+      saved ? "🔖" : "📌";
+
+    button.setAttribute(
+      "aria-label",
+      saved
+        ? "Save post"
+        : "Remove from saved"
+    );
+
+    button.disabled = false;
+  }
+
+
+  /* =======================================================
+     CREATE SAVE BUTTON INSIDE REAL POSTS
+     ======================================================= */
+
+  async function setupPostButtons() {
+
+    const posts =
+      document.querySelectorAll(
+        ".picflow-real-post"
+      );
+
+    if (!posts.length) return;
+
+
+    for (const post of posts) {
+
+      const postId =
+        post.dataset.postId;
+
+      if (!postId) continue;
+
+
+      /* find action row */
+
+      const actionRow =
+        post.querySelector(
+          ".picflow-post-like"
+        )?.parentElement;
+
+      if (!actionRow) continue;
+
+
+      /* already created */
+
+      let button =
+        post.querySelector(
+          ".picflow-post-save"
+        );
+
+
+      if (!button) {
+
+        button =
+          document.createElement(
+            "button"
+          );
+
+        button.className =
+          "picflow-post-save";
+
+        button.type = "button";
+
+        button.style.cssText = `
+          border:0;
+          background:none;
+          font-size:24px;
+          padding:0;
+          cursor:pointer;
+          margin-left:auto;
+        `;
+
+        actionRow.appendChild(
+          button
+        );
+
+        button.onclick =
+          function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            changeSave(
+              postId,
+              button
+            );
+
+          };
+      }
+
+
+      if (
+        button.dataset.loaded === "true"
+      ) {
+        continue;
+      }
+
+      button.dataset.loaded =
+        "true";
+
+
+      const saved =
+        await isSaved(postId);
+
+
+      button.dataset.saved =
+        saved ? "true" : "false";
+
+      button.textContent =
+        saved ? "📌" : "🔖";
+
+      button.setAttribute(
+        "aria-label",
+        saved
+          ? "Remove from saved"
+          : "Save post"
+      );
+    }
+  }
+
+
+  /* =======================================================
+     OVERRIDE OLD toggleSave()
+     ======================================================= */
+
+  window.toggleSave =
+    async function (button) {
+
+      const post =
+        button?.closest(
+          ".picflow-real-post"
+        );
+
+      if (post) {
+
+        const postId =
+          post.dataset.postId;
+
+        if (postId) {
+
+          await changeSave(
+            postId,
+            button
+          );
+
+          return;
+        }
+      }
+
+
+      /* old demo post support */
+
+      const allPosts =
+        document.querySelectorAll(
+          ".picflow-real-post"
+        );
+
+      if (
+        allPosts.length === 0
+      ) {
+
+        alert(
+          "Real post system is loading..."
+        );
+
+      }
+    };
+
+
+  /* =======================================================
+     SAVED POSTS MODAL
+     ======================================================= */
+
+  async function openSavedPosts() {
+
+    const client = getClient();
+    const user = await getUser();
+
+    if (!client || !user) {
+
+      alert(
+        "Please login first."
+      );
+
+      return;
+    }
+
+
+    const result =
+      await client
+        .from("saved_posts")
+        .select(
+          "post_id,created_at"
+        )
+        .eq(
+          "user_id",
+          user.id
+        )
+        .order(
+          "created_at",
+          {
+            ascending: false
+          }
+        );
+
+
+    if (result.error) {
+
+      alert(
+        "Saved posts failed:\n\n" +
+        result.error.message
+      );
+
+      return;
+    }
+
+
+    const saved =
+      result.data || [];
+
+    const postIds =
+      saved.map(
+        item => item.post_id
+      );
+
 
     const old =
       document.getElementById(
@@ -176,8 +392,11 @@
 
     if (old) old.remove();
 
+
     const modal =
-      document.createElement("div");
+      document.createElement(
+        "div"
+      );
 
     modal.id =
       "picflowSavedModal";
@@ -185,47 +404,63 @@
     modal.style.cssText = `
       position:fixed;
       inset:0;
-      z-index:60000;
-      background:rgba(0,0,0,.6);
+      z-index:99999;
+      background:rgba(0,0,0,.65);
       display:flex;
       align-items:flex-end;
+      justify-content:center;
     `;
 
-    const box =
-      document.createElement("div");
 
-    box.style.cssText = `
-      background:#fff;
+    const sheet =
+      document.createElement(
+        "div"
+      );
+
+    sheet.style.cssText = `
       width:100%;
-      max-height:82vh;
+      max-width:700px;
+      max-height:88vh;
       overflow:auto;
-      border-radius:25px 25px 0 0;
-      padding-bottom:25px;
+      background:#fff;
+      border-radius:28px 28px 0 0;
+      padding-bottom:30px;
     `;
 
-    box.innerHTML = `
+
+    sheet.innerHTML = `
       <div style="
+        position:sticky;
+        top:0;
+        z-index:2;
+        background:#fff;
         display:flex;
-        justify-content:space-between;
         align-items:center;
-        padding:20px;
+        justify-content:space-between;
+        padding:18px 20px;
         border-bottom:1px solid #eee;
       ">
-        <strong style="font-size:21px;">
-          🔖 Saved Posts
+
+        <strong style="
+          font-size:21px;
+        ">
+          🔖 Saved
         </strong>
 
         <button
           id="picflowCloseSaved"
           style="
-            border:0;
-            background:#eee;
-            border-radius:50%;
             width:40px;
             height:40px;
-            font-size:22px;
+            border:0;
+            border-radius:50%;
+            background:#eee;
+            font-size:25px;
           "
-        >×</button>
+        >
+          ×
+        </button>
+
       </div>
 
       <div
@@ -234,129 +469,216 @@
           display:grid;
           grid-template-columns:repeat(3,1fr);
           gap:3px;
-          padding:12px;
+          padding:3px;
         "
       ></div>
     `;
 
-    modal.appendChild(box);
-    document.body.appendChild(modal);
+
+    modal.appendChild(sheet);
+
+    document.body.appendChild(
+      modal
+    );
+
 
     document
-      .getElementById("picflowCloseSaved")
-      .onclick = () => modal.remove();
+      .getElementById(
+        "picflowCloseSaved"
+      )
+      .onclick =
+      function () {
+        modal.remove();
+      };
+
 
     const grid =
       document.getElementById(
         "picflowSavedGrid"
       );
 
-    const posts =
-      result.data || [];
 
-    if (!posts.length) {
+    if (!postIds.length) {
 
       grid.innerHTML = `
         <div style="
-          grid-column:1/4;
+          grid-column:1/-1;
           text-align:center;
-          padding:60px 20px;
-          color:#888;
+          padding:80px 20px;
+          color:#777;
         ">
-          <div style="font-size:45px;">🔖</div>
+
           <div style="
-            margin-top:10px;
-            font-size:18px;
+            font-size:55px;
           ">
-            No saved posts yet
+            🔖
           </div>
+
+          <div style="
+            margin-top:12px;
+            font-size:18px;
+            font-weight:bold;
+          ">
+            No saved posts
+          </div>
+
+          <div style="
+            margin-top:6px;
+            font-size:14px;
+          ">
+            Posts you save will appear here.
+          </div>
+
         </div>
       `;
 
       return;
     }
 
-    posts.forEach(function (item) {
 
-      const card =
-        document.createElement("div");
+    /* get actual posts */
 
-      card.style.cssText = `
-        aspect-ratio:1;
-        background:#f1f1f1;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:40px;
-        cursor:pointer;
-      `;
+    const postsResult =
+      await client
+        .from("posts")
+        .select(
+          "id,image_url,caption,user_id"
+        )
+        .in(
+          "id",
+          postIds
+        );
 
-      card.innerHTML = "📸";
 
-      card.onclick = function () {
+    if (postsResult.error) {
 
-        const original =
-          document.querySelector(
-            '[data-post-id="' +
-            item.post_id +
-            '"]'
+      alert(
+        "Could not load saved posts:\n\n" +
+        postsResult.error.message
+      );
+
+      return;
+    }
+
+
+    const posts =
+      postsResult.data || [];
+
+
+    const map = {};
+
+    posts.forEach(
+      function (post) {
+        map[post.id] = post;
+      }
+    );
+
+
+    postIds.forEach(
+      function (postId) {
+
+        const post =
+          map[postId];
+
+        if (!post) return;
+
+
+        const item =
+          document.createElement(
+            "div"
           );
 
-        if (original) {
+        item.style.cssText = `
+          aspect-ratio:1;
+          overflow:hidden;
+          background:#eee;
+          cursor:pointer;
+          position:relative;
+        `;
 
-          modal.remove();
 
-          original.scrollIntoView({
-            behavior:"smooth",
-            block:"center"
-          });
+        item.innerHTML = `
+          <img
+            src="${String(
+              post.image_url
+            )
+              .replace(/"/g,"&quot;")
+            }"
+            style="
+              width:100%;
+              height:100%;
+              object-fit:cover;
+              display:block;
+            "
+            loading="lazy"
+          >
+        `;
 
-        } else {
 
-          alert(
-            "This saved post is not loaded on the current page yet."
-          );
+        item.onclick =
+          function () {
 
-        }
+            modal.remove();
 
-      };
 
-      grid.appendChild(card);
+            const original =
+              document.querySelector(
+                '[data-post-id="' +
+                post.id +
+                '"]'
+              );
 
-    });
+
+            if (original) {
+
+              original.scrollIntoView({
+                behavior:"smooth",
+                block:"center"
+              });
+
+
+              original.style.transition =
+                "box-shadow .3s";
+
+              original.style.boxShadow =
+                "0 0 0 4px #111";
+
+              setTimeout(
+                function () {
+                  original.style.boxShadow =
+                    "";
+                },
+                1200
+              );
+
+            } else {
+
+              alert(
+                "Saved post hai, lekin Home feed mein abhi loaded nahi hai."
+              );
+
+            }
+
+          };
+
+
+        grid.appendChild(
+          item
+        );
+
+      }
+    );
 
   }
 
 
-  window.showSavedPosts =
-    showSavedPosts;
-
-  window.picflowSetupSavedPosts =
-    setupSaveButtons;
+  window.openSavedPosts =
+    openSavedPosts;
 
 
-  /* OBSERVER */
-
-  const observer =
-    new MutationObserver(function () {
-      setupSaveButtons();
-    });
-
-  observer.observe(
-    document.body,
-    {
-      childList:true,
-      subtree:true
-    }
-  );
-
-  setTimeout(
-    setupSaveButtons,
-    1500
-  );
-
-
-  /* CREATE SAVED BUTTON */
+  /* =======================================================
+     SAVED BUTTON
+     ======================================================= */
 
   function createSavedButton() {
 
@@ -366,8 +688,11 @@
       )
     ) return;
 
+
     const button =
-      document.createElement("button");
+      document.createElement(
+        "button"
+      );
 
     button.id =
       "picflowSavedButton";
@@ -375,30 +700,66 @@
     button.innerHTML =
       "🔖 Saved";
 
+
     button.style.cssText = `
       position:fixed;
-      right:18px;
-      bottom:90px;
-      z-index:30000;
+      right:16px;
+      bottom:145px;
+      z-index:40000;
       border:0;
       background:#111;
       color:#fff;
-      border-radius:25px;
       padding:12px 18px;
+      border-radius:24px;
       font-size:15px;
       font-weight:bold;
-      box-shadow:0 5px 20px rgba(0,0,0,.2);
+      box-shadow:0 5px 20px rgba(0,0,0,.25);
+      cursor:pointer;
     `;
 
-    button.onclick =
-      showSavedPosts;
 
-    document.body.appendChild(button);
+    button.onclick =
+      openSavedPosts;
+
+
+    document.body.appendChild(
+      button
+    );
   }
 
+
+  /* =======================================================
+     WATCH FOR POSTS LOADING
+     ======================================================= */
+
+  const observer =
+    new MutationObserver(
+      function () {
+
+        setupPostButtons();
+
+      }
+    );
+
+
+  observer.observe(
+    document.body,
+    {
+      childList:true,
+      subtree:true
+    }
+  );
+
+
   setTimeout(
-    createSavedButton,
+    function () {
+
+      createSavedButton();
+      setupPostButtons();
+
+    },
     1800
   );
+
 
 })();
