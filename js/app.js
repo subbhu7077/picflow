@@ -1878,3 +1878,650 @@ document.addEventListener(
   }
 );
 
+
+/* =========================================================
+   PICFLOW FOLLOW / FOLLOWING SYSTEM
+   ========================================================= */
+
+(function () {
+  if (window.picflowFollowSystemLoaded) return;
+  window.picflowFollowSystemLoaded = true;
+
+  let followClient = null;
+
+  function getSupabase() {
+    if (followClient) return followClient;
+
+    if (
+      typeof window.supabase === "undefined" ||
+      !window.SUPABASE_URL ||
+      !window.SUPABASE_PUBLISHABLE_KEY ||
+      window.SUPABASE_PUBLISHABLE_KEY === "YOUR_PUBLISHABLE_KEY"
+    ) {
+      console.error("PicFlow: Supabase is not configured.");
+      return null;
+    }
+
+    followClient = window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_PUBLISHABLE_KEY
+    );
+
+    return followClient;
+  }
+
+  async function getCurrentUser() {
+    const sb = getSupabase();
+    if (!sb) return null;
+
+    const result = await sb.auth.getUser();
+
+    if (result.error) {
+      console.error(result.error);
+      return null;
+    }
+
+    return result.data.user;
+  }
+
+  function esc(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function avatarHTML(url, username) {
+    if (url) {
+      return `
+        <img
+          src="${esc(url)}"
+          alt="${esc(username)}"
+          style="
+            width:58px;
+            height:58px;
+            border-radius:50%;
+            object-fit:cover;
+            border:1px solid #ddd;
+          "
+        >
+      `;
+    }
+
+    return `
+      <div style="
+        width:58px;
+        height:58px;
+        border-radius:50%;
+        background:#111;
+        color:#fff;
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        font-size:22px;
+        font-weight:700;
+      ">
+        ${esc((username || "U").charAt(0).toUpperCase())}
+      </div>
+    `;
+  }
+
+  async function getFollowStats(userId) {
+    const sb = getSupabase();
+    if (!sb) return { followers: 0, following: 0 };
+
+    const [followersResult, followingResult] = await Promise.all([
+      sb
+        .from("follows")
+        .select("*", { count: "exact", head: true })
+        .eq("following_id", userId),
+
+      sb
+        .from("follows")
+        .select("*", { count: "exact", head: true })
+        .eq("follower_id", userId)
+    ]);
+
+    return {
+      followers: followersResult.count || 0,
+      following: followingResult.count || 0
+    };
+  }
+
+  async function isFollowing(targetId) {
+    const sb = getSupabase();
+    const user = await getCurrentUser();
+
+    if (!sb || !user || !targetId) return false;
+
+    const { data, error } = await sb
+      .from("follows")
+      .select("follower_id")
+      .eq("follower_id", user.id)
+      .eq("following_id", targetId)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Follow check:", error);
+      return false;
+    }
+
+    return !!data;
+  }
+
+  async function followUser(targetId) {
+    const sb = getSupabase();
+    const user = await getCurrentUser();
+
+    if (!sb || !user) {
+      alert("Please login first.");
+      return false;
+    }
+
+    if (user.id === targetId) {
+      alert("You cannot follow yourself.");
+      return false;
+    }
+
+    const { error } = await sb
+      .from("follows")
+      .insert({
+        follower_id: user.id,
+        following_id: targetId
+      });
+
+    if (error) {
+      console.error(error);
+      alert("Follow failed: " + error.message);
+      return false;
+    }
+
+    return true;
+  }
+
+  async function unfollowUser(targetId) {
+    const sb = getSupabase();
+    const user = await getCurrentUser();
+
+    if (!sb || !user) return false;
+
+    const { error } = await sb
+      .from("follows")
+      .delete()
+      .eq("follower_id", user.id)
+      .eq("following_id", targetId);
+
+    if (error) {
+      console.error(error);
+      alert("Unfollow failed: " + error.message);
+      return false;
+    }
+
+    return true;
+  }
+
+  function createPeopleButton() {
+    if (document.getElementById("picflowPeopleButton")) return;
+
+    const button = document.createElement("button");
+
+    button.id = "picflowPeopleButton";
+    button.innerHTML = "👥 People";
+
+    button.style.cssText = `
+      position:fixed;
+      right:16px;
+      bottom:88px;
+      z-index:9998;
+      border:0;
+      border-radius:24px;
+      padding:12px 18px;
+      background:#111;
+      color:#fff;
+      font-size:15px;
+      font-weight:700;
+      box-shadow:0 5px 20px rgba(0,0,0,.2);
+      cursor:pointer;
+    `;
+
+    button.onclick = window.openPeople;
+
+    document.body.appendChild(button);
+  }
+
+  function createPeopleModal() {
+    if (document.getElementById("picflowPeopleModal")) return;
+
+    const modal = document.createElement("div");
+
+    modal.id = "picflowPeopleModal";
+
+    modal.innerHTML = `
+      <div style="
+        position:fixed;
+        inset:0;
+        background:rgba(0,0,0,.55);
+        z-index:9999;
+        display:flex;
+        align-items:flex-end;
+        justify-content:center;
+      ">
+        <div style="
+          width:100%;
+          max-width:600px;
+          max-height:90vh;
+          background:#fff;
+          border-radius:28px 28px 0 0;
+          padding:20px;
+          box-sizing:border-box;
+          overflow:auto;
+        ">
+
+          <div style="
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            margin-bottom:18px;
+          ">
+            <h2 style="
+              margin:0;
+              font-size:24px;
+              color:#111;
+            ">
+              Find People
+            </h2>
+
+            <button
+              onclick="window.closePeople()"
+              style="
+                border:0;
+                background:#eee;
+                width:40px;
+                height:40px;
+                border-radius:50%;
+                font-size:20px;
+              "
+            >
+              ✕
+            </button>
+          </div>
+
+          <div style="
+            display:flex;
+            gap:8px;
+            margin-bottom:18px;
+          ">
+            <input
+              id="picflowPeopleSearch"
+              type="text"
+              placeholder="Search username..."
+              style="
+                flex:1;
+                padding:14px;
+                border:1px solid #ddd;
+                border-radius:15px;
+                font-size:16px;
+                outline:none;
+                box-sizing:border-box;
+              "
+            >
+
+            <button
+              onclick="window.searchPeople()"
+              style="
+                padding:0 18px;
+                border:0;
+                border-radius:15px;
+                background:#111;
+                color:#fff;
+                font-weight:700;
+              "
+            >
+              Search
+            </button>
+          </div>
+
+          <div id="picflowPeopleResults">
+            <div style="
+              text-align:center;
+              color:#777;
+              padding:30px 10px;
+            ">
+              Search for people on PicFlow 🔎
+            </div>
+          </div>
+
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    const input = document.getElementById("picflowPeopleSearch");
+
+    input.addEventListener("keydown", function (event) {
+      if (event.key === "Enter") {
+        window.searchPeople();
+      }
+    });
+  }
+
+  window.openPeople = function () {
+    createPeopleModal();
+
+    const modal = document.getElementById("picflowPeopleModal");
+
+    if (modal) {
+      modal.style.display = "flex";
+    }
+
+    setTimeout(() => {
+      const input = document.getElementById("picflowPeopleSearch");
+      if (input) input.focus();
+    }, 100);
+  };
+
+  window.closePeople = function () {
+    const modal = document.getElementById("picflowPeopleModal");
+
+    if (modal) {
+      modal.style.display = "none";
+    }
+  };
+
+  window.searchPeople = async function () {
+    const sb = getSupabase();
+    const user = await getCurrentUser();
+
+    const input = document.getElementById("picflowPeopleSearch");
+    const results = document.getElementById("picflowPeopleResults");
+
+    if (!results) return;
+
+    const searchText = input
+      ? input.value.trim()
+      : "";
+
+    if (!user) {
+      results.innerHTML = `
+        <div style="
+          text-align:center;
+          padding:30px;
+          color:#777;
+        ">
+          Please login first 🔐
+        </div>
+      `;
+      return;
+    }
+
+    if (!searchText) {
+      results.innerHTML = `
+        <div style="
+          text-align:center;
+          padding:30px;
+          color:#777;
+        ">
+          Username enter karo 🔎
+        </div>
+      `;
+      return;
+    }
+
+    results.innerHTML = `
+      <div style="
+        text-align:center;
+        padding:30px;
+        color:#777;
+      ">
+        Searching... ⏳
+      </div>
+    `;
+
+    const { data, error } = await sb
+      .from("profiles")
+      .select("id, username, bio, avatar_url")
+      .ilike("username", "%" + searchText + "%")
+      .neq("id", user.id)
+      .limit(20);
+
+    if (error) {
+      console.error(error);
+
+      results.innerHTML = `
+        <div style="
+          text-align:center;
+          padding:30px;
+          color:#d00;
+        ">
+          Search failed.<br>
+          ${esc(error.message)}
+        </div>
+      `;
+
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      results.innerHTML = `
+        <div style="
+          text-align:center;
+          padding:35px 10px;
+          color:#777;
+        ">
+          <div style="font-size:40px;">😕</div>
+          <div style="margin-top:10px;">
+            No user found
+          </div>
+        </div>
+      `;
+
+      return;
+    }
+
+    results.innerHTML = "";
+
+    for (const profile of data) {
+      const stats = await getFollowStats(profile.id);
+      const following = await isFollowing(profile.id);
+
+      const card = document.createElement("div");
+
+      card.style.cssText = `
+        display:flex;
+        align-items:center;
+        gap:12px;
+        padding:14px 4px;
+        border-bottom:1px solid #eee;
+      `;
+
+      card.innerHTML = `
+        ${avatarHTML(profile.avatar_url, profile.username)}
+
+        <div style="
+          flex:1;
+          min-width:0;
+        ">
+          <div style="
+            font-weight:800;
+            color:#111;
+            font-size:16px;
+            overflow:hidden;
+            text-overflow:ellipsis;
+          ">
+            ${esc(profile.username)}
+          </div>
+
+          <div style="
+            color:#777;
+            font-size:13px;
+            margin-top:4px;
+          ">
+            ${esc(profile.bio || "PicFlow user")}
+          </div>
+
+          <div style="
+            color:#777;
+            font-size:12px;
+            margin-top:5px;
+          ">
+            ${stats.followers} followers · ${stats.following} following
+          </div>
+        </div>
+
+        <button
+          class="picflow-follow-btn"
+          data-user-id="${esc(profile.id)}"
+          data-following="${following ? "true" : "false"}"
+          style="
+            border:0;
+            border-radius:12px;
+            padding:10px 15px;
+            min-width:88px;
+            background:${following ? "#eee" : "#111"};
+            color:${following ? "#111" : "#fff"};
+            font-weight:700;
+          "
+        >
+          ${following ? "Following" : "Follow"}
+        </button>
+      `;
+
+      const followButton = card.querySelector(".picflow-follow-btn");
+
+      followButton.onclick = async function () {
+        followButton.disabled = true;
+        followButton.textContent = "Wait...";
+
+        const targetId = profile.id;
+        const currentlyFollowing =
+          followButton.dataset.following === "true";
+
+        let success;
+
+        if (currentlyFollowing) {
+          success = await unfollowUser(targetId);
+        } else {
+          success = await followUser(targetId);
+        }
+
+        if (success) {
+          const newFollowing = !currentlyFollowing;
+
+          followButton.dataset.following =
+            newFollowing ? "true" : "false";
+
+          followButton.textContent =
+            newFollowing ? "Following" : "Follow";
+
+          followButton.style.background =
+            newFollowing ? "#eee" : "#111";
+
+          followButton.style.color =
+            newFollowing ? "#111" : "#fff";
+
+          const newStats = await getFollowStats(targetId);
+
+          const statElement =
+            card.querySelector(".picflow-user-stats");
+
+          if (statElement) {
+            statElement.textContent =
+              `${newStats.followers} followers · ${newStats.following} following`;
+          }
+
+          const allText = card.querySelectorAll("div");
+
+          for (const element of allText) {
+            if (
+              element.textContent.includes("followers ·") &&
+              element !== card.querySelector(".picflow-user-stats")
+            ) {
+              element.textContent =
+                `${newStats.followers} followers · ${newStats.following} following`;
+            }
+          }
+        }
+
+        followButton.disabled = false;
+      };
+
+      results.appendChild(card);
+    }
+  };
+
+  async function updateMyFollowCounts() {
+    const user = await getCurrentUser();
+
+    if (!user) return;
+
+    const stats = await getFollowStats(user.id);
+
+    console.log(
+      "PicFlow Follow Stats:",
+      stats.followers,
+      "followers",
+      stats.following,
+      "following"
+    );
+
+    /*
+      Try to update common profile count elements.
+      Existing UI can continue working even if these
+      elements don't exist.
+    */
+
+    const text = document.body.innerText;
+
+    const elements = document.querySelectorAll(
+      ".followers-count, .following-count, #followersCount, #followingCount"
+    );
+
+    elements.forEach(function (element) {
+      const id = element.id || "";
+      const cls = element.className || "";
+
+      if (
+        id.toLowerCase().includes("follower") ||
+        String(cls).toLowerCase().includes("follower")
+      ) {
+        element.textContent = stats.followers;
+      }
+
+      if (
+        id.toLowerCase().includes("following") ||
+        String(cls).toLowerCase().includes("following")
+      ) {
+        element.textContent = stats.following;
+      }
+    });
+  }
+
+  function startFollowSystem() {
+    createPeopleButton();
+    createPeopleModal();
+
+    setTimeout(updateMyFollowCounts, 1500);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener(
+      "DOMContentLoaded",
+      startFollowSystem
+    );
+  } else {
+    startFollowSystem();
+  }
+
+  window.picflowFollowUser = followUser;
+  window.picflowUnfollowUser = unfollowUser;
+  window.picflowGetFollowStats = getFollowStats;
+  window.picflowIsFollowing = isFollowing;
+
+})();
+
+/* =========================================================
+   END FOLLOW / FOLLOWING SYSTEM
+   ========================================================= */
