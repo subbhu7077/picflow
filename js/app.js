@@ -1227,3 +1227,388 @@ window.toggleConfirmPassword = function () {
 
 };
 
+
+
+/* =========================================
+   SUPABASE REAL AUTH + PROFILE
+========================================= */
+
+let picflowSupabase = null;
+
+function initSupabase() {
+
+  if (!window.supabase) {
+    console.error("Supabase library not loaded");
+    return;
+  }
+
+  if (!window.SUPABASE_URL || !window.SUPABASE_PUBLISHABLE_KEY) {
+    console.error("Supabase configuration missing");
+    return;
+  }
+
+  picflowSupabase = window.supabase.createClient(
+    window.SUPABASE_URL,
+    window.SUPABASE_PUBLISHABLE_KEY
+  );
+
+  picflowSupabase.auth.onAuthStateChange(function(event, session) {
+
+    if (session && session.user) {
+
+      localStorage.setItem("picflow_logged_in", "true");
+      localStorage.setItem("picflow_email", session.user.email || "");
+
+      showMainApp();
+
+      setTimeout(function() {
+        loadSupabaseProfile();
+      }, 0);
+
+    } else {
+
+      localStorage.removeItem("picflow_logged_in");
+
+    }
+
+  });
+
+}
+
+
+/* REAL LOGIN */
+
+window.loginUser = async function() {
+
+  const email =
+    document.getElementById("loginEmail").value.trim();
+
+  const mobile =
+    document.getElementById("loginMobile").value.trim();
+
+  const password =
+    document.getElementById("loginPassword").value;
+
+  if (!email && !mobile) {
+    alert("Please enter Email or Mobile Number.");
+    return;
+  }
+
+  if (!password) {
+    alert("Please enter your password.");
+    return;
+  }
+
+  if (mobile && !email) {
+    alert("Mobile login will be enabled after Phone OTP setup. Please login with Email for now.");
+    return;
+  }
+
+  if (!picflowSupabase) {
+    alert("Supabase is not loaded. Please refresh the page.");
+    return;
+  }
+
+  const result =
+    await picflowSupabase.auth.signInWithPassword({
+      email: email,
+      password: password
+    });
+
+  if (result.error) {
+    alert("Login failed: " + result.error.message);
+    return;
+  }
+
+  alert("Login successful! 🎉");
+
+};
+
+
+/* REAL SIGNUP */
+
+window.createAccount = async function() {
+
+  const username =
+    document.getElementById("signupUsername").value.trim();
+
+  const email =
+    document.getElementById("signupEmail").value.trim();
+
+  const mobile =
+    document.getElementById("signupMobile").value.trim();
+
+  const password =
+    document.getElementById("signupPassword").value;
+
+  const confirmPassword =
+    document.getElementById("signupConfirmPassword").value;
+
+  if (!username) {
+    alert("Please enter username.");
+    return;
+  }
+
+  if (!email) {
+    alert("Please enter email.");
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert("Please enter a valid email.");
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert("Please enter a valid 10 digit mobile number.");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+  if (!picflowSupabase) {
+    alert("Supabase is not loaded. Please refresh the page.");
+    return;
+  }
+
+  const result =
+    await picflowSupabase.auth.signUp({
+      email: email,
+      password: password,
+      options: {
+        data: {
+          username: username,
+          mobile: mobile
+        }
+      }
+    });
+
+  if (result.error) {
+    alert("Signup failed: " + result.error.message);
+    return;
+  }
+
+  localStorage.setItem("picflow_username", username);
+  localStorage.setItem("picflow_mobile", mobile);
+
+  if (result.data.session) {
+
+    alert("Account created successfully! 🎉");
+
+    showMainApp();
+
+    await loadSupabaseProfile();
+
+  } else {
+
+    alert(
+      "Account created successfully! 🎉\n\n" +
+      "Please confirm your email, then login."
+    );
+
+    showLogin();
+
+  }
+
+};
+
+
+/* LOAD PROFILE FROM SUPABASE */
+
+async function loadSupabaseProfile() {
+
+  if (!picflowSupabase) return;
+
+  const userResult =
+    await picflowSupabase.auth.getUser();
+
+  if (userResult.error || !userResult.data.user) return;
+
+  const user =
+    userResult.data.user;
+
+  const profileResult =
+    await picflowSupabase
+      .from("profiles")
+      .select("username,bio,mobile,avatar_url")
+      .eq("id", user.id)
+      .maybeSingle();
+
+  if (profileResult.error) {
+    console.error(profileResult.error);
+    return;
+  }
+
+  if (!profileResult.data) return;
+
+  const profile =
+    profileResult.data;
+
+  localStorage.setItem(
+    "picflow_username",
+    profile.username || "You"
+  );
+
+  localStorage.setItem(
+    "picflow_bio",
+    profile.bio || ""
+  );
+
+  if (profile.mobile) {
+    localStorage.setItem(
+      "picflow_mobile",
+      profile.mobile
+    );
+  }
+
+  const homeUsername =
+    document.getElementById("homeUsername");
+
+  const postUsername =
+    document.getElementById("postUsername");
+
+  if (homeUsername) {
+    homeUsername.textContent =
+      profile.username || "You";
+  }
+
+  if (postUsername) {
+    postUsername.textContent =
+      profile.username || "You";
+  }
+
+}
+
+
+/* SAVE PROFILE TO SUPABASE */
+
+window.saveProfile = async function() {
+
+  const username =
+    document.getElementById("editUsername").value.trim();
+
+  const bio =
+    document.getElementById("editBio").value.trim();
+
+  if (!username) {
+    alert("Username cannot be empty.");
+    return;
+  }
+
+  if (!picflowSupabase) {
+    alert("Supabase is not loaded. Please refresh.");
+    return;
+  }
+
+  const userResult =
+    await picflowSupabase.auth.getUser();
+
+  if (userResult.error || !userResult.data.user) {
+    alert("Please login again.");
+    return;
+  }
+
+  const user =
+    userResult.data.user;
+
+  const result =
+    await picflowSupabase
+      .from("profiles")
+      .update({
+        username: username,
+        bio: bio,
+        updated_at: new Date().toISOString()
+      })
+      .eq("id", user.id);
+
+  if (result.error) {
+    alert("Profile save failed: " + result.error.message);
+    return;
+  }
+
+  localStorage.setItem("picflow_username", username);
+  localStorage.setItem("picflow_bio", bio);
+
+  document
+    .querySelectorAll(".profile-overlay")
+    .forEach(function(el) {
+      el.remove();
+    });
+
+  showMessage("Profile saved to Supabase! ☁️✅");
+
+  await loadSupabaseProfile();
+
+};
+
+
+/* REAL LOGOUT */
+
+window.logoutUser = async function() {
+
+  if (picflowSupabase) {
+    await picflowSupabase.auth.signOut();
+  }
+
+  localStorage.removeItem("picflow_logged_in");
+  localStorage.removeItem("picflow_email");
+
+  location.reload();
+
+};
+
+
+/* REAL FORGOT PASSWORD */
+
+window.forgotPassword = async function() {
+
+  const email =
+    prompt("Enter your registered email address:");
+
+  if (!email) return;
+
+  if (!picflowSupabase) {
+    alert("Supabase is not loaded. Please refresh.");
+    return;
+  }
+
+  const result =
+    await picflowSupabase.auth.resetPasswordForEmail(
+      email,
+      {
+        redirectTo:
+          window.location.origin +
+          window.location.pathname
+      }
+    );
+
+  if (result.error) {
+    alert("Reset failed: " + result.error.message);
+    return;
+  }
+
+  alert(
+    "Password reset link sent! 📧\n\n" +
+    "Check your email."
+  );
+
+};
+
+
+/* START SUPABASE */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+    initSupabase();
+  }
+);
+
