@@ -57,9 +57,7 @@ function createPost() {
       <div class="time">JUST NOW</div>
     `;
 
-    const app = document.querySelector(".app");
-    app.prepend(post);
-
+    document.querySelector(".app").prepend(post);
     showMessage("Post created successfully! 🎉");
   };
 
@@ -82,7 +80,9 @@ function toggleLike(button) {
     number++;
   }
 
-  count.textContent = number.toLocaleString() + (number === 1 ? " like" : " likes");
+  count.textContent =
+    number.toLocaleString() +
+    (number === 1 ? " like" : " likes");
 }
 
 function commentPost() {
@@ -121,7 +121,139 @@ function openStory(name) {
 }
 
 function navigate(page) {
+  if (page === "Profile") {
+    openProfile();
+    return;
+  }
+
   showMessage(page);
+}
+
+function openProfile() {
+  if (document.querySelector(".profile-overlay")) return;
+
+  const profile = document.createElement("div");
+  profile.className = "profile-overlay";
+
+  profile.innerHTML = `
+    <div class="profile-top">
+      <h2>Profile</h2>
+      <button class="profile-close" onclick="closeProfile()">×</button>
+    </div>
+
+    <div class="profile-main">
+
+      <section class="profile-header">
+
+        <div class="profile-head-row">
+
+          <div class="profile-avatar">Y</div>
+
+          <div class="profile-stats">
+
+            <div class="profile-stat">
+              <strong>3</strong>
+              <span>Posts</span>
+            </div>
+
+            <div class="profile-stat">
+              <strong>248</strong>
+              <span>Followers</span>
+            </div>
+
+            <div class="profile-stat">
+              <strong>186</strong>
+              <span>Following</span>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="profile-name">
+          <strong>Your Name</strong>
+          <p>📸 Creator on PicFlow<br>
+          Sharing moments, travel & creativity ✨</p>
+        </div>
+
+        <button class="edit-profile-btn" onclick="editProfile()">
+          Edit Profile
+        </button>
+
+      </section>
+
+      <div class="profile-tabs">
+        <button class="profile-tab active">▦</button>
+        <button class="profile-tab">♡</button>
+      </div>
+
+      <div class="profile-grid">
+
+        <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=500&q=80">
+        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80">
+        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=500&q=80">
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(profile);
+  document.body.style.overflow = "hidden";
+}
+
+function closeProfile() {
+  const profile = document.querySelector(".profile-overlay");
+
+  if (profile) {
+    profile.remove();
+    document.body.style.overflow = "";
+  }
+}
+
+function editProfile() {
+  const box = document.createElement("div");
+  box.className = "edit-box";
+
+  box.innerHTML = `
+    <div class="edit-card">
+
+      <h3>Edit Profile</h3>
+
+      <input id="editName" placeholder="Name" value="Your Name">
+
+      <textarea id="editBio" rows="3"
+        placeholder="Bio">📸 Creator on PicFlow
+Sharing moments, travel & creativity ✨</textarea>
+
+      <button class="edit-save" onclick="saveProfile()">
+        Save Profile
+      </button>
+
+    </div>
+  `;
+
+  document.body.appendChild(box);
+}
+
+function saveProfile() {
+  const name = document.getElementById("editName").value.trim();
+  const bio = document.getElementById("editBio").value.trim();
+
+  if (!name) {
+    showMessage("Please enter your name");
+    return;
+  }
+
+  const nameElement = document.querySelector(".profile-name strong");
+  const bioElement = document.querySelector(".profile-name p");
+
+  nameElement.textContent = name;
+  bioElement.innerHTML = bio.replace(/\n/g, "<br>");
+
+  document.querySelector(".edit-box").remove();
+
+  showMessage("Profile updated! ✅");
 }
 
 document.addEventListener("DOMContentLoaded", function () {
