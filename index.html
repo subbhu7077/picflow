@@ -135,12 +135,18 @@
     .btn-theme-secondary { width: 100%; padding: 9px; background: #262626; color: #3897f0; border: 1px solid #3897f0; font-weight: 600; border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
 
-    /* Instagram Live Music Search Sheet */
-    .music-picker-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); z-index: 260; flex-direction: column; padding: 20px 16px; max-width: 480px; margin: 0 auto; }
-    .music-picker-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #222; }
-    .music-search-box { margin: 12px 0 6px; }
-    .music-search-box input { width: 100%; background: #222; border: 1px solid #333; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 13px; }
-    .music-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; padding-top: 10px; }
+    /* Instagram Live Music Sheet & Genre Pills */
+    .music-picker-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 260; flex-direction: column; padding: 16px 14px; max-width: 480px; margin: 0 auto; }
+    .music-picker-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #222; }
+    .music-search-box { margin: 10px 0 6px; }
+    .music-search-box input { width: 100%; background: #222; border: 1px solid #333; border-radius: 8px; padding: 9px 12px; color: #fff; outline: none; font-size: 13px; }
+    
+    .genre-pills-row { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 10px; scrollbar-width: none; }
+    .genre-pills-row::-webkit-scrollbar { display: none; }
+    .genre-pill { background: #222; border: 1px solid #333; color: #ccc; padding: 5px 12px; border-radius: 14px; font-size: 11px; white-space: nowrap; cursor: pointer; font-weight: 500; }
+    .genre-pill.active { background: #0095f6; color: #fff; border-color: #0095f6; }
+
+    .music-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
     .music-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #181818; border-radius: 8px; cursor: pointer; }
     .music-item-info { display: flex; align-items: center; gap: 12px; }
     .music-item-img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; }
@@ -172,7 +178,6 @@
 <body>
 
 <div class="app-root">
-  <!-- Dedicated Audio Elements for Cross-Origin Playback -->
   <audio id="feedAudioEngine" preload="auto"></audio>
   <audio id="storyAudioEngine" preload="auto"></audio>
   <audio id="reelsAudioEngine" preload="auto" loop></audio>
@@ -208,7 +213,7 @@
     <div class="explore-grid-wall" id="exploreGridWall"></div>
   </section>
 
-  <!-- TAB 3: REAL REELS WITH WORKING AUDIO -->
+  <!-- TAB 3: REAL REELS WITH AUDIO -->
   <section id="reelsTab" class="tab-section">
     <div class="reel-viewport" id="reelViewport">
       <div class="reel-mute-btn" onclick="toggleReelAudio(event)">
@@ -239,7 +244,7 @@
           <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
           <span id="reelLikesCount">45.2k</span>
         </div>
-        <div class="reel-action-bubble" onclick="alert('Comments for this reel: Amazing audio & video sync!')">
+        <div class="reel-action-bubble" onclick="alert('Reel comments: Pure Phonk & Bass! 🔥')">
           <i class="fa-regular fa-comment"></i>
           <span id="reelCommentCount">824</span>
         </div>
@@ -302,7 +307,7 @@
       <h3>Create New Post</h3>
       <input type="file" id="postImageUploadInput" accept="image/*" />
       <button class="btn-theme-secondary" onclick="openMusicPicker('post')">
-        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Instagram Music</span>
+        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Song (Hindi/Eng/Phonk)</span>
       </button>
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" onclick="dispatchNewPost()">Share to Feed</button>
@@ -316,21 +321,31 @@
       <h3>Add to Your Story</h3>
       <input type="file" id="storyImageUploadInput" accept="image/*" />
       <button class="btn-theme-secondary" onclick="openMusicPicker('story')">
-        <i class="fa-solid fa-music"></i> <span id="selectedStoryMusicLabel">🎵 Select Story Music</span>
+        <i class="fa-solid fa-music"></i> <span id="selectedStoryMusicLabel">🎵 Add Music Track</span>
       </button>
       <button class="btn-theme-blue" onclick="dispatchNewStory()">Share to Story</button>
     </div>
   </div>
 
-  <!-- Instagram Live Searchable Music Picker Sheet -->
+  <!-- Instagram Live Searchable Music Picker Sheet with Genre Filter -->
   <div class="music-picker-sheet" id="musicPickerSheet">
     <div class="music-picker-header">
       <h4>Trending Instagram Music</h4>
       <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeMusicPicker()"></i>
     </div>
     <div class="music-search-box">
-      <input type="text" id="liveMusicSearchInput" placeholder="🔍 Search any song, Arijit, Karan Aujla, Shubh..." oninput="debounceMusicSearch()" />
+      <input type="text" id="liveMusicSearchInput" placeholder="🔍 Search any Hindi, English, Phonk, Punjabi..." oninput="debounceMusicSearch()" />
     </div>
+    
+    <!-- Genre Quick Filter Pills -->
+    <div class="genre-pills-row">
+      <div class="genre-pill active" onclick="switchMusicGenre('all', this)">🔥 All Trending</div>
+      <div class="genre-pill" onclick="switchMusicGenre('hindi', this)">🇮🇳 Hindi Bollywood</div>
+      <div class="genre-pill" onclick="switchMusicGenre('phonk', this)">⚡ Phonk / Drift</div>
+      <div class="genre-pill" onclick="switchMusicGenre('english', this)">🌍 English Pop</div>
+      <div class="genre-pill" onclick="switchMusicGenre('punjabi', this)">🕺 Punjabi Hits</div>
+    </div>
+
     <div class="music-list" id="musicListContainer"></div>
   </div>
 
@@ -371,8 +386,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Real working music engine active 🎵🔥</div>
-      <div class="chat-bubble them">Instagram ke saare real trending gaane search karke chala sakte ho!</div>
+      <div class="chat-bubble them">Hey Subbhu! Hindi, English aur Phonk songs add ho gaye hain 🎵🔥</div>
+      <div class="chat-bubble them">Reels aur posts pe loud and clear sound baj raha hai!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -382,56 +397,117 @@
 </div>
 
 <script>
-// ==================== REAL INSTAGRAM MUSIC DATABASE ====================
-// Fast-loading verified tracks + live Apple Music Search integration
-let TRENDING_MUSIC = [
+// ==================== MULTI-GENRE MUSIC VAULT ====================
+const MUSIC_VAULT = [
+  // --- HINDI BOLLYWOOD ---
   {
-    id: "m_1",
+    id: "h_1",
+    genre: "hindi",
     title: "Apna Bana Le",
-    artist: "Arijit Singh",
+    artist: "Arijit Singh & Sachin-Jigar",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/ec/3b/b7/ec3bb748-024a-c013-176b-3142750352ef/8902894362145_cover.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/a4/09/25/a40925ea-0c4a-67c4-0b19-f538ee5c7bc5/mzaf_13506145324546419163.plus.aac.p.m4a"
   },
   {
-    id: "m_2",
-    title: "Chaleya",
+    id: "h_2",
+    genre: "hindi",
+    title: "Chaleya (Jawan)",
     artist: "Anirudh Ravichander & Arijit",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/05/cf/b9/05cfb90a-115f-5bc0-ee97-3f3d5386db49/8902894364408_cover.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/e5/2c/b6/e52cb66a-d242-7efc-d102-3c22ad65b630/mzaf_16201386762495393169.plus.aac.p.m4a"
   },
   {
-    id: "m_3",
+    id: "h_3",
+    genre: "hindi",
+    title: "Satranga (Animal)",
+    artist: "Arijit Singh",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/10/d7/a7/10d7a7ae-a6f9-0115-d72b-8ef6420ce29d/8902894365771_cover.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b5/02/76/b50276d4-8979-450a-e24c-e652c6f11100/mzaf_1241199321481745269.plus.aac.p.m4a"
+  },
+
+  // --- PHONK / DRIFT / BASS ---
+  {
+    id: "p_1",
+    genre: "phonk",
+    title: "Murder In My Mind",
+    artist: "KORDHELL (Phonk King)",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/44/2c/c3/442cc3d9-40c2-5503-7cb7-0db7f94bb403/5063010190539_cover.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/91/3c/69/913c6905-eb8b-cce0-128b-6101fe80b91e/mzaf_14002360527411649982.plus.aac.p.m4a"
+  },
+  {
+    id: "p_2",
+    genre: "phonk",
+    title: "Metamorphosis",
+    artist: "INTERWORLD (Drift Phonk)",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/a4/09/a6/a409a6fc-6e54-7f15-0d67-ce6a1ebef03f/cover.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/e5/5d/20/e55d209d-cb9e-71c1-4b20-6d4b533cbdbf/mzaf_11306351703273185564.plus.aac.p.m4a"
+  },
+  {
+    id: "p_3",
+    genre: "phonk",
+    title: "Sahara (Slowed + Bass)",
+    artist: "Hensonn Phonk",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/36/45/be/3645be37-a169-23f2-1b15-9c95ff9c7423/artwork.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/33/c4/62/33c46237-7751-bb44-4fe2-3d85d7b5bfdc/mzaf_10014798363385750242.plus.aac.p.m4a"
+  },
+
+  // --- ENGLISH POP & HIP-HOP ---
+  {
+    id: "e_1",
+    genre: "english",
+    title: "Starboy",
+    artist: "The Weeknd ft. Daft Punk",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4c/76/8a/4c768a41-c887-b952-b91c-1e8df782e4e1/16UMGIM56449.rgb.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7c/ce/0c/7cce0c27-ce3c-1b77-3e81-cfdc7c569ff4/mzaf_7862788583696803875.plus.aac.p.m4a"
+  },
+  {
+    id: "e_2",
+    genre: "english",
+    title: "Levitating",
+    artist: "Dua Lipa",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/41/49/a0/4149a0d3-3561-1ff5-bc09-5c1285223c34/190295286101.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/03/ce/b1/03ceb1fb-429f-3e8c-8f92-ec225139a665/mzaf_14467389146039578665.plus.aac.p.m4a"
+  },
+  {
+    id: "e_3",
+    genre: "english",
+    title: "Blinding Lights",
+    artist: "The Weeknd",
+    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/b9/49/cf/b949cf9d-dcbf-450f-0546-24f0a9bfd5d7/19UMGIM95155.rgb.jpg/100x100bb.jpg",
+    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/10/7c/27/107c2763-71ea-275d-ae4c-4a307c92b0c3/mzaf_8422409555239109723.plus.aac.p.m4a"
+  },
+
+  // --- PUNJABI TRENDING ---
+  {
+    id: "pu_1",
+    genre: "punjabi",
     title: "Softly",
     artist: "Karan Aujla & Ikky",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/44/e9/a5/44e9a5c8-1002-861f-1c4e-28d8f3769152/197189196144.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/1b/38/c2/1b38c267-27b9-d8c8-f9b9-11c504064d4b/mzaf_10526012975924765796.plus.aac.p.m4a"
   },
   {
-    id: "m_4",
+    id: "pu_2",
+    genre: "punjabi",
     title: "Cheques",
     artist: "Shubh",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/03/6a/d7/036ad706-e770-5ce3-d250-bc2f40078ce0/197188730240.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/03/a3/b9/03a3b9eb-a4ca-99b0-ae40-e2ff01c65ff6/mzaf_15024734346765778855.plus.aac.p.m4a"
-  },
-  {
-    id: "m_5",
-    title: "Starboy",
-    artist: "The Weeknd ft. Daft Punk",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4c/76/8a/4c768a41-c887-b952-b91c-1e8df782e4e1/16UMGIM56449.rgb.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7c/ce/0c/7cce0c27-ce3c-1b77-3e81-cfdc7c569ff4/mzaf_7862788583696803875.plus.aac.p.m4a"
   }
 ];
 
 let musicPickerTarget = "post";
-let selectedPostMusic = TRENDING_MUSIC[0];
-let selectedStoryMusic = TRENDING_MUSIC[1];
-let searchTimer = null;
+let currentGenreFilter = "all";
+let selectedPostMusic = MUSIC_VAULT[0];
+let selectedStoryMusic = MUSIC_VAULT[3]; // Default Phonk for story
+let searchDebounceTimer = null;
 
 function renderMusicList(items) {
   const container = document.getElementById("musicListContainer");
-  const list = items || TRENDING_MUSIC;
+  const list = items || (currentGenreFilter === "all" ? MUSIC_VAULT : MUSIC_VAULT.filter(m => m.genre === currentGenreFilter));
+  
   if (!list.length) {
-    container.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Koi song nahi mila, kuch aur search karein</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Koi song nahi mila, search karein...</div>`;
     return;
   }
 
@@ -451,9 +527,21 @@ function renderMusicList(items) {
   `).join("");
 }
 
+function switchMusicGenre(genre, pillEl) {
+  currentGenreFilter = genre;
+  document.querySelectorAll(".genre-pill").forEach(p => p.classList.remove("active"));
+  pillEl.classList.add("active");
+  document.getElementById("liveMusicSearchInput").value = "";
+  renderMusicList();
+}
+
 function openMusicPicker(target) {
   musicPickerTarget = target;
   document.getElementById("liveMusicSearchInput").value = "";
+  currentGenreFilter = "all";
+  document.querySelectorAll(".genre-pill").forEach((p, idx) => {
+    idx === 0 ? p.classList.add("active") : p.classList.remove("active");
+  });
   renderMusicList();
   document.getElementById("musicPickerSheet").style.display = "flex";
 }
@@ -474,27 +562,27 @@ function chooseMusicTrack(encodedJson) {
   closeMusicPicker();
 }
 
-// Live Search Any Song in the World via iTunes API
+// Global Search via Apple Music API (Hindi, English, Phonk, Punjabi)
 function debounceMusicSearch() {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(performLiveMusicSearch, 400);
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(runGlobalSearch, 380);
 }
 
-function performLiveMusicSearch() {
+function runGlobalSearch() {
   const q = document.getElementById("liveMusicSearchInput").value.trim();
   if (!q) {
     renderMusicList();
     return;
   }
   const container = document.getElementById("musicListContainer");
-  container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Searching songs...</div>`;
+  container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Searching hits...</div>`;
 
-  fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=15`)
-    .then(res => res.json())
+  fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=20`)
+    .then(r => r.json())
     .then(data => {
       if (data.results && data.results.length > 0) {
-        const mapped = data.results.map((r, idx) => ({
-          id: "search_" + idx + "_" + r.trackId,
+        const mapped = data.results.map((r, i) => ({
+          id: "search_" + i + "_" + r.trackId,
           title: r.trackName,
           artist: r.artistName,
           cover: r.artworkUrl100 || "https://picsum.photos/100/100",
@@ -506,12 +594,11 @@ function performLiveMusicSearch() {
       }
     })
     .catch(() => {
-      // Fallback local filter
-      const localFiltered = TRENDING_MUSIC.filter(m => 
+      const fallback = MUSIC_VAULT.filter(m => 
         m.title.toLowerCase().includes(q.toLowerCase()) || 
         m.artist.toLowerCase().includes(q.toLowerCase())
       );
-      renderMusicList(localFiltered);
+      renderMusicList(fallback);
     });
 }
 
@@ -557,31 +644,31 @@ const SEED_POSTS = [
     username: "Subbhu7077",
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
     image: "https://picsum.photos/800/800?random=181",
-    likes: 312,
+    likes: 420,
     liked: false,
     saved: false,
-    caption: "Apna Bana Le with Arijit Singh on PicFlow 🎵⚡ Tap photo to listen!",
-    comments: ["Sound quality is awesome!", "Real music playing perfectly"],
-    music: TRENDING_MUSIC[0],
+    caption: "Murder In My Mind - Phonk Edition on PicFlow! Tap photo to turn on Bass ⚡🏎️",
+    comments: ["Pure Phonk energy!", "Sound quality is fire 🔥"],
+    music: MUSIC_VAULT[3], // Kordhell Phonk
     date: "JUST NOW"
   }
 ];
 
 const SEED_STORIES = [
-  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: TRENDING_MUSIC[1] },
-  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: TRENDING_MUSIC[2] }
+  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: MUSIC_VAULT[0] },
+  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: MUSIC_VAULT[6] }
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your post with music.", time: "2m", isFollow: false },
+  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your phonk track.", time: "1m", isFollow: false },
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
-let posts = JSON.parse(localStorage.getItem("pf_v15_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v15_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v15_profile")) || {
+let posts = JSON.parse(localStorage.getItem("pf_v16_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v16_stories")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_v16_profile")) || {
   name: "Subbhu7077",
-  bio: "Photographer | Music & Tech Enthusiast ⚡",
+  bio: "Photographer | Phonk, Hindi & English Hits ⚡",
   avatar: DEFAULT_AVATAR
 };
 
@@ -592,9 +679,9 @@ if (SAVED_PERMANENT_DP) {
 function saveState() {
   try {
     localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    localStorage.setItem("pf_v15_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v15_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v15_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_v16_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v16_stories", JSON.stringify(stories));
+    localStorage.setItem("pf_v16_profile", JSON.stringify(userProfile));
   } catch(e) {
     console.warn("Storage quota:", e);
   }
@@ -642,8 +729,8 @@ function togglePostAudio(postId, audioUrl) {
         renderFeed();
       })
       .catch(e => {
-        console.log("Audio play failed, user gesture needed:", e);
-        alert("Audio play karne ke liye screen par ek baar tap karein!");
+        console.log("Audio play gesture needed:", e);
+        alert("Audio play karne ke liye ek baar screen par tap karein!");
       });
   }
 }
@@ -678,7 +765,7 @@ function renderFeed() {
         ${p.music ? `
           <div class="post-audio-play-pill">
             <i class="fa-solid ${isPlaying ? 'fa-volume-high' : 'fa-volume-xmark'}"></i>
-            <span>${isPlaying ? 'Playing Audio' : 'Tap to Play Music'}</span>
+            <span>${isPlaying ? 'Playing Audio' : 'Tap for Sound'}</span>
           </div>
         ` : ''}
         <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
@@ -774,7 +861,7 @@ function removePost(id) {
   }
 }
 
-// ==================== STORIES WITH MUSIC ====================
+// ==================== STORIES ====================
 const storyAudioEngine = document.getElementById("storyAudioEngine");
 
 function renderStories() {
@@ -838,30 +925,30 @@ function closeStoryPlayerApp() {
   document.getElementById("storyMeterFill").style.width = "0%";
 }
 
-// ==================== REAL REELS WITH AUDIO ENGINE ====================
+// ==================== REAL REELS WITH PHONK, HINDI, ENGLISH ====================
 const REEL_DATABASE = [
   {
     id: "reel_1",
     video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
     user: "@subbhu_vibes",
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
-    caption: "Apna Bana Le sunset therapy 🌊✨ #beach #trending",
+    caption: "Apna Bana Le sunset therapy 🌊✨ #bollywood #hindi",
     audio: "Apna Bana Le - Arijit Singh",
-    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/a4/09/25/a40925ea-0c4a-67c4-0b19-f538ee5c7bc5/mzaf_13506145324546419163.plus.aac.p.m4a",
-    likes: "45.2k",
+    audioUrl: MUSIC_VAULT[0].url,
+    likes: "58.2k",
     comments: "824",
     liked: false
   },
   {
     id: "reel_2",
     video: "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
-    user: "@night_cruiser",
+    user: "@drift_king",
     avatar: "https://picsum.photos/100/100?random=2",
-    caption: "Midnight cruise with Starboy vibes 🚗💨 #mumbai",
-    audio: "Starboy - The Weeknd",
-    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7c/ce/0c/7cce0c27-ce3c-1b77-3e81-cfdc7c569ff4/mzaf_7862788583696803875.plus.aac.p.m4a",
-    likes: "89.1k",
-    comments: "1.4k",
+    caption: "Night drift mode on 🏎️💨 Kordhell Phonk bass boost! #phonk #drift",
+    audio: "Murder In My Mind - KORDHELL",
+    audioUrl: MUSIC_VAULT[3].url,
+    likes: "124.8k",
+    comments: "3.2k",
     liked: false
   },
   {
@@ -869,11 +956,11 @@ const REEL_DATABASE = [
     video: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-skater-riding-a-skateboard-41604-large.mp4",
     user: "@skater_girl",
     avatar: "https://picsum.photos/100/100?random=3",
-    caption: "Skate park energy with Cheques 🛹🔥 #shubh",
-    audio: "Cheques - Shubh Trending",
-    audioUrl: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/03/a3/b9/03a3b9eb-a4ca-99b0-ae40-e2ff01c65ff6/mzaf_15024734346765778855.plus.aac.p.m4a",
-    likes: "67.7k",
-    comments: "912",
+    caption: "Golden hour skate vibes with The Weeknd 🛹🔥 #english #starboy",
+    audio: "Starboy - The Weeknd",
+    audioUrl: MUSIC_VAULT[6].url,
+    likes: "74.1k",
+    comments: "940",
     liked: false
   }
 ];
@@ -887,7 +974,7 @@ const reelsAudioEngine = document.getElementById("reelsAudioEngine");
 function mountReel(index) {
   const data = REEL_DATABASE[index];
   reelVideoEl.src = data.video;
-  reelVideoEl.muted = true; // Video tracks are muted, synchronized audio engine provides loud sound
+  reelVideoEl.muted = true;
   reelsAudioEngine.src = data.audioUrl;
   reelsAudioEngine.muted = isReelMuted;
   
@@ -1088,7 +1175,7 @@ function handleDirectDP(event) {
   });
 }
 
-// ==================== POST & STORY UPLOAD WITH MUSIC ====================
+// ==================== POST & STORY UPLOAD WITH PHONK/HINDI/ENG ====================
 function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
 function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
 
