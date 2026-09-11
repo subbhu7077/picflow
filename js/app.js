@@ -200,6 +200,7 @@ function openProfile() {
 
   document.body.appendChild(profile);
   document.body.style.overflow = "hidden";
+  loadSavedDP();
 }
 
 function closeProfile() {
@@ -220,6 +221,14 @@ function editProfile() {
 
       <h3>Edit Profile</h3>
 
+      <div class="dp-upload-area" onclick="changeDP()">
+        <div class="dp-preview" id="dpPreview">Y</div>
+        <div>
+          <strong>Change Profile Photo</strong>
+          <small>Tap to choose a photo</small>
+        </div>
+      </div>
+
       <input id="editName" placeholder="Name" value="Your Name">
 
       <textarea id="editBio" rows="3"
@@ -234,6 +243,59 @@ Sharing moments, travel & creativity ✨</textarea>
   `;
 
   document.body.appendChild(box);
+}
+
+function changeDP() {
+  const input = document.createElement("input");
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = function () {
+    const file = input.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const image = e.target.result;
+
+      localStorage.setItem("picflow_dp", image);
+
+      const avatar = document.querySelector(".profile-avatar");
+      if (avatar) {
+        avatar.innerHTML = '<img src="' + image + '" alt="Profile photo">';
+      }
+
+      const preview = document.querySelector("#dpPreview");
+      if (preview) {
+        preview.innerHTML = '<img src="' + image + '" alt="Profile preview">';
+      }
+
+      document.querySelectorAll(".avatar").forEach(function(el) {
+        el.innerHTML = '<img src="' + image + '" alt="Profile photo">';
+      });
+
+      showMessage("Profile photo updated! 📸");
+    };
+
+    reader.readAsDataURL(file);
+  };
+
+  input.click();
+}
+
+function loadSavedDP() {
+  const image = localStorage.getItem("picflow_dp");
+  if (!image) return;
+
+  const avatar = document.querySelector(".profile-avatar");
+  if (avatar) {
+    avatar.innerHTML = '<img src="' + image + '" alt="Profile photo">';
+  }
+
+  document.querySelectorAll(".avatar").forEach(function(el) {
+    el.innerHTML = '<img src="' + image + '" alt="Profile photo">';
+  });
 }
 
 function saveProfile() {
