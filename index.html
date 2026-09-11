@@ -11,7 +11,7 @@
 
     .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
-    /* Header */
+    /* Top Bar */
     header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1c1c1c; z-index: 90; }
     .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; }
     .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; position: relative; }
@@ -42,11 +42,14 @@
     .post-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
     .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+    .post-user-text { display: flex; flex-direction: column; }
     .post-author { font-size: 13px; font-weight: 600; }
+    .post-audio-badge { font-size: 11px; color: #bbb; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
     .post-more-btn { color: #888; cursor: pointer; font-size: 16px; }
 
-    .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #0d0d0d; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #0d0d0d; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .post-stage img { width: 100%; height: 100%; object-fit: cover; }
+    .post-audio-play-pill { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.65); padding: 4px 10px; border-radius: 14px; font-size: 11px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(4px); }
     .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
     .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
 
@@ -129,14 +132,26 @@
     .modal-sheet-inner h3 { margin-bottom: 14px; font-size: 16px; }
     .modal-sheet-inner input, .modal-sheet-inner textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
     .btn-theme-blue { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .btn-theme-secondary { width: 100%; padding: 9px; background: #262626; color: #3897f0; border: 1px solid #3897f0; font-weight: 600; border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
 
-    /* Story Player Viewer */
+    /* Music Picker Sheet */
+    .music-picker-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.9); z-index: 260; flex-direction: column; padding: 20px 16px; max-width: 480px; margin: 0 auto; }
+    .music-picker-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 14px; border-bottom: 1px solid #222; }
+    .music-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; padding-top: 14px; }
+    .music-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #161616; border-radius: 8px; cursor: pointer; }
+    .music-item-info { display: flex; align-items: center; gap: 12px; }
+    .music-item-img { width: 42px; height: 42px; border-radius: 6px; object-fit: cover; }
+    .music-item-name { font-size: 13px; font-weight: 600; }
+    .music-item-artist { font-size: 11px; color: #888; }
+
+    /* Story Player Viewer with Music Sticker */
     #storyViewerApp { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
     .story-progress-wire { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
     .story-progress-meter { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
     .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
     .story-author-tag img { width: 34px; height: 34px; border-radius: 50%; }
+    .story-music-sticker { position: absolute; bottom: 40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.7); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.2); }
     #storyViewerTargetImg { width: 100%; height: 100%; object-fit: contain; }
 
     /* Direct Messages Sheet */
@@ -154,6 +169,10 @@
 <body>
 
 <div class="app-root">
+  <!-- Audio Engine Elements -->
+  <audio id="feedBackgroundAudio" preload="auto"></audio>
+  <audio id="storyBackgroundAudio" preload="auto"></audio>
+
   <header>
     <div class="logo" onclick="switchView('feedTab')">PicFlow</div>
     <div class="header-actions">
@@ -185,7 +204,7 @@
     <div class="explore-grid-wall" id="exploreGridWall"></div>
   </section>
 
-  <!-- TAB 3: REAL REELS -->
+  <!-- TAB 3: REAL REELS WITH AUDIO -->
   <section id="reelsTab" class="tab-section">
     <div class="reel-viewport" id="reelViewport">
       <div class="reel-mute-btn" onclick="toggleReelAudio(event)">
@@ -205,7 +224,7 @@
         <p class="reel-caption-text" id="reelCaptionContent">Caption text here...</p>
         <div class="reel-music-tag">
           <i class="fa-solid fa-music"></i>
-          <span id="reelAudioTitle">Original Audio - Subbhu Beats</span>
+          <span id="reelAudioTitle">Trending Beat</span>
           <div class="reel-disc-icon">
             <i class="fa-solid fa-compact-disc" style="font-size: 11px;"></i>
           </div>
@@ -216,7 +235,7 @@
           <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
           <span id="reelLikesCount">24.5k</span>
         </div>
-        <div class="reel-action-bubble" onclick="alert('Comments for this reel: Amazing video!')">
+        <div class="reel-action-bubble" onclick="alert('Reel comments loaded!')">
           <i class="fa-regular fa-comment"></i>
           <span id="reelCommentCount">642</span>
         </div>
@@ -272,25 +291,40 @@
   <!-- Hidden Quick DP Picker -->
   <input type="file" id="directDpFileInput" accept="image/*" style="display:none;" onchange="handleDirectDP(event)" />
 
-  <!-- Create Post Modal -->
+  <!-- Create Post Modal with Music -->
   <div class="modal-overlay-backdrop" id="createPostModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
       <h3>Create New Post</h3>
       <input type="file" id="postImageUploadInput" accept="image/*" />
+      <button class="btn-theme-secondary" onclick="openMusicPicker('post')">
+        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">Add Instagram Music</span>
+      </button>
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" onclick="dispatchNewPost()">Share to Feed</button>
     </div>
   </div>
 
-  <!-- Create Story Modal -->
+  <!-- Create Story Modal with Music -->
   <div class="modal-overlay-backdrop" id="createStoryModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreateStorySheet()"></i>
       <h3>Add to Your Story</h3>
       <input type="file" id="storyImageUploadInput" accept="image/*" />
+      <button class="btn-theme-secondary" onclick="openMusicPicker('story')">
+        <i class="fa-solid fa-music"></i> <span id="selectedStoryMusicLabel">Add Music Track</span>
+      </button>
       <button class="btn-theme-blue" onclick="dispatchNewStory()">Share to Story</button>
     </div>
+  </div>
+
+  <!-- Instagram Music Picker Sheet -->
+  <div class="music-picker-sheet" id="musicPickerSheet">
+    <div class="music-picker-header">
+      <h4>Trending Instagram Music</h4>
+      <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeMusicPicker()"></i>
+    </div>
+    <div class="music-list" id="musicListContainer"></div>
   </div>
 
   <!-- Edit Profile Modal -->
@@ -308,12 +342,16 @@
     </div>
   </div>
 
-  <!-- Story Player Viewer -->
+  <!-- Story Player Viewer with Music Audio -->
   <div id="storyViewerApp" onclick="closeStoryPlayerApp()">
     <div class="story-progress-wire"><div class="story-progress-meter" id="storyMeterFill"></div></div>
     <div class="story-author-tag">
       <img id="storyTargetUserAvatar" src="" />
       <span id="storyTargetUserName">User</span>
+    </div>
+    <div class="story-music-sticker" id="storyMusicSticker">
+      <i class="fa-solid fa-music"></i>
+      <span id="storyMusicTitle">Track Name</span>
     </div>
     <img id="storyViewerTargetImg" src="" />
   </div>
@@ -326,8 +364,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! DP retention issue 100% fix ho gaya hai 🚀</div>
-      <div class="chat-bubble them">Kitni bhi baar refresh karo, DP freeze rahegi!</div>
+      <div class="chat-bubble them">Hey Subbhu! Instagram Music Engine integrated 🎵🔥</div>
+      <div class="chat-bubble them">Stories aur posts me gaana add karke sun sakte ho!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -337,8 +375,81 @@
 </div>
 
 <script>
+// ==================== INSTAGRAM MUSIC DATABASE ====================
+const MUSIC_LIBRARY = [
+  {
+    id: "track_1",
+    title: "Kahani Suno 2.0",
+    artist: "Kaifi Khalil",
+    cover: "https://picsum.photos/100/100?random=501",
+    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"
+  },
+  {
+    id: "track_2",
+    title: "Starboy Synthwave",
+    artist: "The Weeknd Style",
+    cover: "https://picsum.photos/100/100?random=502",
+    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3"
+  },
+  {
+    id: "track_3",
+    title: "Chaleya Vibes",
+    artist: "Arijit Singh Remix",
+    cover: "https://picsum.photos/100/100?random=503",
+    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3"
+  },
+  {
+    id: "track_4",
+    title: "Cheques Anthem",
+    artist: "Shubh Trending",
+    cover: "https://picsum.photos/100/100?random=504",
+    url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3"
+  }
+];
+
+let musicPickerTarget = "post"; // 'post' or 'story'
+let selectedPostMusic = MUSIC_LIBRARY[0];
+let selectedStoryMusic = MUSIC_LIBRARY[1];
+
+function renderMusicList() {
+  const container = document.getElementById("musicListContainer");
+  container.innerHTML = MUSIC_LIBRARY.map(m => `
+    <div class="music-item" onclick="chooseMusicTrack('${m.id}')">
+      <div class="music-item-info">
+        <img src="${m.cover}" class="music-item-img" />
+        <div>
+          <div class="music-item-name">${m.title}</div>
+          <div class="music-item-artist">${m.artist}</div>
+        </div>
+      </div>
+      <i class="fa-solid fa-circle-check" style="color: #0095f6; font-size: 18px;"></i>
+    </div>
+  `).join("");
+}
+
+function openMusicPicker(target) {
+  musicPickerTarget = target;
+  renderMusicList();
+  document.getElementById("musicPickerSheet").style.display = "flex";
+}
+
+function closeMusicPicker() {
+  document.getElementById("musicPickerSheet").style.display = "none";
+}
+
+function chooseMusicTrack(trackId) {
+  const track = MUSIC_LIBRARY.find(t => t.id === trackId);
+  if (musicPickerTarget === "post") {
+    selectedPostMusic = track;
+    document.getElementById("selectedPostMusicLabel").innerText = `🎵 ${track.title} - ${track.artist}`;
+  } else {
+    selectedStoryMusic = track;
+    document.getElementById("selectedStoryMusicLabel").innerText = `🎵 ${track.title} - ${track.artist}`;
+  }
+  closeMusicPicker();
+}
+
 // ==================== IMAGE COMPRESSION UTILITY ====================
-// Compress heavy mobile photos into tiny 20KB HD JPEGs so localStorage NEVER quota crashes
 function compressImageFile(file, maxDimension, quality, callback) {
   const reader = new FileReader();
   reader.onload = function(e) {
@@ -362,12 +473,9 @@ function compressImageFile(file, maxDimension, quality, callback) {
       canvas.height = height;
       const ctx = canvas.getContext("2d");
       ctx.drawImage(img, 0, 0, width, height);
-      const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
-      callback(compressedDataUrl);
+      callback(canvas.toDataURL("image/jpeg", quality));
     };
-    img.onerror = function() {
-      callback(e.target.result);
-    };
+    img.onerror = () => callback(e.target.result);
     img.src = e.target.result;
   };
   reader.readAsDataURL(file);
@@ -375,8 +483,6 @@ function compressImageFile(file, maxDimension, quality, callback) {
 
 // ==================== STATE MANAGEMENT ====================
 const DEFAULT_AVATAR = "https://picsum.photos/200/200?random=1";
-
-// Persistent DP key (Freeze in browser)
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp");
 
 const SEED_POSTS = [
@@ -385,34 +491,34 @@ const SEED_POSTS = [
     username: "Subbhu7077",
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
     image: "https://picsum.photos/800/800?random=181",
-    likes: 215,
+    likes: 245,
     liked: false,
     saved: false,
-    caption: "PicFlow Master V13 - DP Refresh Retention Issue 100% Fixed! 🔥⚡",
-    comments: ["Refresh karne par bhi DP nahi hat rahi!", "Super solid update"],
+    caption: "PicFlow with Instagram Music Engine is Live! Tap photo to listen 🎵⚡",
+    comments: ["Music is playing properly!", "Awesome feature"],
+    music: MUSIC_LIBRARY[0],
     date: "JUST NOW"
   }
 ];
 
 const SEED_STORIES = [
-  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191" },
-  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192" }
+  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: MUSIC_LIBRARY[1] },
+  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: MUSIC_LIBRARY[2] }
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your photo.", time: "2m", isFollow: false },
+  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your post with music.", time: "2m", isFollow: false },
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
-let posts = JSON.parse(localStorage.getItem("pf_v13_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v13_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v13_profile")) || {
+let posts = JSON.parse(localStorage.getItem("pf_v14_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v14_stories")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_v14_profile")) || {
   name: "Subbhu7077",
-  bio: "Photographer | Tech Enthusiast ⚡",
+  bio: "Photographer | Music & Tech Enthusiast ⚡",
   avatar: DEFAULT_AVATAR
 };
 
-// Guarantee: If permanent DP exists, override everywhere
 if (SAVED_PERMANENT_DP) {
   userProfile.avatar = SAVED_PERMANENT_DP;
 }
@@ -420,9 +526,9 @@ if (SAVED_PERMANENT_DP) {
 function saveState() {
   try {
     localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    localStorage.setItem("pf_v13_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v13_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v13_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_v14_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v14_stories", JSON.stringify(stories));
+    localStorage.setItem("pf_v14_profile", JSON.stringify(userProfile));
   } catch(e) {
     console.warn("Storage quota:", e);
   }
@@ -434,6 +540,8 @@ function switchView(viewId) {
   const el = document.getElementById(viewId);
   if (el) el.classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
+
+  stopFeedAudio();
 
   if (viewId === "exploreTab") renderExploreGrid();
   if (viewId === "profileTab") renderProfileSection();
@@ -450,15 +558,221 @@ function switchView(viewId) {
   }
 }
 
-// ==================== REAL REELS PLAYER ====================
+// ==================== FEED & AUDIO ====================
+let activePlayingPostId = null;
+const feedAudioPlayer = document.getElementById("feedBackgroundAudio");
+
+function togglePostAudio(postId, audioUrl) {
+  if (activePlayingPostId === postId && !feedAudioPlayer.paused) {
+    feedAudioPlayer.pause();
+    activePlayingPostId = null;
+    renderFeed();
+  } else {
+    feedAudioPlayer.src = audioUrl;
+    feedAudioPlayer.play().catch(e => console.log("Playback interaction needed:", e));
+    activePlayingPostId = postId;
+    renderFeed();
+  }
+}
+
+function stopFeedAudio() {
+  if (feedAudioPlayer) {
+    feedAudioPlayer.pause();
+    activePlayingPostId = null;
+  }
+}
+
+function renderFeed() {
+  const wall = document.getElementById("postsContainer");
+  if (!wall) return;
+  wall.innerHTML = posts.map(p => {
+    const isPlaying = activePlayingPostId === p.id && feedAudioPlayer && !feedAudioPlayer.paused;
+    return `
+    <article class="post-block" id="post-${p.id}">
+      <div class="post-top">
+        <div class="post-user-info" onclick="switchView('profileTab')">
+          <img src="${p.avatar}" class="post-user-pfp" />
+          <div class="post-user-text">
+            <span class="post-author">${p.username}</span>
+            ${p.music ? `<span class="post-audio-badge"><i class="fa-solid fa-music"></i> ${p.music.title} • ${p.music.artist}</span>` : ''}
+          </div>
+        </div>
+        <i class="fa-solid fa-ellipsis post-more-btn" onclick="removePost(${p.id})"></i>
+      </div>
+
+      <div class="post-stage" onclick="p.music ? togglePostAudio(${p.id}, '${p.music.url}') : null" ondblclick="fireDoubleTapHeart(${p.id})">
+        <img src="${p.image}" loading="lazy" />
+        ${p.music ? `
+          <div class="post-audio-play-pill">
+            <i class="fa-solid ${isPlaying ? 'fa-volume-high' : 'fa-volume-xmark'}"></i>
+            <span>${isPlaying ? 'Playing Audio' : 'Tap to Listen'}</span>
+          </div>
+        ` : ''}
+        <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
+      </div>
+
+      <div class="post-action-bar">
+        <div class="post-action-left">
+          <i class="${p.liked ? 'fa-solid fa-heart liked-red' : 'fa-regular fa-heart'}" onclick="togglePostLike(${p.id})"></i>
+          <i class="fa-regular fa-comment" onclick="focusComment(${p.id})"></i>
+          <i class="fa-regular fa-paper-plane" onclick="sharePost()"></i>
+        </div>
+        <i class="${p.saved ? 'fa-solid fa-bookmark saved-gold' : 'fa-regular fa-bookmark'}" onclick="togglePostSave(${p.id})"></i>
+      </div>
+
+      <div class="post-caption-box">
+        <div class="likes-stat">${p.likes} likes</div>
+        <div class="caption-content"><span>${p.username}</span>${p.caption}</div>
+        <div class="view-comments-btn" onclick="focusComment(${p.id})">View all ${p.comments.length} comments</div>
+        <div class="comments-stack">
+          ${p.comments.map(c => `<div class="comment-entry"><span>user</span>${c}</div>`).join("")}
+        </div>
+        <div class="date-indicator">${p.date}</div>
+      </div>
+
+      <div class="quick-comment-bar">
+        <input type="text" id="comment-box-${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') commitComment(${p.id})" />
+        <button onclick="commitComment(${p.id})">Post</button>
+      </div>
+    </article>
+  `;
+  }).join("");
+}
+
+function togglePostLike(id) {
+  const p = posts.find(item => item.id === id);
+  if (!p) return;
+  p.liked = !p.liked;
+  p.likes += p.liked ? 1 : -1;
+  saveState();
+  renderFeed();
+}
+
+function fireDoubleTapHeart(id) {
+  const burst = document.getElementById(`burst-${id}`);
+  if (burst) {
+    burst.classList.add("pop");
+    setTimeout(() => burst.classList.remove("pop"), 500);
+  }
+  const p = posts.find(item => item.id === id);
+  if (p && !p.liked) {
+    p.liked = true;
+    p.likes += 1;
+    saveState();
+    renderFeed();
+  }
+}
+
+function togglePostSave(id) {
+  const p = posts.find(item => item.id === id);
+  if (!p) return;
+  p.saved = !p.saved;
+  saveState();
+  renderFeed();
+}
+
+function focusComment(id) {
+  const box = document.getElementById(`comment-box-${id}`);
+  if (box) box.focus();
+}
+
+function commitComment(id) {
+  const box = document.getElementById(`comment-box-${id}`);
+  if (!box || !box.value.trim()) return;
+  const p = posts.find(item => item.id === id);
+  if (p) {
+    p.comments.push(box.value.trim());
+    saveState();
+    renderFeed();
+  }
+}
+
+function sharePost() {
+  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+  alert("Post link copied to clipboard! 🔗");
+}
+
+function removePost(id) {
+  if (confirm("Delete this post?")) {
+    posts = posts.filter(p => p.id !== id);
+    saveState();
+    renderFeed();
+    renderProfileSection();
+  }
+}
+
+// ==================== STORIES WITH MUSIC ====================
+const storyAudioPlayer = document.getElementById("storyBackgroundAudio");
+
+function renderStories() {
+  const container = document.getElementById("storiesTray");
+  if (!container) return;
+  let html = `
+    <div class="story-slot" onclick="openCreateStorySheet()">
+      <div class="story-ring-wrap self-empty">
+        <img class="story-thumb-img" src="${userProfile.avatar}" />
+        <div class="story-add-badge">+</div>
+      </div>
+      <span>Your story</span>
+    </div>
+  `;
+
+  stories.forEach(s => {
+    html += `
+      <div class="story-slot" onclick="triggerStoryPlayer('${s.img}', '${s.user}', '${s.avatar}', '${s.music ? s.music.url : ''}', '${s.music ? s.music.title + ' - ' + s.music.artist : ''}')">
+        <div class="story-ring-wrap">
+          <img class="story-thumb-img" src="${s.avatar}" />
+        </div>
+        <span>${s.user}</span>
+      </div>
+    `;
+  });
+  container.innerHTML = html;
+}
+
+let storyTimer = null;
+function triggerStoryPlayer(imgUrl, userName, avatarUrl, musicUrl, musicTitle) {
+  const player = document.getElementById("storyViewerApp");
+  const meter = document.getElementById("storyMeterFill");
+  const musicSticker = document.getElementById("storyMusicSticker");
+
+  document.getElementById("storyViewerTargetImg").src = imgUrl;
+  document.getElementById("storyTargetUserName").innerText = userName;
+  document.getElementById("storyTargetUserAvatar").src = avatarUrl;
+
+  if (musicUrl) {
+    storyAudioPlayer.src = musicUrl;
+    storyAudioPlayer.play().catch(e => console.log("Audio permission required:", e));
+    musicSticker.style.display = "flex";
+    document.getElementById("storyMusicTitle").innerText = musicTitle;
+  } else {
+    musicSticker.style.display = "none";
+  }
+
+  player.style.display = "flex";
+  meter.style.width = "0%";
+  setTimeout(() => { meter.style.width = "100%"; }, 40);
+
+  clearTimeout(storyTimer);
+  storyTimer = setTimeout(closeStoryPlayerApp, 4050);
+}
+
+function closeStoryPlayerApp() {
+  clearTimeout(storyTimer);
+  storyAudioPlayer.pause();
+  document.getElementById("storyViewerApp").style.display = "none";
+  document.getElementById("storyMeterFill").style.width = "0%";
+}
+
+// ==================== REAL REELS WITH AUDIO ====================
 const REEL_DATABASE = [
   {
     id: "reel_1",
     video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
     user: "@subbhu_vibes",
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
-    caption: "Peaceful ocean waves at sunset 🌊✨ Sound on! #beach #relax #reels",
-    audio: "Original Audio - Subbhu Beats",
+    caption: "Peaceful ocean waves at sunset 🌊✨ #beach #soundon",
+    audio: "Kahani Suno - Subbhu Beats",
     likes: "24.5k",
     comments: "642",
     liked: false
@@ -468,8 +782,8 @@ const REEL_DATABASE = [
     video: "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
     user: "@night_cruiser",
     avatar: "https://picsum.photos/100/100?random=2",
-    caption: "Night drive through city lights 🚗💨 Late night therapy #mumbai",
-    audio: "Midnight Drive - Synthwave Anthem",
+    caption: "City lights cruise 🚗💨 Midnight therapy #mumbai",
+    audio: "Starboy Synthwave - The Weeknd",
     likes: "89.1k",
     comments: "1.4k",
     liked: false
@@ -480,7 +794,7 @@ const REEL_DATABASE = [
     user: "@skater_girl",
     avatar: "https://picsum.photos/100/100?random=3",
     caption: "Golden hour skate session 🛹🔥 Practice makes perfect!",
-    audio: "Urban Vibes - Trending Track",
+    audio: "Cheques Anthem - Shubh Trending",
     likes: "45.7k",
     comments: "812",
     liked: false
@@ -594,7 +908,6 @@ function shareReelLink() {
   alert("Reel link copied to clipboard! 🔗 Share with friends");
 }
 
-// Vertical Swipe Detection
 let touchStartY = 0;
 let touchEndY = 0;
 const reelViewport = document.getElementById("reelViewport");
@@ -615,169 +928,10 @@ reelViewport.addEventListener("touchend", (e) => {
   }
 }, { passive: true });
 
-// ==================== STORIES ====================
-function renderStories() {
-  const container = document.getElementById("storiesTray");
-  if (!container) return;
-  let html = `
-    <div class="story-slot" onclick="openCreateStorySheet()">
-      <div class="story-ring-wrap self-empty">
-        <img class="story-thumb-img" src="${userProfile.avatar}" />
-        <div class="story-add-badge">+</div>
-      </div>
-      <span>Your story</span>
-    </div>
-  `;
-
-  stories.forEach(s => {
-    html += `
-      <div class="story-slot" onclick="triggerStoryPlayer('${s.img}', '${s.user}', '${s.avatar}')">
-        <div class="story-ring-wrap">
-          <img class="story-thumb-img" src="${s.avatar}" />
-        </div>
-        <span>${s.user}</span>
-      </div>
-    `;
-  });
-  container.innerHTML = html;
-}
-
-let storyTimer = null;
-function triggerStoryPlayer(imgUrl, userName, avatarUrl) {
-  const player = document.getElementById("storyViewerApp");
-  const meter = document.getElementById("storyMeterFill");
-  document.getElementById("storyViewerTargetImg").src = imgUrl;
-  document.getElementById("storyTargetUserName").innerText = userName;
-  document.getElementById("storyTargetUserAvatar").src = avatarUrl;
-
-  player.style.display = "flex";
-  meter.style.width = "0%";
-  setTimeout(() => { meter.style.width = "100%"; }, 40);
-
-  clearTimeout(storyTimer);
-  storyTimer = setTimeout(closeStoryPlayerApp, 4050);
-}
-
-function closeStoryPlayerApp() {
-  clearTimeout(storyTimer);
-  document.getElementById("storyViewerApp").style.display = "none";
-  document.getElementById("storyMeterFill").style.width = "0%";
-}
-
-// ==================== FEED POSTS ====================
-function renderFeed() {
-  const wall = document.getElementById("postsContainer");
-  if (!wall) return;
-  wall.innerHTML = posts.map(p => `
-    <article class="post-block" id="post-${p.id}">
-      <div class="post-top">
-        <div class="post-user-info" onclick="switchView('profileTab')">
-          <img src="${p.avatar}" class="post-user-pfp" />
-          <span class="post-author">${p.username}</span>
-        </div>
-        <i class="fa-solid fa-ellipsis post-more-btn" onclick="removePost(${p.id})"></i>
-      </div>
-
-      <div class="post-stage" ondblclick="fireDoubleTapHeart(${p.id})">
-        <img src="${p.image}" loading="lazy" />
-        <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
-      </div>
-
-      <div class="post-action-bar">
-        <div class="post-action-left">
-          <i class="${p.liked ? 'fa-solid fa-heart liked-red' : 'fa-regular fa-heart'}" onclick="togglePostLike(${p.id})"></i>
-          <i class="fa-regular fa-comment" onclick="focusComment(${p.id})"></i>
-          <i class="fa-regular fa-paper-plane" onclick="sharePost()"></i>
-        </div>
-        <i class="${p.saved ? 'fa-solid fa-bookmark saved-gold' : 'fa-regular fa-bookmark'}" onclick="togglePostSave(${p.id})"></i>
-      </div>
-
-      <div class="post-caption-box">
-        <div class="likes-stat">${p.likes} likes</div>
-        <div class="caption-content"><span>${p.username}</span>${p.caption}</div>
-        <div class="view-comments-btn" onclick="focusComment(${p.id})">View all ${p.comments.length} comments</div>
-        <div class="comments-stack">
-          ${p.comments.map(c => `<div class="comment-entry"><span>user</span>${c}</div>`).join("")}
-        </div>
-        <div class="date-indicator">${p.date}</div>
-      </div>
-
-      <div class="quick-comment-bar">
-        <input type="text" id="comment-box-${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') commitComment(${p.id})" />
-        <button onclick="commitComment(${p.id})">Post</button>
-      </div>
-    </article>
-  `).join("");
-}
-
-function togglePostLike(id) {
-  const p = posts.find(item => item.id === id);
-  if (!p) return;
-  p.liked = !p.liked;
-  p.likes += p.liked ? 1 : -1;
-  saveState();
-  renderFeed();
-}
-
-function fireDoubleTapHeart(id) {
-  const burst = document.getElementById(`burst-${id}`);
-  if (burst) {
-    burst.classList.add("pop");
-    setTimeout(() => burst.classList.remove("pop"), 500);
-  }
-  const p = posts.find(item => item.id === id);
-  if (p && !p.liked) {
-    p.liked = true;
-    p.likes += 1;
-    saveState();
-    renderFeed();
-  }
-}
-
-function togglePostSave(id) {
-  const p = posts.find(item => item.id === id);
-  if (!p) return;
-  p.saved = !p.saved;
-  saveState();
-  renderFeed();
-}
-
-function focusComment(id) {
-  const box = document.getElementById(`comment-box-${id}`);
-  if (box) box.focus();
-}
-
-function commitComment(id) {
-  const box = document.getElementById(`comment-box-${id}`);
-  if (!box || !box.value.trim()) return;
-  const p = posts.find(item => item.id === id);
-  if (p) {
-    p.comments.push(box.value.trim());
-    saveState();
-    renderFeed();
-  }
-}
-
-function sharePost() {
-  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Post link copied to clipboard! 🔗");
-}
-
-function removePost(id) {
-  if (confirm("Delete this post?")) {
-    posts = posts.filter(p => p.id !== id);
-    saveState();
-    renderFeed();
-    renderProfileSection();
-  }
-}
-
-// ==================== PROFILE & DP RETENTION ====================
+// ==================== PROFILE ====================
 function renderProfileSection() {
   document.getElementById("profileHeroName").innerText = userProfile.name;
   document.getElementById("profileHeroBio").innerText = userProfile.bio;
-  
-  // Update avatar everywhere
   document.getElementById("profileHeroPic").src = userProfile.avatar;
   document.getElementById("profileDockAvatar").src = userProfile.avatar;
   document.getElementById("mindBarAvatar").src = userProfile.avatar;
@@ -809,14 +963,13 @@ function saveProfileDetails() {
   userProfile.bio = bioInput.trim();
 
   if (picFile) {
-    // Compress profile DP to 280x280 at 0.82 quality (~20KB) so it NEVER gets cut on refresh
     compressImageFile(picFile, 280, 0.82, function(optimizedDataUrl) {
       userProfile.avatar = optimizedDataUrl;
       saveState();
       renderProfileSection();
       renderStories();
       closeProfileEditSheet();
-      alert("Profile & DP successfully updated and permanently saved! 📸");
+      alert("Profile & DP updated successfully! 📸");
     });
   } else {
     saveState();
@@ -839,11 +992,11 @@ function handleDirectDP(event) {
     saveState();
     renderProfileSection();
     renderStories();
-    alert("DP permanently saved! Refresh karke check karein. 📸");
+    alert("DP permanently updated! 📸");
   });
 }
 
-// ==================== UPLOAD POST & STORY ====================
+// ==================== POST & STORY UPLOAD ====================
 function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
 function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
 
@@ -855,7 +1008,6 @@ function dispatchNewPost() {
     return;
   }
 
-  // Compress post photo to 800px max (~70KB)
   compressImageFile(file, 800, 0.78, function(optimizedDataUrl) {
     posts.unshift({
       id: Date.now(),
@@ -867,6 +1019,7 @@ function dispatchNewPost() {
       saved: false,
       caption: caption || "",
       comments: [],
+      music: selectedPostMusic,
       date: "JUST NOW"
     });
     saveState();
@@ -893,7 +1046,8 @@ function dispatchNewStory() {
       id: Date.now(),
       user: "Your story",
       avatar: userProfile.avatar,
-      img: optimizedDataUrl
+      img: optimizedDataUrl,
+      music: selectedStoryMusic
     });
     saveState();
     renderStories();
