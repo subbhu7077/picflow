@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Instagram</title>
+  <title>PicFlow - Verified</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -17,6 +17,9 @@
     .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; position: relative; }
     .header-actions i { cursor: pointer; position: relative; }
     .badge { position: absolute; top: -6px; right: -8px; background: #ed4956; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; font-family: sans-serif; }
+
+    /* Verified Badge Style */
+    .verified-tick { color: #0095f6; font-size: 13px; margin-left: 4px; display: inline-flex; align-items: center; }
 
     /* Tabs */
     .tab-section { display: none; }
@@ -43,6 +46,7 @@
     .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
     .post-user-text { display: flex; flex-direction: column; }
+    .post-author-row { display: flex; align-items: center; gap: 2px; }
     .post-author { font-size: 13px; font-weight: 600; }
     .post-audio-badge { font-size: 11px; color: #3897f0; display: flex; align-items: center; gap: 5px; margin-top: 1px; cursor: pointer; }
     .post-more-btn { color: #888; cursor: pointer; font-size: 16px; }
@@ -81,9 +85,9 @@
     .reel-floating-state-icon.show { opacity: 1; transform: scale(1); }
     .reel-mute-btn { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; z-index: 25; cursor: pointer; backdrop-filter: blur(4px); }
     .reel-info-layer { position: absolute; bottom: 16px; left: 14px; right: 75px; z-index: 20; }
-    .reel-user-badge { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .reel-user-badge { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .reel-user-badge img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; }
-    .reel-user-name { font-size: 14px; font-weight: 600; color: #fff; }
+    .reel-user-name { font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 4px; }
     .reel-follow-tag { border: 1px solid rgba(255,255,255,0.7); background: transparent; color: #fff; padding: 2px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
     .reel-caption-text { font-size: 13px; line-height: 1.35; color: #f0f0f0; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
     .reel-music-tag { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #ddd; cursor: pointer; }
@@ -117,7 +121,8 @@
     .profile-metrics-deck strong { display: block; font-size: 16px; }
     .profile-metrics-deck span { font-size: 12px; color: #888; }
     .profile-bio-textblock { margin-top: 14px; }
-    .profile-bio-textblock h4 { font-size: 14px; }
+    .profile-name-row { display: flex; align-items: center; gap: 6px; }
+    .profile-name-row h4 { font-size: 15px; font-weight: 700; }
     .profile-bio-textblock p { font-size: 13px; color: #aaa; margin-top: 2px; }
     .profile-control-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
 
@@ -158,7 +163,7 @@
     #storyViewerApp { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
     .story-progress-wire { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
     .story-progress-meter { width: 0%; height: 100%; background: #fff; transition: width 4.5s linear; }
-    .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
+    .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 6px; z-index: 10; font-size: 13px; font-weight: 600; }
     .story-author-tag img { width: 34px; height: 34px; border-radius: 50%; }
     .story-music-sticker { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.2); }
     #storyViewerTargetImg { width: 100%; height: 100%; object-fit: contain; }
@@ -225,7 +230,9 @@
       <div class="reel-info-layer">
         <div class="reel-user-badge">
           <img src="" id="reelUserAvatar" />
-          <span class="reel-user-name" id="reelAuthorName">@user</span>
+          <span class="reel-user-name" id="reelAuthorName">
+            @user <i class="fa-solid fa-circle-check verified-tick"></i>
+          </span>
           <button class="reel-follow-tag" onclick="toggleReelFollow(this)">Follow</button>
         </div>
         <p class="reel-caption-text" id="reelCaptionContent">Caption text here...</p>
@@ -242,7 +249,7 @@
           <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
           <span id="reelLikesCount">45.2k</span>
         </div>
-        <div class="reel-action-bubble" onclick="alert('Reel comments: Worldwide audio active!')">
+        <div class="reel-action-bubble" onclick="alert('Reel comments: Verified account active!')">
           <i class="fa-regular fa-comment"></i>
           <span id="reelCommentCount">824</span>
         </div>
@@ -263,7 +270,7 @@
     <div class="notifications-holder" id="notifListContainer"></div>
   </section>
 
-  <!-- TAB 5: PROFILE -->
+  <!-- TAB 5: PROFILE WITH BLUE VERIFICATION BADGE -->
   <section id="profileTab" class="tab-section">
     <div class="profile-canvas">
       <div class="profile-bio-header">
@@ -273,13 +280,16 @@
         </div>
         <div class="profile-metrics-deck">
           <div><strong id="profilePostCountNumber">0</strong><span>Posts</span></div>
-          <div><strong id="profileFollowersNum">650</strong><span>Followers</span></div>
-          <div><strong id="profileFollowingNum">328</strong><span>Following</span></div>
+          <div><strong id="profileFollowersNum">1.2M</strong><span>Followers</span></div>
+          <div><strong id="profileFollowingNum">248</strong><span>Following</span></div>
         </div>
       </div>
       <div class="profile-bio-textblock">
-        <h4 id="profileHeroName">Subbhu7077</h4>
-        <p id="profileHeroBio">Photographer | Music & Tech Enthusiast ⚡</p>
+        <div class="profile-name-row">
+          <h4 id="profileHeroName">Subbhu7077</h4>
+          <i class="fa-solid fa-circle-check verified-tick" title="Verified Account"></i>
+        </div>
+        <p id="profileHeroBio">Official Creator & Tech Explorer ⚡</p>
       </div>
       <button class="profile-control-btn" onclick="openProfileEditSheet()">Edit Profile</button>
     </div>
@@ -298,21 +308,21 @@
   <!-- Hidden Quick DP Picker -->
   <input type="file" id="directDpFileInput" accept="image/*" style="display:none;" onchange="handleDirectDP(event)" />
 
-  <!-- Create Post Modal with Music -->
+  <!-- Create Post Modal -->
   <div class="modal-overlay-backdrop" id="createPostModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
       <h3>Create New Post</h3>
       <input type="file" id="postImageUploadInput" accept="image/*" />
       <button class="btn-theme-secondary" onclick="openMusicPicker('post')">
-        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Any Song in the World</span>
+        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Song (Worldwide)</span>
       </button>
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" onclick="dispatchNewPost()">Share to Feed</button>
     </div>
   </div>
 
-  <!-- Create Story Modal with Music -->
+  <!-- Create Story Modal -->
   <div class="modal-overlay-backdrop" id="createStoryModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreateStorySheet()"></i>
@@ -325,7 +335,7 @@
     </div>
   </div>
 
-  <!-- Worldwide Searchable Music Picker Sheet -->
+  <!-- Worldwide Music Picker Sheet -->
   <div class="music-picker-sheet" id="musicPickerSheet">
     <div class="music-picker-header">
       <h4>Trending Worldwide Music</h4>
@@ -362,12 +372,13 @@
     </div>
   </div>
 
-  <!-- Story Player Viewer with Music Audio -->
+  <!-- Story Player Viewer -->
   <div id="storyViewerApp" onclick="closeStoryPlayerApp()">
     <div class="story-progress-wire"><div class="story-progress-meter" id="storyMeterFill"></div></div>
     <div class="story-author-tag">
       <img id="storyTargetUserAvatar" src="" />
       <span id="storyTargetUserName">User</span>
+      <i class="fa-solid fa-circle-check verified-tick"></i>
     </div>
     <div class="story-music-sticker" id="storyMusicSticker">
       <i class="fa-solid fa-music"></i>
@@ -384,8 +395,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Worldwide unlimited music connected 🎵🔥</div>
-      <div class="chat-bubble them">Koi bhi gaana search karke real play karo!</div>
+      <div class="chat-bubble them">Hey Subbhu! Official Blue Verification Tick activate ho gaya hai 💙✨</div>
+      <div class="chat-bubble them">Profile aur posts par verified badge show ho raha hai!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -395,8 +406,7 @@
 </div>
 
 <script>
-// ==================== UNRESTRICTED WORLDWIDE MUSIC ENGINE ====================
-// Uses JSONP callback to bypass browser CORS block 100% reliably
+// ==================== GLOBAL AUDIO ENGINE ====================
 const globalAudio = document.getElementById("globalAudioPlayer");
 
 const DEFAULT_PRESET_TRACKS = [
@@ -429,6 +439,7 @@ const DEFAULT_PRESET_TRACKS = [
 let musicPickerTarget = "post";
 let selectedPostMusic = DEFAULT_PRESET_TRACKS[0];
 let selectedStoryMusic = DEFAULT_PRESET_TRACKS[1];
+let activeMusicList = DEFAULT_PRESET_TRACKS;
 let searchTimeout = null;
 
 function renderMusicList(tracks) {
@@ -455,8 +466,6 @@ function renderMusicList(tracks) {
   `).join("");
 }
 
-let activeMusicList = DEFAULT_PRESET_TRACKS;
-
 function chooseTrackByIndex(idx) {
   const track = activeMusicList[idx];
   if (musicPickerTarget === "post") {
@@ -479,7 +488,6 @@ function previewMusic(url) {
   }
 }
 
-// JSONP Worldwide Search: Works on all networks & devices without CORS errors
 window.handleITunesResponse = function(data) {
   if (data && data.results && data.results.length > 0) {
     activeMusicList = data.results.filter(r => r.previewUrl).map(r => ({
@@ -496,7 +504,7 @@ window.handleITunesResponse = function(data) {
 
 function searchWorldwideMusic(query) {
   const container = document.getElementById("musicListContainer");
-  container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching worldwide music...</div>`;
+  container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Loading tracks...</div>`;
 
   const oldScript = document.getElementById("jsonp-itunes");
   if (oldScript) oldScript.remove();
@@ -583,33 +591,35 @@ const SEED_POSTS = [
   {
     id: 101,
     username: "Subbhu7077",
+    isVerified: true,
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
     image: "https://picsum.photos/800/800?random=181",
-    likes: 420,
+    likes: 1284,
     liked: false,
     saved: false,
-    caption: "Worldwide Music Engine Active on PicFlow! Tap photo or audio pill to listen 🎵⚡",
-    comments: ["Sound is working so crisp!", "Best music player update 🔥"],
+    caption: "Official Blue Verified Tick is now Active on PicFlow! 💙🔥 Tap for music",
+    comments: ["Congratulations for Blue Badge! 💙", "Looks fully verified and official"],
     music: DEFAULT_PRESET_TRACKS[0],
     date: "JUST NOW"
   }
 ];
 
 const SEED_STORIES = [
-  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: DEFAULT_PRESET_TRACKS[1] },
-  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: DEFAULT_PRESET_TRACKS[2] }
+  { id: 1, user: "Your story", isVerified: true, avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: DEFAULT_PRESET_TRACKS[1] },
+  { id: 2, user: "neha_v", isVerified: false, avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: DEFAULT_PRESET_TRACKS[2] }
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your post track.", time: "1m", isFollow: false },
+  { id: 1, user: "Instagram", avatar: "https://picsum.photos/200/200?random=99", text: "granted you official Blue Verification Badge 💙", time: "JUST NOW", isFollow: false },
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
-let posts = JSON.parse(localStorage.getItem("pf_v17_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v17_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v17_profile")) || {
+let posts = JSON.parse(localStorage.getItem("pf_v18_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v18_stories")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_v18_profile")) || {
   name: "Subbhu7077",
-  bio: "Photographer | Music & Tech Enthusiast ⚡",
+  isVerified: true,
+  bio: "Official Creator & Tech Explorer ⚡",
   avatar: DEFAULT_AVATAR
 };
 
@@ -620,9 +630,9 @@ if (SAVED_PERMANENT_DP) {
 function saveState() {
   try {
     localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    localStorage.setItem("pf_v17_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v17_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v17_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_v18_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v18_stories", JSON.stringify(stories));
+    localStorage.setItem("pf_v18_profile", JSON.stringify(userProfile));
   } catch(e) {
     console.warn("Storage quota:", e);
   }
@@ -652,7 +662,7 @@ function switchView(viewId) {
   }
 }
 
-// ==================== FEED & AUDIO PLAYBACK ====================
+// ==================== FEED ====================
 let currentPlayingPostId = null;
 
 function togglePostAudio(postId, audioUrl) {
@@ -665,9 +675,7 @@ function togglePostAudio(postId, audioUrl) {
     globalAudio.play().then(() => {
       currentPlayingPostId = postId;
       renderFeed();
-    }).catch(e => {
-      console.log("Audio play gesture needed:", e);
-    });
+    }).catch(() => {});
   }
 }
 
@@ -682,7 +690,10 @@ function renderFeed() {
         <div class="post-user-info" onclick="switchView('profileTab')">
           <img src="${p.avatar}" class="post-user-pfp" />
           <div class="post-user-text">
-            <span class="post-author">${p.username}</span>
+            <div class="post-author-row">
+              <span class="post-author">${p.username}</span>
+              ${p.isVerified ? `<i class="fa-solid fa-circle-check verified-tick" title="Verified"></i>` : ''}
+            </div>
             ${p.music ? `<span class="post-audio-badge" onclick="event.stopPropagation(); togglePostAudio(${p.id}, '${p.music.url}')"><i class="fa-solid fa-music"></i> ${p.music.title} • ${p.music.artist}</span>` : ''}
           </div>
         </div>
@@ -694,7 +705,7 @@ function renderFeed() {
         ${p.music ? `
           <div class="post-audio-play-pill">
             <i class="fa-solid ${isPlaying ? 'fa-volume-high' : 'fa-play'}"></i>
-            <span>${isPlaying ? 'Playing Audio' : 'Play Music'}</span>
+            <span>${isPlaying ? 'Playing' : 'Play Music'}</span>
           </div>
         ` : ''}
         <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
@@ -778,7 +789,7 @@ function commitComment(id) {
 
 function sharePost() {
   if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Post link copied to clipboard! 🔗");
+  alert("Post link copied! 🔗");
 }
 
 function removePost(id) {
@@ -857,13 +868,13 @@ const REEL_DATABASE = [
   {
     id: "reel_1",
     video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
-    user: "@subbhu_vibes",
+    user: "@Subbhu7077",
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
-    caption: "Ocean therapy with Arijit Singh vibes 🌊✨ #beach #music",
+    caption: "Official Verified Creator Vibes 💙🌊 #verified #subbhu",
     audio: "Apna Bana Le - Arijit Singh",
     audioUrl: DEFAULT_PRESET_TRACKS[0].url,
-    likes: "58.2k",
-    comments: "824",
+    likes: "128.4k",
+    comments: "2.1k",
     liked: false
   },
   {
@@ -871,23 +882,11 @@ const REEL_DATABASE = [
     video: "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
     user: "@drift_king",
     avatar: "https://picsum.photos/100/100?random=2",
-    caption: "Night drift mode on 🏎️💨 Kordhell Phonk bass boost! #phonk #drift",
+    caption: "Night drift mode on 🏎️💨 Kordhell Phonk bass boost! #phonk",
     audio: "Murder In My Mind - KORDHELL",
     audioUrl: DEFAULT_PRESET_TRACKS[1].url,
-    likes: "124.8k",
-    comments: "3.2k",
-    liked: false
-  },
-  {
-    id: "reel_3",
-    video: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-skater-riding-a-skateboard-41604-large.mp4",
-    user: "@skater_girl",
-    avatar: "https://picsum.photos/100/100?random=3",
-    caption: "Golden hour skate vibes with The Weeknd 🛹🔥 #english #starboy",
-    audio: "Starboy - The Weeknd",
-    audioUrl: DEFAULT_PRESET_TRACKS[2].url,
-    likes: "74.1k",
-    comments: "940",
+    likes: "94.8k",
+    comments: "1.4k",
     liked: false
   }
 ];
@@ -904,7 +903,7 @@ function mountReel(index) {
   globalAudio.src = data.audioUrl;
   globalAudio.muted = isReelMuted;
   
-  document.getElementById("reelAuthorName").innerText = data.user;
+  document.getElementById("reelAuthorName").innerHTML = `${data.user} <i class="fa-solid fa-circle-check verified-tick"></i>`;
   document.getElementById("reelUserAvatar").src = data.avatar;
   document.getElementById("reelCaptionContent").innerText = data.caption;
   document.getElementById("reelAudioTitle").innerText = data.audio;
@@ -1010,7 +1009,7 @@ function toggleReelFollow(btn) {
 
 function shareReelLink() {
   if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Reel link copied to clipboard! 🔗 Share with friends");
+  alert("Reel link copied! 🔗");
 }
 
 let touchStartY = 0;
@@ -1074,13 +1073,13 @@ function saveProfileDetails() {
       renderProfileSection();
       renderStories();
       closeProfileEditSheet();
-      alert("Profile & DP permanently saved! 📸");
+      alert("Verified Profile & DP permanently saved! 💙📸");
     });
   } else {
     saveState();
     renderProfileSection();
     closeProfileEditSheet();
-    alert("Profile saved! ✨");
+    alert("Profile saved! 💙");
   }
 }
 
@@ -1117,6 +1116,7 @@ function dispatchNewPost() {
     posts.unshift({
       id: Date.now(),
       username: userProfile.name,
+      isVerified: true,
       avatar: userProfile.avatar,
       image: optimizedDataUrl,
       likes: 0,
@@ -1150,6 +1150,7 @@ function dispatchNewStory() {
     stories.unshift({
       id: Date.now(),
       user: "Your story",
+      isVerified: true,
       avatar: userProfile.avatar,
       img: optimizedDataUrl,
       music: selectedStoryMusic
@@ -1228,7 +1229,7 @@ function dispatchDirectMessage() {
   }, 600);
 }
 
-// ==================== INITIAL BOOT ====================
+// ==================== BOOT ====================
 window.addEventListener("DOMContentLoaded", () => {
   renderProfileSection();
   renderStories();
