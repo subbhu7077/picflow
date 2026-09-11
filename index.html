@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Verified</title>
+  <title>PicFlow - Instagram</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -18,7 +18,7 @@
     .header-actions i { cursor: pointer; position: relative; }
     .badge { position: absolute; top: -6px; right: -8px; background: #ed4956; color: #fff; font-size: 10px; font-weight: bold; padding: 2px 5px; border-radius: 10px; font-family: sans-serif; }
 
-    /* Verified Badge Style */
+    /* Verified Badge */
     .verified-tick { color: #0095f6; font-size: 13px; margin-left: 4px; display: inline-flex; align-items: center; }
 
     /* Tabs */
@@ -583,22 +583,26 @@ function compressImageFile(file, maxDimension, quality, callback) {
   reader.readAsDataURL(file);
 }
 
-// ==================== STATE MANAGEMENT ====================
+// ==================== PERMANENT STORAGE LAYER (HARD-LOCK) ====================
 const DEFAULT_AVATAR = "https://picsum.photos/200/200?random=1";
+
+// Read dedicated permanent keys
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp");
+const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhu7077";
+const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
 
 const SEED_POSTS = [
   {
     id: 101,
-    username: "Subbhu7077",
+    username: SAVED_PERMANENT_USERNAME,
     isVerified: true,
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
     image: "https://picsum.photos/800/800?random=181",
     likes: 1284,
     liked: false,
     saved: false,
-    caption: "Official Blue Verified Tick is now Active on PicFlow! 💙🔥 Tap for music",
-    comments: ["Congratulations for Blue Badge! 💙", "Looks fully verified and official"],
+    caption: "Official Verified Creator on PicFlow! 💙🔥 Username & Bio permanently locked",
+    comments: ["Congratulations for Blue Badge! 💙", "Permanent profile is working!"],
     music: DEFAULT_PRESET_TRACKS[0],
     date: "JUST NOW"
   }
@@ -614,27 +618,29 @@ const SEED_NOTIFS = [
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
-let posts = JSON.parse(localStorage.getItem("pf_v18_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v18_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v18_profile")) || {
-  name: "Subbhu7077",
-  isVerified: true,
-  bio: "Official Creator & Tech Explorer ⚡",
-  avatar: DEFAULT_AVATAR
-};
+let posts = JSON.parse(localStorage.getItem("pf_v19_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v19_stories")) || SEED_STORIES;
 
-if (SAVED_PERMANENT_DP) {
-  userProfile.avatar = SAVED_PERMANENT_DP;
-}
+// Lock userProfile with dedicated permanent keys
+let userProfile = {
+  name: SAVED_PERMANENT_USERNAME,
+  isVerified: true,
+  bio: SAVED_PERMANENT_BIO,
+  avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR
+};
 
 function saveState() {
   try {
+    // Dedicated Permanent Locks
     localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    localStorage.setItem("pf_v18_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v18_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v18_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_permanent_username", userProfile.name);
+    localStorage.setItem("pf_permanent_bio", userProfile.bio);
+
+    // List States
+    localStorage.setItem("pf_v19_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v19_stories", JSON.stringify(stories));
   } catch(e) {
-    console.warn("Storage quota:", e);
+    console.warn("Storage quota warning:", e);
   }
 }
 
@@ -868,9 +874,9 @@ const REEL_DATABASE = [
   {
     id: "reel_1",
     video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
-    user: "@Subbhu7077",
-    avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
-    caption: "Official Verified Creator Vibes 💙🌊 #verified #subbhu",
+    user: `@${userProfile.name}`,
+    avatar: userProfile.avatar,
+    caption: "Official Verified Creator Vibes 💙🌊 #verified",
     audio: "Apna Bana Le - Arijit Singh",
     audioUrl: DEFAULT_PRESET_TRACKS[0].url,
     likes: "128.4k",
@@ -1058,28 +1064,42 @@ function closeProfileEditSheet() {
   document.getElementById("editProfileModal").style.display = "none"; 
 }
 
+// 100% PERMANENT HARD-LOCK SAVE
 function saveProfileDetails() {
-  const nameInput = document.getElementById("editProfileDisplayName").value;
-  const bioInput = document.getElementById("editProfileBioDetails").value;
+  const nameInput = document.getElementById("editProfileDisplayName").value.trim();
+  const bioInput = document.getElementById("editProfileBioDetails").value.trim();
   const picFile = document.getElementById("editProfilePicFile").files[0];
 
-  if (nameInput.trim()) userProfile.name = nameInput.trim();
-  userProfile.bio = bioInput.trim();
+  if (nameInput) {
+    userProfile.name = nameInput;
+    // Update existing user posts username as well
+    posts.forEach(p => {
+      if (p.isVerified) p.username = nameInput;
+    });
+  }
+  if (bioInput) {
+    userProfile.bio = bioInput;
+  }
 
   if (picFile) {
     compressImageFile(picFile, 280, 0.82, function(optimizedDataUrl) {
       userProfile.avatar = optimizedDataUrl;
+      posts.forEach(p => {
+        if (p.isVerified) p.avatar = optimizedDataUrl;
+      });
       saveState();
       renderProfileSection();
       renderStories();
+      renderFeed();
       closeProfileEditSheet();
-      alert("Verified Profile & DP permanently saved! 💙📸");
+      alert("Username, Bio & DP permanently saved! 💙📸");
     });
   } else {
     saveState();
     renderProfileSection();
+    renderFeed();
     closeProfileEditSheet();
-    alert("Profile saved! 💙");
+    alert("Username & Bio permanently saved! 💙✨");
   }
 }
 
@@ -1093,9 +1113,13 @@ function handleDirectDP(event) {
 
   compressImageFile(file, 280, 0.82, function(optimizedDataUrl) {
     userProfile.avatar = optimizedDataUrl;
+    posts.forEach(p => {
+      if (p.isVerified) p.avatar = optimizedDataUrl;
+    });
     saveState();
     renderProfileSection();
     renderStories();
+    renderFeed();
     alert("DP permanently updated! 📸");
   });
 }
