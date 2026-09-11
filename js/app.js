@@ -1612,3 +1612,269 @@ document.addEventListener(
   }
 );
 
+
+
+/* =========================================
+   SUPABASE ONLINE PROFILE PHOTO
+========================================= */
+
+window.changeDP = async function() {
+
+  const input = document.createElement("input");
+
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = async function() {
+
+    const file = input.files[0];
+
+    if (!file) return;
+
+    if (!picflowSupabase) {
+      alert("Supabase is not loaded. Please refresh.");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image.");
+      return;
+    }
+
+    if (file.size > 6 * 1024 * 1024) {
+      alert("Photo must be smaller than 6MB.");
+      return;
+    }
+
+    const userResult =
+      await picflowSupabase.auth.getUser();
+
+    if (userResult.error || !userResult.data.user) {
+      alert("Please login again.");
+      return;
+    }
+
+    const user =
+      userResult.data.user;
+
+    showMessage("Uploading profile photo... 📤");
+
+    const extension =
+      file.name.split(".").pop().toLowerCase() || "jpg";
+
+    const filePath =
+      user.id + "/" +
+      Date.now() + "." +
+      extension;
+
+    const uploadResult =
+      await picflowSupabase
+        .storage
+        .from("avatars")
+        .upload(
+          filePath,
+          file,
+          {
+            cacheControl: "3600",
+            contentType: file.type,
+            upsert: false
+          }
+        );
+
+    if (uploadResult.error) {
+      console.error(uploadResult.error);
+
+      alert(
+        "Photo upload failed:\n\n" +
+        uploadResult.error.message
+      );
+
+      return;
+    }
+
+    const publicResult =
+      picflowSupabase
+        .storage
+        .from("avatars")
+        .getPublicUrl(filePath);
+
+    const publicUrl =
+      publicResult.data.publicUrl;
+
+    const profileResult =
+      await picflowSupabase
+        .from("profiles")
+        .update({
+          avatar_url: publicUrl,
+          updated_at: new Date().toISOString()
+        })
+        .eq("id", user.id);
+
+    if (profileResult.error) {
+
+      console.error(profileResult.error);
+
+      alert(
+        "Photo uploaded, but profile update failed:\n\n" +
+        profileResult.error.message
+      );
+
+      return;
+    }
+
+    localStorage.setItem(
+      "picflow_dp",
+      publicUrl
+    );
+
+    /* Update edit preview */
+
+    const preview =
+      document.getElementById("dpPreview");
+
+    if (preview) {
+
+      preview.innerHTML =
+        '<img src="' +
+        publicUrl +
+        '" alt="Profile preview">';
+    }
+
+
+    /* Update all avatars */
+
+    document
+      .querySelectorAll(".avatar")
+      .forEach(function(el) {
+
+        el.innerHTML =
+          '<img src="' +
+          publicUrl +
+          '" alt="Profile photo">';
+
+      });
+
+
+    /* Update profile avatar */
+
+    const profileAvatar =
+      document.querySelector(".profile-avatar");
+
+    if (profileAvatar) {
+
+      profileAvatar.innerHTML =
+        '<img src="' +
+        publicUrl +
+        '" alt="Profile photo">';
+
+    }
+
+
+    showMessage(
+      "Profile photo saved online! ☁️📸"
+    );
+
+  };
+
+  input.click();
+
+};
+
+
+/* =========================================
+   LOAD ONLINE PROFILE PHOTO
+========================================= */
+
+async function loadSupabaseAvatar() {
+
+  if (!picflowSupabase) return;
+
+  const userResult =
+    await picflowSupabase.auth.getUser();
+
+  if (
+    userResult.error ||
+    !userResult.data.user
+  ) {
+    return;
+  }
+
+  const user =
+    userResult.data.user;
+
+  const result =
+    await picflowSupabase
+      .from("profiles")
+      .select("avatar_url")
+      .eq("id", user.id)
+      .maybeSingle();
+
+  if (result.error) {
+    console.error(result.error);
+    return;
+  }
+
+  if (!result.data || !result.data.avatar_url) {
+    return;
+  }
+
+  const image =
+    result.data.avatar_url;
+
+  localStorage.setItem(
+    "picflow_dp",
+    image
+  );
+
+  document
+    .querySelectorAll(".avatar")
+    .forEach(function(el) {
+
+      el.innerHTML =
+        '<img src="' +
+        image +
+        '" alt="Profile photo">';
+
+    });
+
+  const profileAvatar =
+    document.querySelector(".profile-avatar");
+
+  if (profileAvatar) {
+
+    profileAvatar.innerHTML =
+      '<img src="' +
+      image +
+      '" alt="Profile photo">';
+
+  }
+
+  const preview =
+    document.getElementById("dpPreview");
+
+  if (preview) {
+
+    preview.innerHTML =
+      '<img src="' +
+      image +
+      '" alt="Profile preview">';
+
+  }
+
+}
+
+
+/* Load online DP after app starts */
+
+document.addEventListener(
+  "DOMContentLoaded",
+  function() {
+
+    setTimeout(
+      loadSupabaseAvatar,
+      1200
+    );
+
+  }
+);
+
