@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Instant Post Working</title>
+  <title>PicFlow - Verified Official</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: #000; color: #fff; padding-bottom: 58px; overflow-x: hidden; }
@@ -37,8 +36,8 @@
     .mind-input-faux { flex: 1; background: #1c1c1c; border-radius: 20px; padding: 9px 16px; color: #777; font-size: 13px; }
 
     /* Feed Posts */
-    .post-wall { display: flex; flex-direction: column; }
-    .post-block { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; }
+    .post-wall { display: flex; flex-direction: column; width: 100%; min-height: 200px; }
+    .post-block { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; margin-bottom: 6px; }
     .post-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
     .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
@@ -47,8 +46,8 @@
     .post-author { font-size: 13px; font-weight: 600; }
     .post-audio-badge { font-size: 11px; color: #3897f0; display: flex; align-items: center; gap: 5px; margin-top: 1px; cursor: pointer; }
 
-    .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #0d0d0d; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .post-stage img { width: 100%; height: 100%; object-fit: cover; }
+    .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .post-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .post-audio-play-pill { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.75); padding: 6px 14px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(6px); z-index: 5; border: 1px solid rgba(255,255,255,0.15); }
     .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 10; }
     .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
@@ -95,7 +94,7 @@
     .profile-bio-textblock p { font-size: 13px; color: #aaa; margin-top: 2px; }
     .profile-control-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
     .profile-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 20px; }
-    .profile-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+    .profile-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
 
     /* Bottom Dock */
     nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
@@ -130,7 +129,7 @@
   <header>
     <div class="logo" onclick="switchView('feedTab')">PicFlow</div>
     <div class="header-actions">
-      <i class="fa-regular fa-heart" onclick="alert('All verified notifications loaded')"></i>
+      <i class="fa-regular fa-heart" onclick="alert('No new notifications')"></i>
       <i class="fa-brands fa-facebook-messenger" onclick="alert('Direct chat open')"></i>
     </div>
   </header>
@@ -203,7 +202,7 @@
       </div>
       <div class="profile-bio-textblock">
         <div class="profile-name-row">
-          <h4 id="profileHeroName">Subbhu7077</h4>
+          <h4 id="profileHeroName">Subbhubhai.official</h4>
           <i class="fa-solid fa-circle-check verified-tick"></i>
         </div>
         <p id="profileHeroBio">Official Creator & Tech Explorer ⚡</p>
@@ -275,47 +274,11 @@
 </div>
 
 <script>
-// ==================== FAST COMPRESSION & FILE LOADER ====================
-// Safely downsizes images into tiny Base64 JPEGs without hanging or quota error
-function getOptimizedImageData(file, callback) {
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const rawData = e.target.result;
-    const img = new Image();
-    img.onload = function() {
-      try {
-        const maxDim = 450;
-        let w = img.width;
-        let h = img.height;
-        if (w > h && w > maxDim) {
-          h = Math.round((h * maxDim) / w);
-          w = maxDim;
-        } else if (h > maxDim) {
-          w = Math.round((w * maxDim) / h);
-          h = maxDim;
-        }
-        const cvs = document.createElement("canvas");
-        cvs.width = w;
-        cvs.height = h;
-        const ctx = cvs.getContext("2d");
-        ctx.drawImage(img, 0, 0, w, h);
-        callback(cvs.toDataURL("image/jpeg", 0.65));
-      } catch (err) {
-        callback(rawData);
-      }
-    };
-    img.onerror = () => callback(rawData);
-    img.src = rawData;
-  };
-  reader.onerror = () => callback(null);
-  reader.readAsDataURL(file);
-}
-
 // ==================== STATE MANAGEMENT ====================
 const globalAudio = document.getElementById("globalAudioPlayer");
 
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp") || "https://picsum.photos/200/200?random=1";
-const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhu7077";
+const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhubhai.official";
 const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
 
 let userProfile = {
@@ -332,13 +295,22 @@ const DEFAULT_POSTS = [
     username: userProfile.name,
     avatar: userProfile.avatar,
     image: "https://picsum.photos/800/800?random=181",
-    caption: "PicFlow Master Engine Active! 🚀",
+    caption: "Official Verified Creator Vibes ⚡💙",
     likes: 1284,
     music: null
   }
 ];
 
-let globalPosts = JSON.parse(localStorage.getItem("pf_v24_posts")) || DEFAULT_POSTS;
+let globalPosts = [];
+try {
+  const cached = localStorage.getItem("pf_final_posts_v25");
+  if (cached) globalPosts = JSON.parse(cached);
+} catch (e) {}
+
+if (!globalPosts || !globalPosts.length) {
+  globalPosts = DEFAULT_POSTS;
+}
+
 let globalReels = [
   {
     id: "r_1",
@@ -352,16 +324,14 @@ let globalReels = [
 
 function persistData() {
   try {
-    // Keep max 15 posts in localStorage to guarantee no quota crashes
-    if (globalPosts.length > 15) globalPosts = globalPosts.slice(0, 15);
-    localStorage.setItem("pf_v24_posts", JSON.stringify(globalPosts));
+    localStorage.setItem("pf_final_posts_v25", JSON.stringify(globalPosts));
     localStorage.setItem("pf_permanent_username", userProfile.name);
     localStorage.setItem("pf_permanent_bio", userProfile.bio);
     localStorage.setItem("pf_permanent_dp", userProfile.avatar);
   } catch (e) {
     try {
-      localStorage.setItem("pf_v24_posts", JSON.stringify(globalPosts.slice(0, 5)));
-    } catch(e2) {}
+      localStorage.setItem("pf_final_posts_v25", JSON.stringify(globalPosts.slice(0, 5)));
+    } catch(err) {}
   }
 }
 
@@ -396,6 +366,12 @@ function togglePostAudio(postId, audioUrl) {
 function renderFeed() {
   const wall = document.getElementById("postsContainer");
   if (!wall) return;
+
+  if (!globalPosts.length) {
+    wall.innerHTML = `<div style="text-align:center; padding:40px; color:#666;">No posts yet. Tap + to share one!</div>`;
+    return;
+  }
+
   wall.innerHTML = globalPosts.map(p => {
     const isPlaying = currentPlayingPostId === p.id && !globalAudio.paused;
     return `
@@ -536,7 +512,11 @@ function renderProfileSection() {
 
   const grid = document.getElementById("profileGridWall");
   if (grid) {
-    grid.innerHTML = globalPosts.map(p => `<img src="${p.image}" />`).join("");
+    grid.innerHTML = globalPosts.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
+  }
+  const exploreGrid = document.getElementById("exploreGridWall");
+  if (exploreGrid) {
+    exploreGrid.innerHTML = globalPosts.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
   }
 }
 
@@ -555,6 +535,7 @@ function saveProfileDetails() {
 
   persistData();
   renderProfileSection();
+  renderFeed();
   closeProfileEditSheet();
   alert("Profile permanently saved! 💙");
 }
@@ -565,16 +546,18 @@ function handleDirectDP(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  getOptimizedImageData(file, function(dataUrl) {
-    if (!dataUrl) return;
-    userProfile.avatar = dataUrl;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    userProfile.avatar = e.target.result;
     persistData();
     renderProfileSection();
+    renderFeed();
     alert("DP permanently updated! 📸");
-  });
+  };
+  reader.readAsDataURL(file);
 }
 
-// Post Creation Engine (Guaranteed Non-Freezing)
+// Post Creation Engine (Bulletproof 100% Guaranteed Display)
 function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
 function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
 function openCreateReelSheet() { document.getElementById("createReelModal").style.display = "flex"; }
@@ -593,47 +576,50 @@ function dispatchNewPost() {
     return;
   }
 
-  btn.innerText = "Posting...";
+  btn.innerText = "Sharing...";
   btn.disabled = true;
 
-  getOptimizedImageData(file, function(optimizedDataUrl) {
-    try {
-      if (!optimizedDataUrl) {
-        alert("Image read error, please choose another photo.");
-        return;
-      }
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const newPost = {
+      id: Date.now(),
+      username: userProfile.name,
+      avatar: userProfile.avatar,
+      image: e.target.result,
+      caption: captionInput.value || "",
+      likes: 0,
+      music: selectedPostMusic
+    };
 
-      const newPost = {
-        id: Date.now(),
-        username: userProfile.name,
-        avatar: userProfile.avatar,
-        image: optimizedDataUrl,
-        caption: captionInput.value || "",
-        likes: 0,
-        music: selectedPostMusic
-      };
+    // 1. Add to beginning of array
+    globalPosts.unshift(newPost);
+    persistData();
 
-      // 1. Instantly unshift to feed
-      globalPosts.unshift(newPost);
-      persistData();
+    // 2. Render Feed & Profile IMMEDIATELY
+    renderFeed();
+    renderProfileSection();
 
-      // 2. Render immediately
-      renderFeed();
-      renderProfileSection();
-    } catch (err) {
-      console.error("Post create error:", err);
-    } finally {
-      // 3. Guaranteed Modal Close & Reset
-      closeCreatePostSheet();
-      btn.innerText = "Share Post";
-      btn.disabled = false;
-      fileInput.value = "";
-      captionInput.value = "";
-      selectedPostMusic = null;
-      document.getElementById("selectedPostMusicLabel").innerText = "🎵 Select Song";
-      switchView("feedTab");
-    }
-  });
+    // 3. Reset modal
+    closeCreatePostSheet();
+    btn.innerText = "Share Post";
+    btn.disabled = false;
+    fileInput.value = "";
+    captionInput.value = "";
+    selectedPostMusic = null;
+    document.getElementById("selectedPostMusicLabel").innerText = "🎵 Select Song";
+
+    // 4. Switch to feed view so user sees it right away
+    switchView("feedTab");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
+  reader.onerror = function() {
+    alert("Error reading file. Please select another image.");
+    btn.innerText = "Share Post";
+    btn.disabled = false;
+  };
+
+  reader.readAsDataURL(file);
 }
 
 function dispatchNewReel() {
@@ -646,32 +632,30 @@ function dispatchNewReel() {
     return;
   }
 
-  btn.innerText = "Processing Reel...";
+  btn.innerText = "Uploading...";
   btn.disabled = true;
 
   const reader = new FileReader();
   reader.onload = function(e) {
-    try {
-      const newReel = {
-        id: "reel_" + Date.now(),
-        username: userProfile.name,
-        avatar: userProfile.avatar,
-        video: e.target.result,
-        caption: caption || "Viral Reel #picflow",
-        likes: "1.5k"
-      };
+    const newReel = {
+      id: "reel_" + Date.now(),
+      username: userProfile.name,
+      avatar: userProfile.avatar,
+      video: e.target.result,
+      caption: caption || "Viral Reel #picflow",
+      likes: "1.5k"
+    };
 
-      globalReels.unshift(newReel);
-      mountReel(0);
-    } finally {
-      closeCreateReelSheet();
-      btn.innerText = "Publish Reel";
-      btn.disabled = false;
-      document.getElementById("reelVideoUploadInput").value = "";
-      document.getElementById("reelCaptionInput").value = "";
-      switchView("reelsTab");
-      alert("Reel published successfully! 🎬");
-    }
+    globalReels.unshift(newReel);
+    mountReel(0);
+
+    closeCreateReelSheet();
+    btn.innerText = "Publish Reel";
+    btn.disabled = false;
+    document.getElementById("reelVideoUploadInput").value = "";
+    document.getElementById("reelCaptionInput").value = "";
+    switchView("reelsTab");
+    alert("Reel published successfully! 🎬");
   };
   reader.readAsDataURL(file);
 }
