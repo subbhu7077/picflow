@@ -1,555 +1,197 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>PicFlow</title>
-
-    <meta name="description"
-          content="PicFlow - Share photos, connect with people and discover new content.">
-
-    <link rel="stylesheet" href="css/style.css?v=6">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PicFlow</title>
+  <link rel="stylesheet" href="css/style.css?v=10">
 </head>
 
 <body>
 
-    <!-- =========================
-         TOP NAVBAR
-    ========================== -->
+<div id="app">
 
-    <header class="topbar">
+  <!-- LOGIN SCREEN -->
+  <section id="loginScreen" class="auth-screen">
 
-        <div class="logo">
-            PicFlow
+    <div class="auth-card">
+
+      <div class="auth-logo">
+        <div class="auth-logo-icon">📸</div>
+        <h1>PicFlow</h1>
+        <p>Share moments. Connect people.</p>
+      </div>
+
+      <div class="auth-form">
+
+        <label>Email</label>
+        <input
+          id="loginEmail"
+          type="email"
+          placeholder="Enter your email"
+          autocomplete="email"
+        >
+
+        <label>Mobile Number</label>
+        <input
+          id="loginMobile"
+          type="tel"
+          placeholder="Enter mobile number"
+          maxlength="10"
+          inputmode="numeric"
+        >
+
+        <label>Password</label>
+
+        <div class="password-box">
+          <input
+            id="loginPassword"
+            type="password"
+            placeholder="Enter password"
+            autocomplete="current-password"
+          >
+          <button type="button" onclick="togglePassword()">👁️</button>
         </div>
 
-        <div class="top-actions">
+        <button class="login-btn" onclick="loginUser()">
+          Login
+        </button>
 
-            <button class="icon-btn" onclick="showMessage('Notifications')">
-                ♡
-            </button>
+        <button class="facebook-btn" onclick="facebookLogin()">
+          <span>f</span>
+          Continue with Facebook
+        </button>
 
-            <button class="icon-btn" onclick="showMessage('Messages')">
-                ✉
-            </button>
+        <button class="forgot-btn" onclick="forgotPassword()">
+          Forgot password?
+        </button>
 
+        <div class="auth-divider">
+          <span>OR</span>
         </div>
 
+        <p class="signup-text">
+          Don't have an account?
+        </p>
+
+        <button class="signup-btn" onclick="showSignup()">
+          Create new account
+        </button>
+
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- MAIN APP -->
+  <section id="mainApp" style="display:none;">
+
+    <header class="top-header">
+      <div class="logo">PicFlow</div>
+      <div class="header-icons">
+        <button onclick="showMessage('Notifications coming soon 🔔')">♡</button>
+        <button onclick="showMessage('Messages coming soon 💬')">✈</button>
+      </div>
     </header>
 
-
-    <!-- =========================
-         MAIN APP
-    ========================== -->
-
-    <main class="app">
-
-        <!-- STORIES -->
-
-        <section class="stories-section">
-
-            <div class="stories">
-
-                <div class="story add-story" onclick="showMessage('Add Story')">
-
-                    <div class="story-circle">
-                        +
-                    </div>
-
-                    <span>Your story</span>
-
-                </div>
-
-
-                <div class="story" onclick="openStory('Alex')">
-
-                    <div class="story-circle gradient">
-                        A
-                    </div>
-
-                    <span>Alex</span>
-
-                </div>
-
-
-                <div class="story" onclick="openStory('Mia')">
-
-                    <div class="story-circle gradient">
-                        M
-                    </div>
-
-                    <span>Mia</span>
-
-                </div>
-
-
-                <div class="story" onclick="openStory('Sam')">
-
-                    <div class="story-circle gradient">
-                        S
-                    </div>
-
-                    <span>Sam</span>
-
-                </div>
-
-
-                <div class="story" onclick="openStory('John')">
-
-                    <div class="story-circle gradient">
-                        J
-                    </div>
-
-                    <span>John</span>
-
-                </div>
-
-
-                <div class="story" onclick="openStory('Sara')">
-
-                    <div class="story-circle gradient">
-                        S
-                    </div>
-
-                    <span>Sara</span>
-
-                </div>
-
-            </div>
-
-        </section>
-
-
-        <!-- =========================
-             POST 1
-        ========================== -->
-
-        <article class="post">
-
-            <!-- POST HEADER -->
-
-            <div class="post-header">
-
-                <div class="user-info">
-
-                    <div class="avatar">
-                        A
-                    </div>
-
-                    <div>
-
-                        <strong>alex_world</strong>
-
-                        <small>Mumbai, India</small>
-
-                    </div>
-
-                </div>
-
-                <button class="more-btn"
-                        onclick="showMessage('Post options')">
-                    ⋯
-                </button>
-
-            </div>
-
-
-            <!-- POST IMAGE -->
-
-            <div class="post-image">
-
-                <img
-                    src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80"
-                    alt="Mountain landscape"
-                >
-
-            </div>
-
-
-            <!-- ACTIONS -->
-
-            <div class="post-actions">
-
-                <div class="left-actions">
-
-                    <button
-                        class="action-btn like-btn"
-                        onclick="toggleLike(this)">
-                        ♡
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        onclick="commentPost()">
-                        ♧
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        onclick="sharePost()">
-                        ↗
-                    </button>
-
-                </div>
-
-                <button
-                    class="action-btn save-btn"
-                    onclick="toggleSave(this)">
-                    ♧
-                </button>
-
-            </div>
-
-
-            <!-- LIKE COUNT -->
-
-            <div class="likes">
-
-                <strong class="like-count">
-                    1,245 likes
-                </strong>
-
-            </div>
-
-
-            <!-- CAPTION -->
-
-            <div class="caption">
-
-                <strong>alex_world</strong>
-
-                Exploring new places 🌄
-
-                <span class="hashtags">
-                    #travel #nature #adventure
-                </span>
-
-            </div>
-
-
-            <!-- COMMENTS -->
-
-            <button class="comments-btn"
-                    onclick="commentPost()">
-
-                View all 48 comments
-
-            </button>
-
-
-            <div class="time">
-
-                2 HOURS AGO
-
-            </div>
-
-        </article>
-
-
-        <!-- =========================
-             POST 2
-        ========================== -->
-
-        <article class="post">
-
-            <div class="post-header">
-
-                <div class="user-info">
-
-                    <div class="avatar">
-                        M
-                    </div>
-
-                    <div>
-
-                        <strong>mia_daily</strong>
-
-                        <small>Goa, India</small>
-
-                    </div>
-
-                </div>
-
-                <button class="more-btn"
-                        onclick="showMessage('Post options')">
-                    ⋯
-                </button>
-
-            </div>
-
-
-            <div class="post-image">
-
-                <img
-                    src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80"
-                    alt="Beach"
-                >
-
-            </div>
-
-
-            <div class="post-actions">
-
-                <div class="left-actions">
-
-                    <button
-                        class="action-btn like-btn"
-                        onclick="toggleLike(this)">
-                        ♡
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        onclick="commentPost()">
-                        ♧
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        onclick="sharePost()">
-                        ↗
-                    </button>
-
-                </div>
-
-                <button
-                    class="action-btn save-btn"
-                    onclick="toggleSave(this)">
-                    ♧
-                </button>
-
-            </div>
-
-
-            <div class="likes">
-
-                <strong class="like-count">
-                    876 likes
-                </strong>
-
-            </div>
-
-
-            <div class="caption">
-
-                <strong>mia_daily</strong>
-
-                Beach days are the best ☀️🌊
-
-                <span class="hashtags">
-                    #beach #summer #vacation
-                </span>
-
-            </div>
-
-
-            <button class="comments-btn"
-                    onclick="commentPost()">
-
-                View all 21 comments
-
-            </button>
-
-
-            <div class="time">
-
-                5 HOURS AGO
-
-            </div>
-
-        </article>
-
-
-        <!-- =========================
-             POST 3
-        ========================== -->
-
-        <article class="post">
-
-            <div class="post-header">
-
-                <div class="user-info">
-
-                    <div class="avatar">
-                        S
-                    </div>
-
-                    <div>
-
-                        <strong>sam_creates</strong>
-
-                        <small>Pune, India</small>
-
-                    </div>
-
-                </div>
-
-                <button class="more-btn"
-                        onclick="showMessage('Post options')">
-                    ⋯
-                </button>
-
-            </div>
-
-
-            <div class="post-image">
-
-                <img
-                    src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=80"
-                    alt="Workspace"
-                >
-
-            </div>
-
-
-            <div class="post-actions">
-
-                <div class="left-actions">
-
-                    <button
-                        class="action-btn like-btn"
-                        onclick="toggleLike(this)">
-                        ♡
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        onclick="commentPost()">
-                        ♧
-                    </button>
-
-                    <button
-                        class="action-btn"
-                        onclick="sharePost()">
-                        ↗
-                    </button>
-
-                </div>
-
-                <button
-                    class="action-btn save-btn"
-                    onclick="toggleSave(this)">
-                    ♧
-                </button>
-
-            </div>
-
-
-            <div class="likes">
-
-                <strong class="like-count">
-                    532 likes
-                </strong>
-
-            </div>
-
-
-            <div class="caption">
-
-                <strong>sam_creates</strong>
-
-                Building something new today 💻🔥
-
-                <span class="hashtags">
-                    #coding #developer #startup
-                </span>
-
-            </div>
-
-
-            <button class="comments-btn"
-                    onclick="commentPost()">
-
-                View all 13 comments
-
-            </button>
-
-
-            <div class="time">
-
-                8 HOURS AGO
-
-            </div>
-
-        </article>
+    <main>
+
+      <div class="stories">
+        <div class="story">
+          <div class="story-avatar">Y</div>
+          <small>Your story</small>
+        </div>
+
+        <div class="story">
+          <div class="story-avatar">A</div>
+          <small>Alex</small>
+        </div>
+
+        <div class="story">
+          <div class="story-avatar">R</div>
+          <small>Rahul</small>
+        </div>
+
+        <div class="story">
+          <div class="story-avatar">S</div>
+          <small>Sarah</small>
+        </div>
+      </div>
+
+
+      <div class="post">
+
+        <div class="post-header">
+          <div class="avatar">Y</div>
+
+          <div>
+            <strong id="homeUsername">You</strong>
+            <small>Thane, India</small>
+          </div>
+        </div>
+
+        <div class="post-image">
+          <div class="demo-image">📸</div>
+        </div>
+
+        <div class="post-actions">
+          <button onclick="toggleLike(this)">♡</button>
+          <button onclick="commentPost()">💬</button>
+          <button onclick="sharePost()">✈</button>
+          <button onclick="toggleSave(this)">🔖</button>
+        </div>
+
+        <div class="likes">
+          <span class="like-count">0</span> likes
+        </div>
+
+        <p>
+          <strong id="postUsername">You</strong>
+          Welcome to PicFlow! 🚀
+        </p>
+
+      </div>
 
     </main>
 
 
-    <!-- =========================
-         BOTTOM NAVIGATION
-    ========================== -->
-
     <nav class="bottom-nav">
 
-        <button
-            class="nav-btn active"
-            onclick="navigate('Home')">
+      <button class="nav-btn" onclick="navigate('Home')">
+        <span>⌂</span>
+        <small>Home</small>
+      </button>
 
-            <span>⌂</span>
-            <small>Home</small>
+      <button class="nav-btn" onclick="showMessage('Search coming soon 🔍')">
+        <span>⌕</span>
+        <small>Search</small>
+      </button>
 
-        </button>
+      <button class="nav-btn create-btn" onclick="createPost()">
+        <span>＋</span>
+        <small>Create</small>
+      </button>
 
+      <button class="nav-btn" onclick="showMessage('Reels coming soon 🎬')">
+        <span>▶</span>
+        <small>Reels</small>
+      </button>
 
-        <button
-            class="nav-btn"
-            onclick="navigate('Search')">
-
-            <span>⌕</span>
-            <small>Search</small>
-
-        </button>
-
-
-        <button
-            class="nav-btn create-btn"
-            onclick="createPost()">
-
-            <span>＋</span>
-            <small>Create</small>
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            onclick="navigate('Activity')">
-
-            <span>♡</span>
-            <small>Activity</small>
-
-        </button>
-
-
-        <button
-            class="nav-btn"
-            onclick="navigate('Profile')">
-
-            <span>●</span>
-            <small>Profile</small>
-
-        </button>
+      <button class="nav-btn" onclick="navigate('Profile')">
+        <span>●</span>
+        <small>Profile</small>
+      </button>
 
     </nav>
 
+  </section>
 
-    <!-- =========================
-         TOAST MESSAGE
-    ========================== -->
-
-    <div id="toast" class="toast">
-        Hello
-    </div>
+</div>
 
 
-    <!-- =========================
-         JAVASCRIPT
-    ========================== -->
-
-    <script src="js/app.js?v=6"></script>
+<script src="js/app.js?v=10"></script>
 
 </body>
 </html>
-

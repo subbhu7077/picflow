@@ -1,153 +1,409 @@
+
+/* =========================
+   PICFLOW APP
+========================= */
+
 function showMessage(message) {
   alert(message);
 }
 
+
+/* =========================
+   AUTH
+========================= */
+
+function loginUser() {
+
+  const email = document.getElementById("loginEmail").value.trim();
+  const mobile = document.getElementById("loginMobile").value.trim();
+  const password = document.getElementById("loginPassword").value;
+
+  if (!email && !mobile) {
+    alert("Please enter Email or Mobile Number.");
+    return;
+  }
+
+  if (!password) {
+    alert("Please enter your password.");
+    return;
+  }
+
+  if (mobile && !/^[0-9]{10}$/.test(mobile)) {
+    alert("Please enter a valid 10 digit mobile number.");
+    return;
+  }
+
+  /*
+    TEMPORARY FRONTEND LOGIN
+
+    Real secure authentication will be connected
+    with Supabase in the next step.
+  */
+
+  localStorage.setItem("picflow_logged_in", "true");
+
+  if (email) {
+    localStorage.setItem("picflow_email", email);
+  }
+
+  if (mobile) {
+    localStorage.setItem("picflow_mobile", mobile);
+  }
+
+  showMainApp();
+}
+
+
+function facebookLogin() {
+
+  alert(
+    "Facebook Login selected.\n\n" +
+    "Real Facebook authentication will be connected " +
+    "after the backend setup."
+  );
+
+}
+
+
+function forgotPassword() {
+
+  const email = prompt(
+    "Enter your registered email address:"
+  );
+
+  if (!email) return;
+
+  alert(
+    "Password reset will be connected with the real " +
+    "authentication system.\n\nEmail: " + email
+  );
+
+}
+
+
+function showSignup() {
+
+  alert(
+    "Signup screen is the next step.\n\n" +
+    "We will add:\n" +
+    "Username\n" +
+    "Email\n" +
+    "Mobile Number\n" +
+    "Password\n" +
+    "Profile Photo"
+  );
+
+}
+
+
+function togglePassword() {
+
+  const password =
+    document.getElementById("loginPassword");
+
+  if (password.type === "password") {
+    password.type = "text";
+  } else {
+    password.type = "password";
+  }
+
+}
+
+
+/* =========================
+   APP START
+========================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const loggedIn =
+    localStorage.getItem("picflow_logged_in");
+
+  if (loggedIn === "true") {
+    showMainApp();
+  }
+
+});
+
+
+function showMainApp() {
+
+  const login =
+    document.getElementById("loginScreen");
+
+  const app =
+    document.getElementById("mainApp");
+
+  if (login) {
+    login.style.display = "none";
+  }
+
+  if (app) {
+    app.style.display = "block";
+  }
+
+  const email =
+    localStorage.getItem("picflow_email");
+
+  const username =
+    localStorage.getItem("picflow_username") || "You";
+
+  const homeUsername =
+    document.getElementById("homeUsername");
+
+  const postUsername =
+    document.getElementById("postUsername");
+
+  if (homeUsername) {
+    homeUsername.textContent = username;
+  }
+
+  if (postUsername) {
+    postUsername.textContent = username;
+  }
+
+}
+
+
+/* =========================
+   CREATE POST
+========================= */
+
 function createPost() {
-  const input = document.createElement("input");
+
+  const input =
+    document.createElement("input");
+
   input.type = "file";
   input.accept = "image/*";
 
   input.onchange = function () {
+
     const file = input.files[0];
+
     if (!file) return;
 
-    const imageURL = URL.createObjectURL(file);
+    const reader =
+      new FileReader();
 
-    const post = document.createElement("article");
-    post.className = "post";
+    reader.onload = function (e) {
 
-    post.innerHTML = `
-      <div class="post-header">
-        <div class="user-info">
-          <div class="avatar">Y</div>
-          <div>
-            <strong>You</strong>
-            <small>Just now</small>
-          </div>
-        </div>
-        <button class="more-btn" onclick="showMessage('Post options')">⋯</button>
-      </div>
+      const image =
+        e.target.result;
 
-      <div class="post-image">
-        <img src="${imageURL}" alt="Your post">
-      </div>
+      const postImage =
+        document.querySelector(".post-image");
 
-      <div class="post-actions">
-        <div class="left-actions">
-          <button class="action-btn like-btn" onclick="toggleLike(this)">♡</button>
-          <button class="action-btn" onclick="commentPost()">♧</button>
-          <button class="action-btn" onclick="sharePost()">↗</button>
-        </div>
-        <button class="action-btn save-btn" onclick="toggleSave(this)">♧</button>
-      </div>
+      if (postImage) {
 
-      <div class="likes">
-        <strong class="like-count">0 likes</strong>
-      </div>
+        postImage.innerHTML =
+          '<img src="' +
+          image +
+          '" style="width:100%;height:100%;object-fit:cover;">';
 
-      <div class="caption">
-        <strong>You</strong>
-        My new PicFlow post 📸
-      </div>
+      }
 
-      <button class="comments-btn" onclick="commentPost()">
-        Add a comment
-      </button>
+      showMessage("Post created! 📸");
 
-      <div class="time">JUST NOW</div>
-    `;
+    };
 
-    document.querySelector(".app").prepend(post);
-    showMessage("Post created successfully! 🎉");
+    reader.readAsDataURL(file);
+
   };
 
   input.click();
+
 }
+
+
+/* =========================
+   LIKE
+========================= */
 
 function toggleLike(button) {
-  const post = button.closest(".post");
-  const count = post.querySelector(".like-count");
 
-  let number = parseInt(count.textContent.replace(/,/g, "")) || 0;
+  const post =
+    button.closest(".post");
 
-  if (button.classList.contains("liked")) {
-    button.classList.remove("liked");
-    button.textContent = "♡";
+  if (!post) return;
+
+  const count =
+    post.querySelector(".like-count");
+
+  if (!count) return;
+
+  let number =
+    parseInt(count.textContent) || 0;
+
+  if (button.dataset.liked === "true") {
+
     number--;
+
+    button.dataset.liked = "false";
+    button.textContent = "♡";
+
   } else {
-    button.classList.add("liked");
-    button.textContent = "♥";
+
     number++;
+
+    button.dataset.liked = "true";
+    button.textContent = "♥";
+
   }
 
-  count.textContent =
-    number.toLocaleString() +
-    (number === 1 ? " like" : " likes");
+  count.textContent = number;
+
 }
+
+
+/* =========================
+   COMMENTS
+========================= */
 
 function commentPost() {
-  const comment = prompt("Write your comment:");
 
-  if (comment && comment.trim()) {
-    showMessage("Comment added! 💬");
-  }
+  const comment =
+    prompt("Write your comment:");
+
+  if (!comment) return;
+
+  showMessage("Comment added: " + comment);
+
 }
+
+
+/* =========================
+   SHARE
+========================= */
 
 function sharePost() {
+
   if (navigator.share) {
+
     navigator.share({
       title: "PicFlow",
-      text: "Check out this PicFlow post!"
+      text: "Check this post on PicFlow!"
     });
+
   } else {
-    showMessage("Post link ready to share! ↗");
+
+    showMessage("Post link copied! 🔗");
+
   }
+
 }
+
+
+/* =========================
+   SAVE
+========================= */
 
 function toggleSave(button) {
-  if (button.classList.contains("saved")) {
-    button.classList.remove("saved");
-    button.textContent = "♧";
-    showMessage("Removed from saved");
+
+  if (button.dataset.saved === "true") {
+
+    button.dataset.saved = "false";
+    button.textContent = "🔖";
+
+    showMessage("Post unsaved");
+
   } else {
-    button.classList.add("saved");
-    button.textContent = "♥";
-    showMessage("Post saved! 🔖");
+
+    button.dataset.saved = "true";
+    button.textContent = "📌";
+
+    showMessage("Post saved!");
+
   }
+
 }
+
+
+/* =========================
+   STORIES
+========================= */
 
 function openStory(name) {
+
   showMessage(name + "'s story");
+
 }
 
+
+/* =========================
+   NAVIGATION
+========================= */
+
 function navigate(page) {
+
   if (page === "Profile") {
     openProfile();
     return;
   }
 
-  showMessage(page);
+  if (page === "Home") {
+    location.reload();
+    return;
+  }
+
 }
 
+
+/* =========================
+   PROFILE
+========================= */
+
 function openProfile() {
-  if (document.querySelector(".profile-overlay")) return;
 
-  const profile = document.createElement("div");
-  profile.className = "profile-overlay";
+  const old =
+    document.querySelector(".profile-overlay");
 
-  profile.innerHTML = `
+  if (old) old.remove();
+
+  const username =
+    localStorage.getItem("picflow_username") || "You";
+
+  const bio =
+    localStorage.getItem("picflow_bio") ||
+    "Welcome to my PicFlow profile ✨";
+
+  const dp =
+    localStorage.getItem("picflow_dp");
+
+  const avatar =
+    dp
+      ? '<img src="' + dp + '" alt="Profile photo">'
+      : username.charAt(0).toUpperCase();
+
+  const overlay =
+    document.createElement("div");
+
+  overlay.className =
+    "profile-overlay";
+
+  overlay.innerHTML = `
+
     <div class="profile-top">
-      <h2>Profile</h2>
-      <button class="profile-close" onclick="closeProfile()">×</button>
+
+      <h2>${username}</h2>
+
+      <button
+        class="profile-close"
+        onclick="closeProfile()">
+        ×
+      </button>
+
     </div>
 
     <div class="profile-main">
 
-      <section class="profile-header">
+      <div class="profile-header">
 
         <div class="profile-head-row">
 
-          <div class="profile-avatar">Y</div>
+          <div class="profile-avatar">
+            ${avatar}
+          </div>
 
           <div class="profile-stats">
 
@@ -157,12 +413,12 @@ function openProfile() {
             </div>
 
             <div class="profile-stat">
-              <strong>248</strong>
+              <strong>120</strong>
               <span>Followers</span>
             </div>
 
             <div class="profile-stat">
-              <strong>186</strong>
+              <strong>85</strong>
               <span>Following</span>
             </div>
 
@@ -171,153 +427,332 @@ function openProfile() {
         </div>
 
         <div class="profile-name">
-          <strong>Your Name</strong>
-          <p>📸 Creator on PicFlow<br>
-          Sharing moments, travel & creativity ✨</p>
+          <strong>${username}</strong>
+          <p>${bio}</p>
         </div>
 
-        <button class="edit-profile-btn" onclick="editProfile()">
+        <button
+          class="edit-profile-btn"
+          onclick="editProfile()">
           Edit Profile
         </button>
 
-      </section>
+      </div>
 
       <div class="profile-tabs">
         <button class="profile-tab active">▦</button>
+        <button class="profile-tab">▶</button>
         <button class="profile-tab">♡</button>
       </div>
 
       <div class="profile-grid">
 
-        <img src="https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=500&q=80">
-        <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=500&q=80">
-        <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=500&q=80">
+        <div>📸</div>
+        <div>🌄</div>
+        <div>✨</div>
 
       </div>
 
-    </div>
-  `;
-
-  document.body.appendChild(profile);
-  document.body.style.overflow = "hidden";
-  loadSavedDP();
-}
-
-function closeProfile() {
-  const profile = document.querySelector(".profile-overlay");
-
-  if (profile) {
-    profile.remove();
-    document.body.style.overflow = "";
-  }
-}
-
-function editProfile() {
-  const box = document.createElement("div");
-  box.className = "edit-box";
-
-  box.innerHTML = `
-    <div class="edit-card">
-
-      <h3>Edit Profile</h3>
-
-      <div class="dp-upload-area" onclick="changeDP()">
-        <div class="dp-preview" id="dpPreview">Y</div>
-        <div>
-          <strong>Change Profile Photo</strong>
-          <small>Tap to choose a photo</small>
-        </div>
-      </div>
-
-      <input id="editName" placeholder="Name" value="Your Name">
-
-      <textarea id="editBio" rows="3"
-        placeholder="Bio">📸 Creator on PicFlow
-Sharing moments, travel & creativity ✨</textarea>
-
-      <button class="edit-save" onclick="saveProfile()">
-        Save Profile
+      <button
+        onclick="logoutUser()"
+        style="
+          width:100%;
+          margin-top:20px;
+          padding:12px;
+          border:1px solid #ddd;
+          border-radius:10px;
+          background:white;
+          color:#e53935;
+          font-weight:bold;
+        ">
+        Logout
       </button>
 
     </div>
   `;
 
-  document.body.appendChild(box);
+  document.body.appendChild(overlay);
+
+  loadSavedDP();
+
 }
 
+
+function closeProfile() {
+
+  const profile =
+    document.querySelector(".profile-overlay");
+
+  if (profile) {
+    profile.remove();
+  }
+
+}
+
+
+/* =========================
+   EDIT PROFILE
+========================= */
+
+function editProfile() {
+
+  const username =
+    localStorage.getItem("picflow_username") || "You";
+
+  const bio =
+    localStorage.getItem("picflow_bio") ||
+    "Welcome to my PicFlow profile ✨";
+
+  const box =
+    document.createElement("div");
+
+  box.className =
+    "profile-overlay";
+
+  box.innerHTML = `
+
+    <div class="profile-top">
+
+      <h2>Edit Profile</h2>
+
+      <button
+        class="profile-close"
+        onclick="this.closest('.profile-overlay').remove()">
+        ×
+      </button>
+
+    </div>
+
+    <div class="profile-main">
+
+      <div class="edit-box">
+
+        <div
+          class="dp-upload-area"
+          onclick="changeDP()">
+
+          <div
+            class="dp-preview"
+            id="dpPreview">
+
+            ${localStorage.getItem("picflow_dp")
+              ? '<img src="' +
+                localStorage.getItem("picflow_dp") +
+                '" alt="Profile preview">'
+              : username.charAt(0).toUpperCase()
+            }
+
+          </div>
+
+          <div>
+
+            <strong>
+              Change Profile Photo
+            </strong>
+
+            <small>
+              Tap to choose a photo
+            </small>
+
+          </div>
+
+        </div>
+
+
+        <div class="edit-card">
+
+          <label>Username</label>
+
+          <input
+            id="editUsername"
+            value="${username}"
+            placeholder="Username"
+          >
+
+        </div>
+
+
+        <div class="edit-card">
+
+          <label>Bio</label>
+
+          <textarea
+            id="editBio"
+            placeholder="Write your bio..."
+          >${bio}</textarea>
+
+        </div>
+
+
+        <button
+          class="edit-save"
+          onclick="saveProfile()">
+
+          Save Profile
+
+        </button>
+
+      </div>
+
+    </div>
+  `;
+
+  document.body.appendChild(box);
+
+}
+
+
+function saveProfile() {
+
+  const username =
+    document.getElementById("editUsername").value.trim();
+
+  const bio =
+    document.getElementById("editBio").value.trim();
+
+  if (!username) {
+
+    alert("Username cannot be empty.");
+
+    return;
+
+  }
+
+  localStorage.setItem(
+    "picflow_username",
+    username
+  );
+
+  localStorage.setItem(
+    "picflow_bio",
+    bio
+  );
+
+  document.querySelectorAll(
+    ".profile-overlay"
+  ).forEach(function (el) {
+    el.remove();
+  });
+
+  showMessage("Profile saved! ✅");
+
+}
+
+
+/* =========================
+   PROFILE PHOTO
+========================= */
+
 function changeDP() {
-  const input = document.createElement("input");
+
+  const input =
+    document.createElement("input");
+
   input.type = "file";
   input.accept = "image/*";
 
   input.onchange = function () {
-    const file = input.files[0];
+
+    const file =
+      input.files[0];
+
     if (!file) return;
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
     reader.onload = function (e) {
-      const image = e.target.result;
 
-      localStorage.setItem("picflow_dp", image);
+      const image =
+        e.target.result;
 
-      const avatar = document.querySelector(".profile-avatar");
-      if (avatar) {
-        avatar.innerHTML = '<img src="' + image + '" alt="Profile photo">';
-      }
+      localStorage.setItem(
+        "picflow_dp",
+        image
+      );
 
-      const preview = document.querySelector("#dpPreview");
+      const preview =
+        document.querySelector("#dpPreview");
+
       if (preview) {
-        preview.innerHTML = '<img src="' + image + '" alt="Profile preview">';
+
+        preview.innerHTML =
+          '<img src="' +
+          image +
+          '" alt="Profile preview">';
+
       }
 
-      document.querySelectorAll(".avatar").forEach(function(el) {
-        el.innerHTML = '<img src="' + image + '" alt="Profile photo">';
+      document.querySelectorAll(
+        ".avatar"
+      ).forEach(function (el) {
+
+        el.innerHTML =
+          '<img src="' +
+          image +
+          '" alt="Profile photo">';
+
       });
 
-      showMessage("Profile photo updated! 📸");
+      showMessage(
+        "Profile photo updated! 📸"
+      );
+
     };
 
     reader.readAsDataURL(file);
+
   };
 
   input.click();
+
 }
+
 
 function loadSavedDP() {
-  const image = localStorage.getItem("picflow_dp");
+
+  const image =
+    localStorage.getItem("picflow_dp");
+
   if (!image) return;
 
-  const avatar = document.querySelector(".profile-avatar");
-  if (avatar) {
-    avatar.innerHTML = '<img src="' + image + '" alt="Profile photo">';
-  }
+  document.querySelectorAll(
+    ".avatar"
+  ).forEach(function (el) {
 
-  document.querySelectorAll(".avatar").forEach(function(el) {
-    el.innerHTML = '<img src="' + image + '" alt="Profile photo">';
+    el.innerHTML =
+      '<img src="' +
+      image +
+      '" alt="Profile photo">';
+
   });
-}
 
-function saveProfile() {
-  const name = document.getElementById("editName").value.trim();
-  const bio = document.getElementById("editBio").value.trim();
+  const profileAvatar =
+    document.querySelector(".profile-avatar");
 
-  if (!name) {
-    showMessage("Please enter your name");
-    return;
+  if (profileAvatar) {
+
+    profileAvatar.innerHTML =
+      '<img src="' +
+      image +
+      '" alt="Profile photo">';
+
   }
 
-  const nameElement = document.querySelector(".profile-name strong");
-  const bioElement = document.querySelector(".profile-name p");
-
-  nameElement.textContent = name;
-  bioElement.innerHTML = bio.replace(/\n/g, "<br>");
-
-  document.querySelector(".edit-box").remove();
-
-  showMessage("Profile updated! ✅");
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-  console.log("PicFlow App Loaded");
-});
+
+/* =========================
+   LOGOUT
+========================= */
+
+function logoutUser() {
+
+  localStorage.removeItem(
+    "picflow_logged_in"
+  );
+
+  location.reload();
+
+}
+
