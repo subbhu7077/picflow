@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: #000; color: #fff; padding-bottom: 58px; overflow-x: hidden; }
+    body { background: #000; color: #fff; padding-bottom: 60px; overflow-x: hidden; }
 
     .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
+    /* Top Bar */
     header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1c1c1c; z-index: 90; }
     .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; }
     .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; }
@@ -36,8 +37,8 @@
     .mind-input-faux { flex: 1; background: #1c1c1c; border-radius: 20px; padding: 9px 16px; color: #777; font-size: 13px; }
 
     /* Feed Posts */
-    .post-wall { display: flex; flex-direction: column; width: 100%; min-height: 200px; }
-    .post-block { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; margin-bottom: 6px; }
+    .post-wall { display: flex; flex-direction: column; width: 100%; }
+    .post-block { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; margin-bottom: 4px; }
     .post-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
     .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
@@ -48,7 +49,6 @@
 
     .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .post-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .post-audio-play-pill { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.75); padding: 6px 14px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(6px); z-index: 5; border: 1px solid rgba(255,255,255,0.15); }
     .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 10; }
     .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
 
@@ -62,14 +62,13 @@
     .caption-content span { font-weight: 600; margin-right: 6px; }
 
     /* Reels Viewport */
-    #reelsTab { position: relative; height: calc(100vh - 58px); overflow: hidden; background: #000; }
+    #reelsTab { position: relative; height: calc(100vh - 60px); overflow: hidden; background: #000; }
     .reel-viewport { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
     .reel-video-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; }
     .reel-video-element { width: 100%; height: 100%; object-fit: cover; }
     .reel-floating-state-icon { position: absolute; font-size: 55px; color: rgba(255,255,255,0.85); pointer-events: none; opacity: 0; transform: scale(0.6); transition: all 0.25s ease; z-index: 10; }
     .reel-floating-state-icon.show { opacity: 1; transform: scale(1); }
     .reel-mute-btn { position: absolute; top: 16px; right: 16px; width: 38px; height: 38px; border-radius: 50%; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; z-index: 25; cursor: pointer; }
-    .reel-upload-shortcut { position: absolute; top: 16px; left: 16px; background: rgba(0,0,0,0.6); padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; color: #fff; z-index: 25; cursor: pointer; border: 1px solid rgba(255,255,255,0.2); }
     .reel-info-layer { position: absolute; bottom: 16px; left: 14px; right: 75px; z-index: 20; }
     .reel-user-badge { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
     .reel-user-badge img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; }
@@ -107,25 +106,12 @@
     .modal-sheet-inner h3 { margin-bottom: 14px; font-size: 16px; }
     .modal-sheet-inner input, .modal-sheet-inner textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
     .btn-theme-blue { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-    .btn-theme-secondary { width: 100%; padding: 9px; background: #262626; color: #3897f0; border: 1px solid #3897f0; font-weight: 600; border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
-
-    /* Music Picker */
-    .music-picker-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 260; flex-direction: column; padding: 16px 14px; max-width: 480px; margin: 0 auto; }
-    .music-picker-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #222; }
-    .music-search-box { margin: 10px 0 6px; }
-    .music-search-box input { width: 100%; background: #222; border: 1px solid #3897f0; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 13px; }
-    .music-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .music-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #161616; border-radius: 8px; cursor: pointer; border: 1px solid #242424; }
-    .music-item-info { display: flex; align-items: center; gap: 12px; }
-    .music-item-img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; }
   </style>
 </head>
 <body>
 
 <div class="app-root">
-  <audio id="globalAudioPlayer" preload="auto"></audio>
-
   <header>
     <div class="logo" onclick="switchView('feedTab')">PicFlow</div>
     <div class="header-actions">
@@ -155,9 +141,6 @@
   <!-- TAB 3: REELS -->
   <section id="reelsTab" class="tab-section">
     <div class="reel-viewport" id="reelViewport">
-      <div class="reel-upload-shortcut" onclick="openCreateReelSheet()">
-        <i class="fa-solid fa-camera"></i> Post Reel
-      </div>
       <div class="reel-mute-btn" onclick="toggleReelAudio(event)">
         <i class="fa-solid fa-volume-high" id="reelMuteIcon"></i>
       </div>
@@ -230,22 +213,8 @@
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
       <h3>Create New Post</h3>
       <input type="file" id="postImageUploadInput" accept="image/*" />
-      <button class="btn-theme-secondary" onclick="openMusicPicker('post')">
-        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Song</span>
-      </button>
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" id="btnPublishPost" onclick="dispatchNewPost()">Share Post</button>
-    </div>
-  </div>
-
-  <!-- Create Reel Modal -->
-  <div class="modal-overlay-backdrop" id="createReelModal">
-    <div class="modal-sheet-inner">
-      <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreateReelSheet()"></i>
-      <h3>Upload Reel</h3>
-      <input type="file" id="reelVideoUploadInput" accept="video/mp4,video/webm" />
-      <input type="text" id="reelCaptionInput" placeholder="Reel caption..." />
-      <button class="btn-theme-blue" id="btnPublishReel" onclick="dispatchNewReel()">Publish Reel</button>
     </div>
   </div>
 
@@ -259,24 +228,55 @@
       <button class="btn-theme-blue" onclick="saveProfileDetails()">Save Profile Changes</button>
     </div>
   </div>
-
-  <!-- Music Picker Sheet -->
-  <div class="music-picker-sheet" id="musicPickerSheet">
-    <div class="music-picker-header">
-      <h4>Select Track</h4>
-      <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeMusicPicker()"></i>
-    </div>
-    <div class="music-search-box">
-      <input type="text" id="liveMusicSearchInput" placeholder="🔍 Search any song worldwide..." oninput="handleMusicSearchInput()" />
-    </div>
-    <div class="music-list" id="musicListContainer"></div>
-  </div>
 </div>
 
 <script>
-// ==================== STATE MANAGEMENT ====================
-const globalAudio = document.getElementById("globalAudioPlayer");
+// ==================== INDEXEDDB ENGINE (ZERO QUOTA LIMIT) ====================
+let db;
+const DB_NAME = "PicFlowDB";
+const STORE_NAME = "posts_store";
 
+function initDB(callback) {
+  const request = indexedDB.open(DB_NAME, 1);
+  request.onupgradeneeded = function(e) {
+    db = e.target.result;
+    if (!db.objectStoreNames.contains(STORE_NAME)) {
+      db.createObjectStore(STORE_NAME, { keyPath: "id" });
+    }
+  };
+  request.onsuccess = function(e) {
+    db = e.target.result;
+    callback();
+  };
+  request.onerror = function(e) {
+    console.error("DB Open Error:", e);
+    callback();
+  };
+}
+
+function savePostToDB(postObj, callback) {
+  if (!db) return callback();
+  const tx = db.transaction([STORE_NAME], "readwrite");
+  const store = tx.objectStore(STORE_NAME);
+  store.put(postObj);
+  tx.oncomplete = () => callback();
+  tx.onerror = () => callback();
+}
+
+function getAllPostsFromDB(callback) {
+  if (!db) return callback([]);
+  const tx = db.transaction([STORE_NAME], "readonly");
+  const store = tx.objectStore(STORE_NAME);
+  const request = store.getAll();
+  request.onsuccess = function() {
+    callback(request.result || []);
+  };
+  request.onerror = function() {
+    callback([]);
+  };
+}
+
+// ==================== USER PROFILE STATE ====================
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp") || "https://picsum.photos/200/200?random=1";
 const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhubhai.official";
 const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
@@ -289,27 +289,16 @@ let userProfile = {
   isVerified: true
 };
 
-const DEFAULT_POSTS = [
-  {
-    id: 101,
-    username: userProfile.name,
-    avatar: userProfile.avatar,
-    image: "https://picsum.photos/800/800?random=181",
-    caption: "Official Verified Creator Vibes ⚡💙",
-    likes: 1284,
-    music: null
-  }
-];
+const SEED_DEFAULT_POST = {
+  id: 101,
+  username: userProfile.name,
+  avatar: userProfile.avatar,
+  image: "https://picsum.photos/800/800?random=181",
+  caption: "Official Verified Creator Vibes ⚡💙",
+  likes: 1284
+};
 
 let globalPosts = [];
-try {
-  const cached = localStorage.getItem("pf_final_posts_v25");
-  if (cached) globalPosts = JSON.parse(cached);
-} catch (e) {}
-
-if (!globalPosts || !globalPosts.length) {
-  globalPosts = DEFAULT_POSTS;
-}
 
 let globalReels = [
   {
@@ -322,59 +311,25 @@ let globalReels = [
   }
 ];
 
-function persistData() {
-  try {
-    localStorage.setItem("pf_final_posts_v25", JSON.stringify(globalPosts));
-    localStorage.setItem("pf_permanent_username", userProfile.name);
-    localStorage.setItem("pf_permanent_bio", userProfile.bio);
-    localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-  } catch (e) {
-    try {
-      localStorage.setItem("pf_final_posts_v25", JSON.stringify(globalPosts.slice(0, 5)));
-    } catch(err) {}
-  }
-}
-
 // Navigation
 function switchView(viewId) {
   document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
   const el = document.getElementById(viewId);
   if (el) el.classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
-  globalAudio.pause();
 
   if (viewId === "reelsTab") playCurrentReel();
   else pauseCurrentReel();
 }
 
-// Feed Engine
-let currentPlayingPostId = null;
-function togglePostAudio(postId, audioUrl) {
-  if (currentPlayingPostId === postId && !globalAudio.paused) {
-    globalAudio.pause();
-    currentPlayingPostId = null;
-    renderFeed();
-  } else {
-    globalAudio.src = audioUrl;
-    globalAudio.play().then(() => {
-      currentPlayingPostId = postId;
-      renderFeed();
-    }).catch(() => {});
-  }
-}
-
+// Feed Renderer
 function renderFeed() {
   const wall = document.getElementById("postsContainer");
   if (!wall) return;
 
-  if (!globalPosts.length) {
-    wall.innerHTML = `<div style="text-align:center; padding:40px; color:#666;">No posts yet. Tap + to share one!</div>`;
-    return;
-  }
+  const displayList = globalPosts.length ? globalPosts : [SEED_DEFAULT_POST];
 
-  wall.innerHTML = globalPosts.map(p => {
-    const isPlaying = currentPlayingPostId === p.id && !globalAudio.paused;
-    return `
+  wall.innerHTML = displayList.map(p => `
     <article class="post-block" id="post-${p.id}">
       <div class="post-top">
         <div class="post-user-info" onclick="switchView('profileTab')">
@@ -384,19 +339,12 @@ function renderFeed() {
               <span class="post-author">${p.username}</span>
               <i class="fa-solid fa-circle-check verified-tick"></i>
             </div>
-            ${p.music ? `<span class="post-audio-badge" onclick="event.stopPropagation(); togglePostAudio(${p.id}, '${p.music.url}')"><i class="fa-solid fa-music"></i> ${p.music.title}</span>` : ''}
           </div>
         </div>
       </div>
 
-      <div class="post-stage" onclick="p.music ? togglePostAudio(${p.id}, '${p.music.url}') : null" ondblclick="fireDoubleTapHeart(${p.id})">
+      <div class="post-stage" ondblclick="fireDoubleTapHeart(${p.id})">
         <img src="${p.image}" loading="lazy" />
-        ${p.music ? `
-          <div class="post-audio-play-pill">
-            <i class="fa-solid ${isPlaying ? 'fa-volume-high' : 'fa-play'}"></i>
-            <span>${isPlaying ? 'Playing' : 'Listen'}</span>
-          </div>
-        ` : ''}
         <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
       </div>
 
@@ -409,12 +357,11 @@ function renderFeed() {
       </div>
 
       <div class="post-caption-box">
-        <div class="likes-stat">${p.likes} likes</div>
+        <div class="likes-stat">${p.likes || 1} likes</div>
         <div class="caption-content"><span>${p.username}</span>${p.caption || ''}</div>
       </div>
     </article>
-  `;
-  }).join("");
+  `).join("");
 }
 
 function fireDoubleTapHeart(id) {
@@ -433,6 +380,122 @@ function togglePostLike(icon) {
 function sharePost() {
   if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
   alert("Post link copied! 🔗");
+}
+
+// Profile Section Renderer
+function renderProfileSection() {
+  document.getElementById("profileHeroName").innerText = userProfile.name;
+  document.getElementById("profileHeroBio").innerText = userProfile.bio;
+  document.getElementById("profileFollowersNum").innerText = userProfile.followers;
+  document.getElementById("profileHeroPic").src = userProfile.avatar;
+  document.getElementById("profileDockAvatar").src = userProfile.avatar;
+  document.getElementById("mindBarAvatar").src = userProfile.avatar;
+
+  const displayList = globalPosts.length ? globalPosts : [SEED_DEFAULT_POST];
+  document.getElementById("profilePostCountNumber").innerText = displayList.length;
+
+  const grid = document.getElementById("profileGridWall");
+  if (grid) {
+    grid.innerHTML = displayList.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
+  }
+  const exploreGrid = document.getElementById("exploreGridWall");
+  if (exploreGrid) {
+    exploreGrid.innerHTML = displayList.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
+  }
+}
+
+function openProfileEditSheet() {
+  document.getElementById("editProfileDisplayName").value = userProfile.name;
+  document.getElementById("editProfileBioDetails").value = userProfile.bio;
+  document.getElementById("editProfileModal").style.display = "flex";
+}
+function closeProfileEditSheet() { document.getElementById("editProfileModal").style.display = "none"; }
+
+function saveProfileDetails() {
+  const name = document.getElementById("editProfileDisplayName").value.trim();
+  const bio = document.getElementById("editProfileBioDetails").value.trim();
+  if (name) userProfile.name = name;
+  if (bio) userProfile.bio = bio;
+
+  localStorage.setItem("pf_permanent_username", userProfile.name);
+  localStorage.setItem("pf_permanent_bio", userProfile.bio);
+
+  renderProfileSection();
+  renderFeed();
+  closeProfileEditSheet();
+  alert("Profile permanently saved! 💙");
+}
+
+function quickChangeDP() { document.getElementById("directDpFileInput").click(); }
+
+function handleDirectDP(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    userProfile.avatar = e.target.result;
+    localStorage.setItem("pf_permanent_dp", userProfile.avatar);
+    renderProfileSection();
+    renderFeed();
+    alert("DP permanently updated! 📸");
+  };
+  reader.readAsDataURL(file);
+}
+
+// Post Creation Engine (Guaranteed 100% Instant Upload)
+function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
+function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
+
+function dispatchNewPost() {
+  const fileInput = document.getElementById("postImageUploadInput");
+  const file = fileInput.files[0];
+  const captionInput = document.getElementById("postCaptionTextInput");
+  const btn = document.getElementById("btnPublishPost");
+
+  if (!file) {
+    alert("Please select a photo from gallery!");
+    return;
+  }
+
+  btn.innerText = "Posting...";
+  btn.disabled = true;
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const newPost = {
+      id: Date.now(),
+      username: userProfile.name,
+      avatar: userProfile.avatar,
+      image: e.target.result,
+      caption: captionInput.value || "",
+      likes: 0
+    };
+
+    // Save to IndexedDB (No Storage Limits)
+    savePostToDB(newPost, function() {
+      globalPosts.unshift(newPost);
+      renderFeed();
+      renderProfileSection();
+
+      closeCreatePostSheet();
+      btn.innerText = "Share Post";
+      btn.disabled = false;
+      fileInput.value = "";
+      captionInput.value = "";
+
+      switchView("feedTab");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+  };
+
+  reader.onerror = function() {
+    alert("File read error. Choose another image.");
+    btn.innerText = "Share Post";
+    btn.disabled = false;
+  };
+
+  reader.readAsDataURL(file);
 }
 
 // Reels Engine
@@ -500,217 +563,19 @@ function toggleReelAudio(e) {
   document.getElementById("reelMuteIcon").className = isReelMuted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
 }
 
-// Profile Engine
-function renderProfileSection() {
-  document.getElementById("profileHeroName").innerText = userProfile.name;
-  document.getElementById("profileHeroBio").innerText = userProfile.bio;
-  document.getElementById("profileFollowersNum").innerText = userProfile.followers;
-  document.getElementById("profileHeroPic").src = userProfile.avatar;
-  document.getElementById("profileDockAvatar").src = userProfile.avatar;
-  document.getElementById("mindBarAvatar").src = userProfile.avatar;
-  document.getElementById("profilePostCountNumber").innerText = globalPosts.length;
-
-  const grid = document.getElementById("profileGridWall");
-  if (grid) {
-    grid.innerHTML = globalPosts.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
-  }
-  const exploreGrid = document.getElementById("exploreGridWall");
-  if (exploreGrid) {
-    exploreGrid.innerHTML = globalPosts.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
-  }
-}
-
-function openProfileEditSheet() {
-  document.getElementById("editProfileDisplayName").value = userProfile.name;
-  document.getElementById("editProfileBioDetails").value = userProfile.bio;
-  document.getElementById("editProfileModal").style.display = "flex";
-}
-function closeProfileEditSheet() { document.getElementById("editProfileModal").style.display = "none"; }
-
-function saveProfileDetails() {
-  const name = document.getElementById("editProfileDisplayName").value.trim();
-  const bio = document.getElementById("editProfileBioDetails").value.trim();
-  if (name) userProfile.name = name;
-  if (bio) userProfile.bio = bio;
-
-  persistData();
-  renderProfileSection();
-  renderFeed();
-  closeProfileEditSheet();
-  alert("Profile permanently saved! 💙");
-}
-
-function quickChangeDP() { document.getElementById("directDpFileInput").click(); }
-
-function handleDirectDP(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    userProfile.avatar = e.target.result;
-    persistData();
-    renderProfileSection();
-    renderFeed();
-    alert("DP permanently updated! 📸");
-  };
-  reader.readAsDataURL(file);
-}
-
-// Post Creation Engine (Bulletproof 100% Guaranteed Display)
-function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
-function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
-function openCreateReelSheet() { document.getElementById("createReelModal").style.display = "flex"; }
-function closeCreateReelSheet() { document.getElementById("createReelModal").style.display = "none"; }
-
-let selectedPostMusic = null;
-
-function dispatchNewPost() {
-  const fileInput = document.getElementById("postImageUploadInput");
-  const file = fileInput.files[0];
-  const captionInput = document.getElementById("postCaptionTextInput");
-  const btn = document.getElementById("btnPublishPost");
-
-  if (!file) {
-    alert("Please select a photo from gallery!");
-    return;
-  }
-
-  btn.innerText = "Sharing...";
-  btn.disabled = true;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const newPost = {
-      id: Date.now(),
-      username: userProfile.name,
-      avatar: userProfile.avatar,
-      image: e.target.result,
-      caption: captionInput.value || "",
-      likes: 0,
-      music: selectedPostMusic
-    };
-
-    // 1. Add to beginning of array
-    globalPosts.unshift(newPost);
-    persistData();
-
-    // 2. Render Feed & Profile IMMEDIATELY
-    renderFeed();
-    renderProfileSection();
-
-    // 3. Reset modal
-    closeCreatePostSheet();
-    btn.innerText = "Share Post";
-    btn.disabled = false;
-    fileInput.value = "";
-    captionInput.value = "";
-    selectedPostMusic = null;
-    document.getElementById("selectedPostMusicLabel").innerText = "🎵 Select Song";
-
-    // 4. Switch to feed view so user sees it right away
-    switchView("feedTab");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-  };
-
-  reader.onerror = function() {
-    alert("Error reading file. Please select another image.");
-    btn.innerText = "Share Post";
-    btn.disabled = false;
-  };
-
-  reader.readAsDataURL(file);
-}
-
-function dispatchNewReel() {
-  const file = document.getElementById("reelVideoUploadInput").files[0];
-  const caption = document.getElementById("reelCaptionInput").value;
-  const btn = document.getElementById("btnPublishReel");
-
-  if (!file) {
-    alert("Please choose a video file!");
-    return;
-  }
-
-  btn.innerText = "Uploading...";
-  btn.disabled = true;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    const newReel = {
-      id: "reel_" + Date.now(),
-      username: userProfile.name,
-      avatar: userProfile.avatar,
-      video: e.target.result,
-      caption: caption || "Viral Reel #picflow",
-      likes: "1.5k"
-    };
-
-    globalReels.unshift(newReel);
-    mountReel(0);
-
-    closeCreateReelSheet();
-    btn.innerText = "Publish Reel";
-    btn.disabled = false;
-    document.getElementById("reelVideoUploadInput").value = "";
-    document.getElementById("reelCaptionInput").value = "";
-    switchView("reelsTab");
-    alert("Reel published successfully! 🎬");
-  };
-  reader.readAsDataURL(file);
-}
-
-// Music Engine
-function openMusicPicker() {
-  document.getElementById("musicPickerSheet").style.display = "flex";
-  searchWorldwideMusic("Trending");
-}
-function closeMusicPicker() {
-  document.getElementById("musicPickerSheet").style.display = "none";
-}
-
-function handleMusicSearchInput() {
-  const q = document.getElementById("liveMusicSearchInput").value.trim();
-  if (q) searchWorldwideMusic(q);
-}
-
-window.handleITunesResponse = function(data) {
-  const container = document.getElementById("musicListContainer");
-  if (data && data.results && data.results.length > 0) {
-    container.innerHTML = data.results.filter(r => r.previewUrl).map(r => `
-      <div class="music-item" onclick="chooseTrack('${encodeURIComponent(r.trackName)}', '${r.previewUrl}')">
-        <div class="music-item-info">
-          <img src="${r.artworkUrl100 || 'https://picsum.photos/100/100'}" class="music-item-img" />
-          <div>
-            <div style="font-size:13px; font-weight:600;">${r.trackName}</div>
-            <div style="font-size:11px; color:#888;">${r.artistName}</div>
-          </div>
-        </div>
-        <i class="fa-solid fa-check" style="color:#0095f6;"></i>
-      </div>
-    `).join("");
-  }
-};
-
-function searchWorldwideMusic(q) {
-  const oldScript = document.getElementById("jsonp-itunes");
-  if (oldScript) oldScript.remove();
-  const s = document.createElement("script");
-  s.id = "jsonp-itunes";
-  s.src = `https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=15&callback=handleITunesResponse`;
-  document.body.appendChild(s);
-}
-
-function chooseTrack(title, url) {
-  selectedPostMusic = { title: decodeURIComponent(title), url: url };
-  document.getElementById("selectedPostMusicLabel").innerText = `🎵 ${selectedPostMusic.title}`;
-  closeMusicPicker();
-}
-
-// Initial Boot
+// Initial Bootup
 window.addEventListener("DOMContentLoaded", () => {
   renderProfileSection();
-  renderFeed();
+  initDB(function() {
+    getAllPostsFromDB(function(savedPosts) {
+      if (savedPosts && savedPosts.length) {
+        // Sort newest first
+        globalPosts = savedPosts.sort((a, b) => b.id - a.id);
+      }
+      renderFeed();
+      renderProfileSection();
+    });
+  });
   mountReel(0);
 });
 </script>
