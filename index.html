@@ -1,97 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<meta name="theme-color" content="#000">
-<title>PicFlow</title>
-<link rel="icon" href="data:,">
-
-<style>
-*{box-sizing:border-box}
-html,body{margin:0;background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-button,input,textarea{font:inherit}
-button{cursor:pointer}
-img,video{max-width:100%}
-.hidden{display:none!important}
-#app{max-width:620px;margin:auto;min-height:100vh;background:#000}
-
-.auth{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:25px}
-.authbox{width:100%;max-width:390px}
-.logo{text-align:center;font-size:43px;font-weight:900;margin-bottom:35px;letter-spacing:-2px}
-.input{width:100%;padding:14px;margin:6px 0;border:1px solid #292929;background:#151515;color:#fff;border-radius:10px;outline:none}
-.input:focus{border-color:#777}
-.primary{width:100%;padding:14px;border:0;border-radius:10px;background:#fff;color:#000;font-weight:800;margin-top:8px}
-.secondary{width:100%;padding:13px;border:1px solid #333;border-radius:10px;background:#111;color:#fff;margin-top:9px}
-.link{text-align:center;color:#aaa;margin:17px;cursor:pointer}
-
-.top{height:58px;position:sticky;top:0;z-index:20;display:flex;align-items:center;justify-content:space-between;padding:0 16px;background:rgba(0,0,0,.95);border-bottom:1px solid #222}
-.logo2{font-size:25px;font-weight:900}
-.topicons{display:flex;gap:20px;font-size:24px}
-.page{padding-bottom:72px}
-
-.stories{display:flex;gap:14px;overflow-x:auto;padding:14px;border-bottom:1px solid #222}
-.stories::-webkit-scrollbar{display:none}
-.story{min-width:66px;text-align:center;font-size:11px;color:#aaa}
-.storyring{width:60px;height:60px;padding:2px;margin:auto;border-radius:50%;background:linear-gradient(45deg,#ff0,#f06,#80f)}
-.storyring img{width:100%;height:100%;border-radius:50%;object-fit:cover;border:3px solid #000}
-
-.create{margin:12px;padding:12px;border:1px solid #222;border-radius:13px;display:flex;align-items:center;gap:10px}
-.avatar{width:42px;height:42px;border-radius:50%;object-fit:cover;background:#222}
-.fakeinput{flex:1;background:#171717;border-radius:25px;padding:12px;color:#888}
-
-.post{border-bottom:1px solid #222;margin-bottom:5px}
-.posthead{display:flex;align-items:center;gap:10px;padding:12px}
-.postuser{flex:1;font-weight:800}
-.postmedia{width:100%;max-height:680px;object-fit:cover;background:#111}
-.actions{display:flex;gap:20px;padding:10px 13px;font-size:26px}
-.action{cursor:pointer}
-.info{padding:0 13px 15px}
-.likes{font-weight:800;margin-bottom:6px}
-.caption{line-height:1.4}
-.commentlink{color:#888;margin-top:7px;cursor:pointer}
-
-.bottom{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:620px;height:64px;background:rgba(0,0,0,.97);border-top:1px solid #222;display:flex;justify-content:space-around;align-items:center;z-index:50}
-.nav{text-align:center;font-size:24px;color:#aaa;cursor:pointer}
-.nav.active{color:#fff}
-.nav small{display:block;font-size:9px}
-
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:100;display:flex;align-items:flex-end}
-.sheet{width:100%;max-width:620px;max-height:92vh;overflow:auto;background:#111;border-radius:22px 22px 0 0;padding:18px}
-.close{float:right;border:0;background:#292929;color:#fff;border-radius:50%;width:35px;height:35px;font-size:22px}
-.title{font-size:23px;font-weight:900;margin:4px 0 20px}
-.person{display:flex;align-items:center;gap:11px;padding:12px 0;border-bottom:1px solid #222}
-.personinfo{flex:1}
-.personinfo b{display:block}
-.personinfo span{font-size:12px;color:#888}
-.follow{border:0;background:#fff;color:#000;border-radius:8px;padding:8px 14px;font-weight:800}
-.following{background:#222;color:#fff;border:1px solid #444}
-
-.profilehead{display:flex;gap:20px;align-items:center;padding:10px 0}
-.bigavatar{width:92px;height:92px;border-radius:50%;object-fit:cover;background:#222}
-.stats{display:flex;gap:20px;text-align:center}
-.stats b{display:block;font-size:18px}
-.stats span{font-size:11px;color:#888}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:15px}
-.grid img,.grid video{width:100%;aspect-ratio:1;object-fit:cover}
-.setting{padding:17px 4px;border-bottom:1px solid #222;display:flex;justify-content:space-between}
-.empty{text-align:center;color:#777;padding:50px 20px}
-.toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:#fff;color:#000;padding:11px 18px;border-radius:25px;z-index:999;font-weight:800;white-space:nowrap}
-.chat{display:flex;flex-direction:column;gap:7px;min-height:250px}
-.bubble{max-width:78%;padding:10px 13px;border-radius:18px;background:#222;align-self:flex-start}
-.bubble.me{background:#fff;color:#000;align-self:flex-end}
-.chatbar{display:flex;gap:7px;margin-top:10px}
-.chatbar input{flex:1}
-.chatbar button{width:55px;border:0;border-radius:10px}
-.preview{max-height:300px;display:block;margin:10px auto;border-radius:12px}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PicFlow</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { background: #fafafa; color: #262626; padding-bottom: 70px; }
+    header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #dbdbdb; display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; z-index: 50; }
+    .logo { font-size: 1.4rem; font-weight: 700; font-family: 'Brush Script MT', cursive, sans-serif; }
+    .header-icons i { font-size: 1.3rem; margin-left: 18px; cursor: pointer; }
+    .stories-container { display: flex; overflow-x: auto; padding: 14px 10px; background: #fff; border-bottom: 1px solid #dbdbdb; gap: 14px; }
+    .stories-container::-webkit-scrollbar { display: none; }
+    .story { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
+    .story-ring { width: 64px; height: 64px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; }
+    .story-img { width: 58px; height: 58px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; }
+    .feed { max-width: 470px; margin: 15px auto; display: flex; flex-direction: column; gap: 18px; }
+    .post { background: #fff; border: 1px solid #dbdbdb; border-radius: 8px; overflow: hidden; }
+    .post-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; }
+    .post-user { display: flex; align-items: center; gap: 10px; }
+    .post-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+    .post-username { font-size: 13px; font-weight: 600; }
+    .post-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #000; }
+    .post-actions { display: flex; justify-content: space-between; padding: 10px 14px; font-size: 1.3rem; }
+    .post-actions-left { display: flex; gap: 14px; }
+    .post-actions i { cursor: pointer; }
+    .post-actions .fa-heart.liked { color: #ed4956; }
+    .post-meta { padding: 0 14px 12px; font-size: 13px; }
+    .likes-count { font-weight: 600; margin-bottom: 6px; }
+    .caption span { font-weight: 600; margin-right: 6px; }
+    .comments-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
+    .add-comment { display: flex; border-top: 1px solid #efefef; padding: 8px 14px; margin-top: 8px; }
+    .add-comment input { flex: 1; border: none; outline: none; font-size: 13px; }
+    .add-comment button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    nav.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: #fff; border-top: 1px solid #dbdbdb; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
+    nav.bottom-bar i { font-size: 1.3rem; cursor: pointer; color: #262626; }
+    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
+    .modal-box { background: #fff; width: 90%; max-width: 420px; border-radius: 12px; padding: 18px; position: relative; }
+    .close-btn { position: absolute; top: 12px; right: 14px; font-size: 18px; cursor: pointer; }
+    .modal input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #dbdbdb; border-radius: 6px; }
+    .btn-submit { width: 100%; padding: 10px; background: #0095f6; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
+    #storyViewer { display: none; position: fixed; inset: 0; background: #000; z-index: 200; justify-content: center; align-items: center; }
+    #storyViewer img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  </style>
 </head>
-
 <body>
-<div id="app"></div>
+  <header>
+    <div class="logo">PicFlow</div>
+    <div class="header-icons">
+      <i class="fa-regular fa-heart" onclick="alert('No notifications')"></i>
+      <i class="fa-brands fa-facebook-messenger" onclick="alert('Chats loaded')"></i>
+    </div>
+  </header>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="js/supabase-config.js?v=master3"></script>
-<script src="js/master.js?v=master3"></script>
+  <div class="stories-container" id="storiesContainer"></div>
+  <main class="feed" id="feedContainer"></main>
+
+  <nav class="bottom-bar">
+    <i class="fa-solid fa-house" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"></i>
+    <i class="fa-solid fa-magnifying-glass" onclick="alert('Explore')"></i>
+    <i class="fa-regular fa-square-plus" onclick="openCreateModal()"></i>
+    <i class="fa-solid fa-clapperboard" onclick="alert('Reels')"></i>
+    <i class="fa-regular fa-user" onclick="alert('Profile')"></i>
+  </nav>
+
+  <div class="modal" id="createModal">
+    <div class="modal-box">
+      <span class="close-btn" onclick="closeCreateModal()">&times;</span>
+      <h3>Create New Post</h3>
+      <input type="file" id="postImageInput" accept="image/*" />
+      <input type="text" id="postCaptionInput" placeholder="Write a caption..." />
+      <button class="btn-submit" onclick="submitPost()">Share Post</button>
+    </div>
+  </div>
+
+  <div id="storyViewer" onclick="closeStoryViewer()">
+    <img id="activeStoryImg" src="" alt="Story" />
+  </div>
+
+  <script src="js/master.js?v=master3"></script>
 </body>
 </html>
