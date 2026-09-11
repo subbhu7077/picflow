@@ -2525,3 +2525,251 @@ document.addEventListener(
 /* =========================================================
    END FOLLOW / FOLLOWING SYSTEM
    ========================================================= */
+
+/* =========================================================
+   PICFLOW - LIVE PROFILE FOLLOW COUNTS
+   ========================================================= */
+
+(function () {
+
+  async function updateLiveProfileCounts() {
+
+    try {
+
+      if (
+        typeof window.supabase === "undefined" ||
+        !window.SUPABASE_URL ||
+        !window.SUPABASE_PUBLISHABLE_KEY ||
+        window.SUPABASE_PUBLISHABLE_KEY === "YOUR_PUBLISHABLE_KEY"
+      ) {
+        console.log("Supabase not ready");
+        return;
+      }
+
+      const sb = window.supabase.createClient(
+        window.SUPABASE_URL,
+        window.SUPABASE_PUBLISHABLE_KEY
+      );
+
+      const {
+        data: userData,
+        error: userError
+      } = await sb.auth.getUser();
+
+      if (userError || !userData || !userData.user) {
+        console.log("No logged-in user");
+        return;
+      }
+
+      const userId = userData.user.id;
+
+      const [
+        followersResult,
+        followingResult
+      ] = await Promise.all([
+
+        sb
+          .from("follows")
+          .select("*", { count: "exact", head: true })
+          .eq("following_id", userId),
+
+        sb
+          .from("follows")
+          .select("*", { count: "exact", head: true })
+          .eq("follower_id", userId)
+
+      ]);
+
+      if (followersResult.error) {
+        console.error(
+          "Followers count error:",
+          followersResult.error
+        );
+      }
+
+      if (followingResult.error) {
+        console.error(
+          "Following count error:",
+          followingResult.error
+        );
+      }
+
+      const followers =
+        followersResult.count || 0;
+
+      const following =
+        followingResult.count || 0;
+
+      console.log(
+        "LIVE PROFILE:",
+        followers,
+        "followers",
+        following,
+        "following"
+      );
+
+      /*
+        Find profile stats by looking for text
+        containing Followers / Following.
+      */
+
+      const allElements =
+        document.querySelectorAll("*");
+
+      allElements.forEach(function (el) {
+
+        if (el.children.length > 0) return;
+
+        const text =
+          (el.textContent || "").trim();
+
+        if (!text) return;
+
+        /*
+          Replace old static follower number.
+          Example:
+          120
+          Followers
+        */
+
+        if (
+          text.toLowerCase() === "followers"
+        ) {
+
+          const parent =
+            el.parentElement;
+
+          if (parent) {
+
+            const number =
+              parent.querySelector(
+                "strong, b, span"
+              );
+
+            if (number && number !== el) {
+              number.textContent = followers;
+            }
+
+          }
+
+        }
+
+        /*
+          Replace old static following number.
+        */
+
+        if (
+          text.toLowerCase() === "following"
+        ) {
+
+          const parent =
+            el.parentElement;
+
+          if (parent) {
+
+            const number =
+              parent.querySelector(
+                "strong, b, span"
+              );
+
+            if (number && number !== el) {
+              number.textContent = following;
+            }
+
+          }
+
+        }
+
+      });
+
+      /*
+        Also replace common classes/IDs if they exist.
+      */
+
+      const followerSelectors = [
+        "#followersCount",
+        ".followers-count",
+        ".followersCount"
+      ];
+
+      const followingSelectors = [
+        "#followingCount",
+        ".following-count",
+        ".followingCount"
+      ];
+
+      followerSelectors.forEach(function (selector) {
+
+        document
+          .querySelectorAll(selector)
+          .forEach(function (el) {
+
+            el.textContent = followers;
+
+          });
+
+      });
+
+      followingSelectors.forEach(function (selector) {
+
+        document
+          .querySelectorAll(selector)
+          .forEach(function (el) {
+
+            el.textContent = following;
+
+          });
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Live profile count error:",
+        error
+      );
+
+    }
+
+  }
+
+  /*
+    Run after page loads.
+  */
+
+  if (document.readyState === "loading") {
+
+    document.addEventListener(
+      "DOMContentLoaded",
+      function () {
+
+        setTimeout(
+          updateLiveProfileCounts,
+          1800
+        );
+
+      }
+    );
+
+  } else {
+
+    setTimeout(
+      updateLiveProfileCounts,
+      1800
+    );
+
+  }
+
+  /*
+    Make function available globally.
+  */
+
+  window.updateLiveProfileCounts =
+    updateLiveProfileCounts;
+
+})();
+
+/* =========================================================
+   END LIVE PROFILE FOLLOW COUNTS
+   ========================================================= */
+
