@@ -1,60 +1,84 @@
-// --- Initial Seed State ---
+// --- Supabase Bridge Initialization ---
+let supabaseClient = null;
+if (typeof supabase !== 'undefined' && typeof SUPABASE_URL !== 'undefined' && typeof SUPABASE_KEY !== 'undefined') {
+  try {
+    supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    console.log("Connected to Supabase Database successfully!");
+  } catch (err) {
+    console.warn("Supabase init error, running in Local fallback mode:", err);
+  }
+}
+
+// --- Defaults ---
 const SEED_POSTS = [
   {
-    id: 201,
+    id: 101,
     username: "Subbhu7077",
     avatar: "https://picsum.photos/200/200?random=1",
-    image: "https://picsum.photos/800/800?random=81",
-    likes: 184,
+    image: "https://picsum.photos/800/800?random=181",
+    likes: 215,
     liked: false,
     saved: false,
-    caption: "PicFlow Master V7 live on GitHub Pages! Everything is fully functioning 🔥",
-    comments: ["Smooth dark mode!", "Upload and stories are working great!"],
+    caption: "PicFlow Master V8 + Supabase Full Cloud Ready! 🔥⚡",
+    comments: ["DP change is working smooth!", "Best clean Instagram clone"],
     date: "JUST NOW"
   },
   {
-    id: 202,
-    username: "wander_spirit",
+    id: 102,
+    username: "travel_diaries",
     avatar: "https://picsum.photos/200/200?random=2",
-    image: "https://picsum.photos/800/800?random=82",
-    likes: 640,
+    image: "https://picsum.photos/800/800?random=182",
+    likes: 712,
     liked: false,
     saved: false,
-    caption: "Misty mountains at dawn 🌄✨ #nature #peace",
-    comments: ["Where was this taken?", "Incredible photography 👏"],
-    date: "2 HOURS AGO"
+    caption: "Chasing sunrises in the valley 🌄✨",
+    comments: ["Location please?", "Super capture!"],
+    date: "3 HOURS AGO"
   }
 ];
 
 const SEED_STORIES = [
-  { id: 1, user: "Your story", avatar: "https://picsum.photos/200/200?random=1", img: "https://picsum.photos/800/1200?random=91", isSelf: true },
-  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=92", isSelf: false },
-  { id: 3, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", img: "https://picsum.photos/800/1200?random=93", isSelf: false },
-  { id: 4, user: "lens_art", avatar: "https://picsum.photos/200/200?random=5", img: "https://picsum.photos/800/1200?random=94", isSelf: false }
+  { id: 1, user: "Your story", avatar: "https://picsum.photos/200/200?random=1", img: "https://picsum.photos/800/1200?random=191" },
+  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192" },
+  { id: 3, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", img: "https://picsum.photos/800/1200?random=193" }
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your photo.", time: "5m", isFollow: false },
-  { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true },
-  { id: 3, user: "wander_spirit", avatar: "https://picsum.photos/200/200?random=2", text: "commented on your post.", time: "1h", isFollow: false }
+  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your post.", time: "4m", isFollow: false },
+  { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "25m", isFollow: true },
+  { id: 3, user: "travel_diaries", avatar: "https://picsum.photos/200/200?random=2", text: "commented on your photo.", time: "1h", isFollow: false }
 ];
 
 // Persistent State
-let posts = JSON.parse(localStorage.getItem("pf_posts_v7")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_stories_v7")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_profile_v7")) || {
+let posts = JSON.parse(localStorage.getItem("pf_posts_v8")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_stories_v8")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_profile_v8")) || {
   name: "Subbhu7077",
-  bio: "Photographer | Tech Enthusiast ⚡",
+  bio: "Photographer | Tech Explorer ⚡",
   avatar: "https://picsum.photos/200/200?random=1"
 };
 
-function commitState() {
-  localStorage.setItem("pf_posts_v7", JSON.stringify(posts));
-  localStorage.setItem("pf_stories_v7", JSON.stringify(stories));
-  localStorage.setItem("pf_profile_v7", JSON.stringify(userProfile));
+function persistAll() {
+  localStorage.setItem("pf_posts_v8", JSON.stringify(posts));
+  localStorage.setItem("pf_stories_v8", JSON.stringify(stories));
+  localStorage.setItem("pf_profile_v8", JSON.stringify(userProfile));
+
+  // Sync to Supabase if connected
+  if (supabaseClient) {
+    try {
+      supabaseClient.from('profiles').upsert({
+        id: 'primary_user',
+        username: userProfile.name,
+        bio: userProfile.bio,
+        avatar_url: userProfile.avatar
+      }).then();
+    } catch (e) {
+      console.log("Background Supabase sync:", e);
+    }
+  }
 }
 
-// Navigation Tab Switcher
+// Tab Switching
 function switchView(viewId) {
   document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
   const el = document.getElementById(viewId);
@@ -64,13 +88,13 @@ function switchView(viewId) {
   if (viewId === "exploreTab") renderExploreGrid();
   if (viewId === "profileTab") renderProfileSection();
   if (viewId === "notifTab") {
-    renderNotificationList();
+    renderNotifications();
     document.getElementById("notifBadge").style.display = "none";
   }
 }
 
 // Stories Tray
-function renderStoriesTray() {
+function renderStories() {
   const container = document.getElementById("storiesTray");
   let html = `
     <div class="story-slot" onclick="openCreateStorySheet()">
@@ -119,7 +143,7 @@ function closeStoryPlayerApp() {
 }
 
 // Feed Posts
-function renderFeedPosts() {
+function renderFeed() {
   const wall = document.getElementById("postsContainer");
   wall.innerHTML = posts.map(p => `
     <article class="post-block" id="post-${p.id}">
@@ -128,7 +152,7 @@ function renderFeedPosts() {
           <img src="${p.avatar}" class="post-user-pfp" />
           <span class="post-author">${p.username}</span>
         </div>
-        <i class="fa-solid fa-ellipsis post-more-btn" onclick="removePostItem(${p.id})"></i>
+        <i class="fa-solid fa-ellipsis post-more-btn" onclick="removePost(${p.id})"></i>
       </div>
 
       <div class="post-stage" ondblclick="fireDoubleTapHeart(${p.id})">
@@ -139,8 +163,8 @@ function renderFeedPosts() {
       <div class="post-action-bar">
         <div class="post-action-left">
           <i class="${p.liked ? 'fa-solid fa-heart liked-red' : 'fa-regular fa-heart'}" onclick="togglePostLike(${p.id})"></i>
-          <i class="fa-regular fa-comment" onclick="focusCommentInput(${p.id})"></i>
-          <i class="fa-regular fa-paper-plane" onclick="sharePostPermalink()"></i>
+          <i class="fa-regular fa-comment" onclick="focusComment(${p.id})"></i>
+          <i class="fa-regular fa-paper-plane" onclick="sharePost()"></i>
         </div>
         <i class="${p.saved ? 'fa-solid fa-bookmark saved-gold' : 'fa-regular fa-bookmark'}" onclick="togglePostSave(${p.id})"></i>
       </div>
@@ -148,9 +172,7 @@ function renderFeedPosts() {
       <div class="post-caption-box">
         <div class="likes-stat">${p.likes} likes</div>
         <div class="caption-content"><span>${p.username}</span>${p.caption}</div>
-        
-        <div class="view-comments-btn" onclick="focusCommentInput(${p.id})">View all ${p.comments.length} comments</div>
-
+        <div class="view-comments-btn" onclick="focusComment(${p.id})">View all ${p.comments.length} comments</div>
         <div class="comments-stack">
           ${p.comments.map(c => `<div class="comment-entry"><span>user</span>${c}</div>`).join("")}
         </div>
@@ -158,8 +180,8 @@ function renderFeedPosts() {
       </div>
 
       <div class="quick-comment-bar">
-        <input type="text" id="comment-box-${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') commitPostComment(${p.id})" />
-        <button onclick="commitPostComment(${p.id})">Post</button>
+        <input type="text" id="comment-box-${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') commitComment(${p.id})" />
+        <button onclick="commitComment(${p.id})">Post</button>
       </div>
     </article>
   `).join("");
@@ -170,8 +192,8 @@ function togglePostLike(id) {
   if (!p) return;
   p.liked = !p.liked;
   p.likes += p.liked ? 1 : -1;
-  commitState();
-  renderFeedPosts();
+  persistAll();
+  renderFeed();
 }
 
 function fireDoubleTapHeart(id) {
@@ -184,8 +206,8 @@ function fireDoubleTapHeart(id) {
   if (p && !p.liked) {
     p.liked = true;
     p.likes += 1;
-    commitState();
-    renderFeedPosts();
+    persistAll();
+    renderFeed();
   }
 }
 
@@ -193,36 +215,36 @@ function togglePostSave(id) {
   const p = posts.find(item => item.id === id);
   if (!p) return;
   p.saved = !p.saved;
-  commitState();
-  renderFeedPosts();
+  persistAll();
+  renderFeed();
 }
 
-function focusCommentInput(id) {
+function focusComment(id) {
   const box = document.getElementById(`comment-box-${id}`);
   if (box) box.focus();
 }
 
-function commitPostComment(id) {
+function commitComment(id) {
   const box = document.getElementById(`comment-box-${id}`);
   if (!box || !box.value.trim()) return;
   const p = posts.find(item => item.id === id);
   if (p) {
     p.comments.push(box.value.trim());
-    commitState();
-    renderFeedPosts();
+    persistAll();
+    renderFeed();
   }
 }
 
-function sharePostPermalink() {
+function sharePost() {
   if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Post link copied to clipboard! 🔗 Share anywhere");
+  alert("Post link copied to clipboard! 🔗");
 }
 
-function removePostItem(id) {
+function removePost(id) {
   if (confirm("Delete this post?")) {
     posts = posts.filter(p => p.id !== id);
-    commitState();
-    renderFeedPosts();
+    persistAll();
+    renderFeed();
     renderProfileSection();
   }
 }
@@ -252,8 +274,8 @@ function dispatchNewPost() {
       comments: [],
       date: "JUST NOW"
     });
-    commitState();
-    renderFeedPosts();
+    persistAll();
+    renderFeed();
     closeCreatePostSheet();
     document.getElementById("postImageUploadInput").value = "";
     document.getElementById("postCaptionTextInput").value = "";
@@ -269,7 +291,7 @@ function closeCreateStorySheet() { document.getElementById("createStoryModal").s
 function dispatchNewStory() {
   const file = document.getElementById("storyImageUploadInput").files[0];
   if (!file) {
-    alert("Please select a photo for your story!");
+    alert("Please select a story image!");
     return;
   }
   const reader = new FileReader();
@@ -280,8 +302,8 @@ function dispatchNewStory() {
       avatar: userProfile.avatar,
       img: e.target.result
     });
-    commitState();
-    renderStoriesTray();
+    persistAll();
+    renderStories();
     closeCreateStorySheet();
     document.getElementById("storyImageUploadInput").value = "";
   };
@@ -290,15 +312,15 @@ function dispatchNewStory() {
 
 // Explore Section
 const EXPLORE_PHOTOS = [
-  "https://picsum.photos/400/400?random=111",
-  "https://picsum.photos/400/400?random=112",
-  "https://picsum.photos/400/400?random=113",
-  "https://picsum.photos/400/400?random=114",
-  "https://picsum.photos/400/400?random=115",
-  "https://picsum.photos/400/400?random=116",
-  "https://picsum.photos/400/400?random=117",
-  "https://picsum.photos/400/400?random=118",
-  "https://picsum.photos/400/400?random=119"
+  "https://picsum.photos/400/400?random=211",
+  "https://picsum.photos/400/400?random=212",
+  "https://picsum.photos/400/400?random=213",
+  "https://picsum.photos/400/400?random=214",
+  "https://picsum.photos/400/400?random=215",
+  "https://picsum.photos/400/400?random=216",
+  "https://picsum.photos/400/400?random=217",
+  "https://picsum.photos/400/400?random=218",
+  "https://picsum.photos/400/400?random=219"
 ];
 
 function renderExploreGrid() {
@@ -322,9 +344,9 @@ function handleExploreSearchLive() {
 
 // Reels Logic
 const REELS_LIBRARY = [
-  { img: "https://picsum.photos/600/1000?random=601", user: "@subbhu_vibes", caption: "Drive into the neon lights 🚗✨ #picflow #master", likes: "4.8k" },
-  { img: "https://picsum.photos/600/1000?random=602", user: "@chef_kunal", caption: "Street food secrets in Delhi 🍲🔥", likes: "18.4k" },
-  { img: "https://picsum.photos/600/1000?random=603", user: "@wander_india", caption: "Tiger Point sunrise, Lonavala 🌄", likes: "9.2k" }
+  { img: "https://picsum.photos/600/1000?random=701", user: "@subbhu_vibes", caption: "Drive into the neon lights 🚗✨ #picflow #master", likes: "5.1k" },
+  { img: "https://picsum.photos/600/1000?random=702", user: "@chef_kunal", caption: "Street food secrets in Delhi 🍲🔥", likes: "21.4k" },
+  { img: "https://picsum.photos/600/1000?random=703", user: "@wander_india", caption: "Tiger Point sunrise, Lonavala 🌄", likes: "10.2k" }
 ];
 let currentReelIndex = 0;
 let isCurrentReelLiked = false;
@@ -346,7 +368,7 @@ function toggleReelHeart() {
 }
 
 // Notifications
-function renderNotificationList() {
+function renderNotifications() {
   const list = document.getElementById("notifListContainer");
   list.innerHTML = SEED_NOTIFS.map(n => `
     <div class="notif-card">
@@ -357,6 +379,25 @@ function renderNotificationList() {
       ${n.isFollow ? `<button class="notif-btn-action" onclick="this.innerText='Following'">Follow</button>` : `<i class="fa-solid fa-heart" style="color: #ed4956;"></i>`}
     </div>
   `).join("");
+}
+
+// Direct DP Change Handler (Camera Tap)
+function quickChangeDP() {
+  document.getElementById("directDpFileInput").click();
+}
+
+function handleDirectDP(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    userProfile.avatar = e.target.result;
+    persistAll();
+    renderProfileSection();
+    renderStories();
+    alert("Profile Picture (DP) Updated Successfully! 📸");
+  };
+  reader.readAsDataURL(file);
 }
 
 // Profile Section & Edit
@@ -391,14 +432,14 @@ function saveProfileDetails() {
     const reader = new FileReader();
     reader.onload = function(e) {
       userProfile.avatar = e.target.result;
-      commitState();
+      persistAll();
       renderProfileSection();
-      renderStoriesTray();
+      renderStories();
       closeProfileEditSheet();
     };
     reader.readAsDataURL(picFile);
   } else {
-    commitState();
+    persistAll();
     renderProfileSection();
     closeProfileEditSheet();
   }
@@ -428,6 +469,6 @@ function dispatchDirectMessage() {
 }
 
 // Initial Boot
-renderStoriesTray();
-renderFeedPosts();
+renderStories();
+renderFeed();
 renderProfileSection();
