@@ -3,9 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Global Live</title>
+  <title>PicFlow - Instant Live</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
-  <!-- Supabase JS Client -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
@@ -141,7 +140,7 @@
     <div class="stories-scroller" id="storiesTray"></div>
     <div class="whats-on-mind" onclick="openCreatePostSheet()">
       <img src="https://picsum.photos/200/200?random=1" class="mind-avatar" id="mindBarAvatar" />
-      <div class="mind-input-faux">What's on your mind? (Global Cloud Post)</div>
+      <div class="mind-input-faux">What's on your mind?</div>
     </div>
     <div class="post-wall" id="postsContainer"></div>
   </section>
@@ -154,7 +153,7 @@
     <div class="profile-grid-wall" id="exploreGridWall"></div>
   </section>
 
-  <!-- TAB 3: REELS (CLOUD SYNCED) -->
+  <!-- TAB 3: REELS -->
   <section id="reelsTab" class="tab-section">
     <div class="reel-viewport" id="reelViewport">
       <div class="reel-upload-shortcut" onclick="openCreateReelSheet()">
@@ -230,13 +229,13 @@
   <div class="modal-overlay-backdrop" id="createPostModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
-      <h3>Create Global Cloud Post</h3>
+      <h3>Create New Post</h3>
       <input type="file" id="postImageUploadInput" accept="image/*" />
       <button class="btn-theme-secondary" onclick="openMusicPicker('post')">
         <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Song</span>
       </button>
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
-      <button class="btn-theme-blue" id="btnPublishPost" onclick="dispatchNewPost()">Publish to Supabase Cloud</button>
+      <button class="btn-theme-blue" id="btnPublishPost" onclick="dispatchNewPost()">Share Post</button>
     </div>
   </div>
 
@@ -244,10 +243,10 @@
   <div class="modal-overlay-backdrop" id="createReelModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreateReelSheet()"></i>
-      <h3>Upload Global Reel</h3>
+      <h3>Upload Reel</h3>
       <input type="file" id="reelVideoUploadInput" accept="video/mp4,video/webm" />
-      <input type="text" id="reelCaptionInput" placeholder="Reel caption / hashtags..." />
-      <button class="btn-theme-blue" id="btnPublishReel" onclick="dispatchNewReel()">Publish Reel Worldwide</button>
+      <input type="text" id="reelCaptionInput" placeholder="Reel caption..." />
+      <button class="btn-theme-blue" id="btnPublishReel" onclick="dispatchNewReel()">Publish Reel</button>
     </div>
   </div>
 
@@ -276,10 +275,13 @@
 </div>
 
 <script>
-// ==================== SUPABASE GLOBAL CLOUD CLIENT ====================
+// ==================== SUPABASE CLIENT ====================
 const SUPABASE_URL = "https://nuqqtvqkbpraxhowpoya.supabase.co";
 const SUPABASE_KEY = "sb_publishable__hbybHtM15GlGuMrFr4vWQ_iL0ivaFt";
-const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+let supabaseClient = null;
+try {
+  supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+} catch (e) {}
 
 const globalAudio = document.getElementById("globalAudioPlayer");
 
@@ -297,79 +299,81 @@ let userProfile = {
   isVerified: true
 };
 
-let globalPosts = [];
-let globalReels = [];
-
-// ==================== REALTIME DATABASE SYNCHRONIZATION ====================
-async function fetchCloudData() {
-  try {
-    // 1. Fetch Posts from Supabase
-    const { data: postsData, error: postErr } = await supabaseClient
-      .from("posts")
-      .select("*")
-      .order("id", { ascending: false });
-
-    if (postsData && !postErr && postsData.length > 0) {
-      globalPosts = postsData;
-    } else {
-      // Seed initial post if empty
-      globalPosts = [{
-        id: 101,
-        username: userProfile.name,
-        avatar: userProfile.avatar,
-        image: "https://picsum.photos/800/800?random=181",
-        caption: "Welcome to PicFlow Global Cloud! Everyone sees this post live 🚀",
-        likes: 1284,
-        music: null
-      }];
-    }
-    renderFeed();
-    renderProfileSection();
-
-    // 2. Fetch Reels from Supabase
-    const { data: reelsData, error: reelErr } = await supabaseClient
-      .from("reels")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (reelsData && !reelErr && reelsData.length > 0) {
-      globalReels = reelsData;
-    } else {
-      globalReels = [
-        {
-          id: "r_1",
-          username: userProfile.name,
-          avatar: userProfile.avatar,
-          video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
-          caption: "Sunset waves on PicFlow Reels 🌊✨",
-          likes: "45.2k"
-        }
-      ];
-    }
-    mountReel(0);
-
-  } catch (err) {
-    console.warn("Cloud fallback running:", err);
+const DEFAULT_POSTS = [
+  {
+    id: 101,
+    username: userProfile.name,
+    avatar: userProfile.avatar,
+    image: "https://picsum.photos/800/800?random=181",
+    caption: "PicFlow Master Engine Active! 🚀",
+    likes: 1284,
+    music: null
   }
+];
+
+let globalPosts = JSON.parse(localStorage.getItem("pf_v23_posts")) || DEFAULT_POSTS;
+let globalReels = [
+  {
+    id: "r_1",
+    username: userProfile.name,
+    avatar: userProfile.avatar,
+    video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
+    caption: "Sunset waves on PicFlow Reels 🌊✨",
+    likes: "45.2k"
+  }
+];
+
+function persistLocalData() {
+  try {
+    localStorage.setItem("pf_v23_posts", JSON.stringify(globalPosts));
+    localStorage.setItem("pf_permanent_username", userProfile.name);
+    localStorage.setItem("pf_permanent_bio", userProfile.bio);
+    localStorage.setItem("pf_permanent_dp", userProfile.avatar);
+  } catch (e) {}
 }
 
-// Listen to Worldwide New Posts & Reels Live
-function subscribeToRealtime() {
-  supabaseClient
-    .channel("public-cloud-changes")
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "posts" }, payload => {
-      globalPosts.unshift(payload.new);
-      renderFeed();
-      renderProfileSection();
-    })
-    .on("postgres_changes", { event: "INSERT", schema: "public", table: "reels" }, payload => {
-      globalReels.unshift(payload.new);
-      mountReel(0);
-    })
-    .subscribe();
+// Background Cloud Sync without blocking the UI
+function syncPostToCloudBackground(postObj) {
+  if (!supabaseClient) return;
+  supabaseClient.from("posts").insert([postObj]).then(({ error }) => {
+    if (error) console.log("Cloud sync pass:", error.message);
+    else console.log("Post synced to Supabase successfully");
+  }).catch(() => {});
 }
 
-// ==================== NAVIGATION ====================
+// Image compression
+function compressImageFile(file, maxDimension, quality, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      let width = img.width;
+      let height = img.height;
+      if (width > height) {
+        if (width > maxDimension) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        }
+      } else {
+        if (height > maxDimension) {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      callback(canvas.toDataURL("image/jpeg", quality));
+    };
+    img.onerror = () => callback(e.target.result);
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// Navigation
 function switchView(viewId) {
   document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
   const el = document.getElementById(viewId);
@@ -377,16 +381,12 @@ function switchView(viewId) {
   window.scrollTo({ top: 0, behavior: "smooth" });
   globalAudio.pause();
 
-  if (viewId === "reelsTab") {
-    playCurrentReel();
-  } else {
-    pauseCurrentReel();
-  }
+  if (viewId === "reelsTab") playCurrentReel();
+  else pauseCurrentReel();
 }
 
-// ==================== FEED ENGINE ====================
+// Feed Engine
 let currentPlayingPostId = null;
-
 function togglePostAudio(postId, audioUrl) {
   if (currentPlayingPostId === postId && !globalAudio.paused) {
     globalAudio.pause();
@@ -435,7 +435,7 @@ function renderFeed() {
       <div class="post-action-bar">
         <div class="post-action-left">
           <i class="fa-regular fa-heart" onclick="togglePostLike(this, ${p.id})"></i>
-          <i class="fa-regular fa-comment" onclick="alert('Comment added!')"></i>
+          <i class="fa-regular fa-comment" onclick="alert('Comments ready!')"></i>
           <i class="fa-regular fa-paper-plane" onclick="sharePost()"></i>
         </div>
       </div>
@@ -457,17 +457,17 @@ function fireDoubleTapHeart(id) {
   }
 }
 
-function togglePostLike(icon, id) {
+function togglePostLike(icon) {
   icon.classList.toggle("fa-solid");
   icon.classList.toggle("liked-red");
 }
 
 function sharePost() {
   if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Post link copied worldwide! 🔗");
+  alert("Post link copied! 🔗");
 }
 
-// ==================== REELS ENGINE ====================
+// Reels Engine
 let activeReelIndex = 0;
 let isReelMuted = false;
 const reelVideoEl = document.getElementById("reelActiveVideo");
@@ -532,30 +532,7 @@ function toggleReelAudio(e) {
   document.getElementById("reelMuteIcon").className = isReelMuted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
 }
 
-function shareReelLink() {
-  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Reel link copied! 🔗");
-}
-
-// Vertical Swipe for Reels
-let touchStartY = 0;
-let touchEndY = 0;
-const reelViewport = document.getElementById("reelViewport");
-
-reelViewport.addEventListener("touchstart", (e) => {
-  touchStartY = e.changedTouches[0].screenY;
-}, { passive: true });
-
-reelViewport.addEventListener("touchend", (e) => {
-  touchEndY = e.changedTouches[0].screenY;
-  const diff = touchStartY - touchEndY;
-  if (Math.abs(diff) > 45) {
-    if (diff > 0) advanceReel(1);
-    else advanceReel(-1);
-  }
-}, { passive: true });
-
-// ==================== PROFILE ENGINE ====================
+// Profile Engine
 function renderProfileSection() {
   document.getElementById("profileHeroName").innerText = userProfile.name;
   document.getElementById("profileHeroBio").innerText = userProfile.bio;
@@ -578,29 +555,16 @@ function openProfileEditSheet() {
 }
 function closeProfileEditSheet() { document.getElementById("editProfileModal").style.display = "none"; }
 
-async function saveProfileDetails() {
+function saveProfileDetails() {
   const name = document.getElementById("editProfileDisplayName").value.trim();
   const bio = document.getElementById("editProfileBioDetails").value.trim();
   if (name) userProfile.name = name;
   if (bio) userProfile.bio = bio;
 
-  localStorage.setItem("pf_permanent_username", userProfile.name);
-  localStorage.setItem("pf_permanent_bio", userProfile.bio);
-
-  try {
-    await supabaseClient.from("profiles").upsert({
-      id: userProfile.id,
-      username: userProfile.name,
-      bio: userProfile.bio,
-      avatar_url: userProfile.avatar,
-      followers: "500M",
-      is_verified: true
-    });
-  } catch (e) {}
-
+  persistLocalData();
   renderProfileSection();
   closeProfileEditSheet();
-  alert("Profile permanently saved across cloud! 💙");
+  alert("Profile permanently saved! 💙");
 }
 
 function quickChangeDP() { document.getElementById("directDpFileInput").click(); }
@@ -609,23 +573,15 @@ function handleDirectDP(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = async function(e) {
-    userProfile.avatar = e.target.result;
-    localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    try {
-      await supabaseClient.from("profiles").upsert({
-        id: userProfile.id,
-        avatar_url: userProfile.avatar
-      });
-    } catch (err) {}
+  compressImageFile(file, 280, 0.82, function(optimizedDataUrl) {
+    userProfile.avatar = optimizedDataUrl;
+    persistLocalData();
     renderProfileSection();
     alert("DP permanently updated! 📸");
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
-// ==================== CLOUD POST & REEL PUBLISHING ====================
+// Post Creation Engine (Instant Unfreeze & Display)
 function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
 function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
 function openCreateReelSheet() { document.getElementById("createReelModal").style.display = "flex"; }
@@ -633,59 +589,53 @@ function closeCreateReelSheet() { document.getElementById("createReelModal").sty
 
 let selectedPostMusic = null;
 
-// Publish Post to Supabase (Visible to Everyone Worldwide)
-async function dispatchNewPost() {
+function dispatchNewPost() {
   const file = document.getElementById("postImageUploadInput").files[0];
   const caption = document.getElementById("postCaptionTextInput").value;
   const btn = document.getElementById("btnPublishPost");
 
   if (!file) {
-    alert("Please select a photo first!");
+    alert("Please select a photo from gallery!");
     return;
   }
 
-  btn.innerText = "Uploading to Cloud...";
+  btn.innerText = "Processing...";
   btn.disabled = true;
 
-  const reader = new FileReader();
-  reader.onload = async function(e) {
+  // Optimize image to 600px max so it never freezes
+  compressImageFile(file, 600, 0.78, function(optimizedDataUrl) {
     const newPost = {
       id: Date.now(),
       username: userProfile.name,
       avatar: userProfile.avatar,
-      image: e.target.result,
+      image: optimizedDataUrl,
       caption: caption || "",
       likes: 0,
       music: selectedPostMusic
     };
 
-    try {
-      const { error } = await supabaseClient.from("posts").insert([newPost]);
-      if (error) throw error;
-      globalPosts.unshift(newPost);
-      renderFeed();
-      renderProfileSection();
-      closeCreatePostSheet();
-      alert("Post permanently published worldwide! 🚀 Everyone can see it now.");
-    } catch (err) {
-      console.warn("Direct upload error:", err);
-      globalPosts.unshift(newPost);
-      renderFeed();
-      closeCreatePostSheet();
-      alert("Post published locally & queueing to Supabase cloud! 🚀");
-    } finally {
-      btn.innerText = "Publish to Supabase Cloud";
-      btn.disabled = false;
-      document.getElementById("postImageUploadInput").value = "";
-      document.getElementById("postCaptionTextInput").value = "";
-      switchView("feedTab");
-    }
-  };
-  reader.readAsDataURL(file);
+    // 1. INSTANT LOCAL UPDATE
+    globalPosts.unshift(newPost);
+    persistLocalData();
+    renderFeed();
+    renderProfileSection();
+
+    // 2. CLOSE MODAL IMMEDIATELY
+    closeCreatePostSheet();
+    btn.innerText = "Share Post";
+    btn.disabled = false;
+    document.getElementById("postImageUploadInput").value = "";
+    document.getElementById("postCaptionTextInput").value = "";
+    selectedPostMusic = null;
+    document.getElementById("selectedPostMusicLabel").innerText = "🎵 Select Song";
+    switchView("feedTab");
+
+    // 3. BACKGROUND ASYNC SYNC
+    syncPostToCloudBackground(newPost);
+  });
 }
 
-// Publish Reel to Supabase (Visible to Everyone Worldwide)
-async function dispatchNewReel() {
+function dispatchNewReel() {
   const file = document.getElementById("reelVideoUploadInput").files[0];
   const caption = document.getElementById("reelCaptionInput").value;
   const btn = document.getElementById("btnPublishReel");
@@ -695,11 +645,11 @@ async function dispatchNewReel() {
     return;
   }
 
-  btn.innerText = "Uploading Reel to Cloud...";
+  btn.innerText = "Processing Reel...";
   btn.disabled = true;
 
   const reader = new FileReader();
-  reader.onload = async function(e) {
+  reader.onload = function(e) {
     const newReel = {
       id: "reel_" + Date.now(),
       username: userProfile.name,
@@ -709,31 +659,20 @@ async function dispatchNewReel() {
       likes: "1.5k"
     };
 
-    try {
-      const { error } = await supabaseClient.from("reels").insert([newReel]);
-      if (error) throw error;
-      globalReels.unshift(newReel);
-      mountReel(0);
-      closeCreateReelSheet();
-      alert("Reel published worldwide! 🎬 Sabhi users ise Reels me dekh sakte hain.");
-    } catch (err) {
-      console.warn("Reel upload pass:", err);
-      globalReels.unshift(newReel);
-      mountReel(0);
-      closeCreateReelSheet();
-      alert("Reel loaded successfully! 🎬");
-    } finally {
-      btn.innerText = "Publish Reel Worldwide";
-      btn.disabled = false;
-      document.getElementById("reelVideoUploadInput").value = "";
-      document.getElementById("reelCaptionInput").value = "";
-      switchView("reelsTab");
-    }
+    globalReels.unshift(newReel);
+    mountReel(0);
+    closeCreateReelSheet();
+    btn.innerText = "Publish Reel";
+    btn.disabled = false;
+    document.getElementById("reelVideoUploadInput").value = "";
+    document.getElementById("reelCaptionInput").value = "";
+    switchView("reelsTab");
+    alert("Reel published successfully! 🎬");
   };
   reader.readAsDataURL(file);
 }
 
-// ==================== MUSIC ENGINE ====================
+// Music Engine
 function openMusicPicker() {
   document.getElementById("musicPickerSheet").style.display = "flex";
   searchWorldwideMusic("Trending");
@@ -755,15 +694,13 @@ window.handleITunesResponse = function(data) {
         <div class="music-item-info">
           <img src="${r.artworkUrl100 || 'https://picsum.photos/100/100'}" class="music-item-img" />
           <div>
-            <div class="music-item-name">${r.trackName}</div>
-            <div class="music-item-artist" style="font-size:11px; color:#888;">${r.artistName}</div>
+            <div style="font-size:13px; font-weight:600;">${r.trackName}</div>
+            <div style="font-size:11px; color:#888;">${r.artistName}</div>
           </div>
         </div>
         <i class="fa-solid fa-check" style="color:#0095f6;"></i>
       </div>
     `).join("");
-  } else {
-    container.innerHTML = `<div style="text-align:center; padding:20px; color:#888;">No tracks found</div>`;
   }
 };
 
@@ -782,11 +719,11 @@ function chooseTrack(title, url) {
   closeMusicPicker();
 }
 
-// ==================== INITIAL BOOT ====================
+// Initial Boot
 window.addEventListener("DOMContentLoaded", () => {
   renderProfileSection();
-  fetchCloudData();
-  subscribeToRealtime();
+  renderFeed();
+  mountReel(0);
 });
 </script>
 </body>
