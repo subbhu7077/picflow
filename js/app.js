@@ -2773,3 +2773,715 @@ document.addEventListener(
    END LIVE PROFILE FOLLOW COUNTS
    ========================================================= */
 
+
+/* =========================================================
+   FIX - UPDATE FOLLOW COUNTS WHEN PROFILE OPENS
+   ========================================================= */
+
+(function () {
+
+  const originalOpenProfile = window.openProfile;
+
+  if (typeof originalOpenProfile !== "function") {
+    console.error("PicFlow: openProfile not found");
+    return;
+  }
+
+  window.openProfile = function () {
+
+    originalOpenProfile.apply(this, arguments);
+
+    setTimeout(async function () {
+
+      try {
+
+        if (
+          typeof window.supabase === "undefined" ||
+          !window.SUPABASE_URL ||
+          !window.SUPABASE_PUBLISHABLE_KEY ||
+          window.SUPABASE_PUBLISHABLE_KEY === "YOUR_PUBLISHABLE_KEY"
+        ) {
+          return;
+        }
+
+        const sb = window.supabase.createClient(
+          window.SUPABASE_URL,
+          window.SUPABASE_PUBLISHABLE_KEY
+        );
+
+        const {
+          data,
+          error
+        } = await sb.auth.getUser();
+
+        if (error || !data || !data.user) {
+          console.log("No logged-in user");
+          return;
+        }
+
+        const userId = data.user.id;
+
+        const [
+          followers,
+          following
+        ] = await Promise.all([
+
+          sb
+            .from("follows")
+            .select("*", {
+              count: "exact",
+              head: true
+            })
+            .eq("following_id", userId),
+
+          sb
+            .from("follows")
+            .select("*", {
+              count: "exact",
+              head: true
+            })
+            .eq("follower_id", userId)
+
+        ]);
+
+        if (followers.error) {
+          console.error(
+            "Followers:",
+            followers.error
+          );
+        }
+
+        if (following.error) {
+          console.error(
+            "Following:",
+            following.error
+          );
+        }
+
+        const followerCount =
+          followers.count || 0;
+
+        const followingCount =
+          following.count || 0;
+
+        const stats =
+          document.querySelectorAll(
+            ".profile-stat"
+          );
+
+        stats.forEach(function (stat
+cd ~/free-tools-hub/picflow
+
+cat >> js/app.js <<'EOF'
+
+/* =========================================================
+   PICFLOW PUBLIC PROFILE + FOLLOWERS/FOLLOWING LISTS
+   ========================================================= */
+
+(function () {
+
+  if (window.picflowPublicProfileLoaded) return;
+  window.picflowPublicProfileLoaded = true;
+
+  function getSB() {
+    if (
+      typeof window.supabase === "undefined" ||
+      !window.SUPABASE_URL ||
+      !window.SUPABASE_PUBLISHABLE_KEY ||
+      window.SUPABASE_PUBLISHABLE_KEY === "YOUR_PUBLISHABLE_KEY"
+    ) {
+      return null;
+    }
+
+    return window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_PUBLISHABLE_KEY
+    );
+  }
+
+  function safe(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  async function currentUser() {
+    const sb = getSB();
+    if (!sb) return null;
+
+    const result = await sb.auth.getUser();
+
+    if (result.error) return null;
+
+    return result.data.user || null;
+  }
+
+  async function getProfile(id) {
+    const sb = getSB();
+    if (!sb) return null;
+
+    const result = await sb
+      .from("profiles")
+      .select("id, username, bio, avatar_url, created_at")
+      .eq("id", id)
+      .maybeSingle();
+
+    if (result.error) {
+      console.error(result.error);
+      return null;
+    }
+
+    return result.data;
+  }
+
+  async function getCounts(id) {
+    const sb = getSB();
+
+    if (!sb) {
+      return {
+        followers: 0,
+        following: 0
+      };
+    }
+
+    const [followers, following] = await Promise.all([
+
+      sb
+        .from
+cd ~/free-tools-hub/picflow
+
+cat >> js/app.js <<'EOF'
+
+/* =========================================================
+   PICFLOW - WORKING PUBLIC PROFILE
+   ========================================================= */
+
+(function () {
+
+  if (window.picflowPublicProfileFix) return;
+  window.picflowPublicProfileFix = true;
+
+  function getClient() {
+    if (
+      typeof window.supabase === "undefined" ||
+      !window.SUPABASE_URL ||
+      !window.SUPABASE_PUBLISHABLE_KEY
+    ) return null;
+
+    return window.supabase.createClient(
+      window.SUPABASE_URL,
+      window.SUPABASE_PUBLISHABLE_KEY
+    );
+  }
+
+  function clean(value) {
+    return String(value || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  window.picflowOpenPublicProfile = async function (userId) {
+
+    const sb = getClient();
+
+    if (!sb || !userId) {
+      alert("Profile open failed.");
+      return;
+    }
+
+    const old =
+      document.getElementById("picflowPublicProfileFix");
+
+    if (old) old.remove();
+
+    const { data: profile, error } =
+      await sb
+        .from("profiles")
+        .select("id,username,bio,avatar_url")
+        .eq("id", userId)
+        .maybeSingle();
+
+    if (error || !profile) {
+      alert("Profile not found.");
+      return;
+    }
+
+    const { count: followers } =
+      await sb
+        .from("follows")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+        .eq("following_id", userId);
+
+    const { count: following } =
+      await sb
+        .from("follows")
+        .select("*", {
+          count: "exact",
+          head: true
+        })
+        .eq("follower_id", userId);
+
+    const { data: me } =
+      await sb.auth.getUser();
+
+    let isFollowing = false;
+
+    if (me && me.user) {
+
+      const result =
+        await sb
+          .from("follows")
+          .select("follower_id")
+          .eq("follower_id", me.user.id)
+          .eq("following_id", userId)
+          .maybeSingle();
+
+      isFollowing = !!result.data;
+    }
+
+    const avatar = profile.avatar_url
+      ? `
+        <img
+          src="${clean(profile.avatar_url)}"
+          style="
+            width:92px;
+            height:92px;
+            border-radius:50%;
+            object-fit:cover;
+          "
+        >
+      `
+      : `
+        <div style="
+          width:92px;
+          height:92px;
+          border-radius:50%;
+          background:#111;
+          color:#fff;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          font-size:35px;
+          font-weight:bold;
+        ">
+          ${clean(
+            (profile.username || "U")
+              .charAt(0)
+              .toUpperCase()
+          )}
+        </div>
+      `;
+
+    const modal =
+      document.createElement("div");
+
+    modal.id =
+      "picflowPublicProfileFix";
+
+    modal.innerHTML = `
+
+      <div style="
+        position:fixed;
+        inset:0;
+        z-index:10050;
+        background:rgba(0,0,0,.6);
+        display:flex;
+        align-items:flex-end;
+        justify-content:center;
+      ">
+
+        <div style="
+          width:100%;
+          max-width:600px;
+          max-height:88vh;
+          overflow:auto;
+          background:#fff;
+          border-radius:28px 28px 0 0;
+        ">
+
+          <div style="
+            padding:18px 20px;
+            border-bottom:1px solid #eee;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+          ">
+
+            <b style="font-size:21px;">
+              ${clean(profile.username)}
+            </b>
+
+            <button
+              id="closePublicProfileFix"
+              style="
+                width:42px;
+                height:42px;
+                border:0;
+                border-radius:50%;
+                background:#eee;
+                font-size:25px;
+              "
+            >
+              ×
+            </button>
+
+          </div>
+
+          <div style="
+            padding:25px 20px;
+          ">
+
+            <div style="
+              display:flex;
+              align-items:center;
+              gap:22px;
+            ">
+
+              ${avatar}
+
+              <div style="
+                flex:1;
+                display:flex;
+                justify-content:space-around;
+                text-align:center;
+              ">
+
+                <div>
+                  <b>0</b>
+                  <small style="
+                    display:block;
+                    color:#777;
+                  ">
+                    Posts
+                  </small>
+                </div>
+
+                <div>
+                  <b>${followers || 0}</b>
+                  <small style="
+                    display:block;
+                    color:#777;
+                  ">
+                    Followers
+                  </small>
+                </div>
+
+                <div>
+                  <b>${following || 0}</b>
+                  <small style="
+                    display:block;
+                    color:#777;
+                  ">
+                    Following
+                  </small>
+                </div>
+
+              </div>
+
+            </div>
+
+            <div style="
+              margin-top:20px;
+            ">
+
+              <b style="font-size:18px;">
+                ${clean(profile.username)}
+              </b>
+
+              <p style="
+                color:#666;
+                margin:8px 0 18px;
+              ">
+                ${clean(
+                  profile.bio ||
+                  "Welcome to my PicFlow profile ✨"
+                )}
+              </p>
+
+              <button
+                id="publicProfileFollowButton"
+                style="
+                  width:100%;
+                  padding:14px;
+                  border:0;
+                  border-radius:13px;
+                  font-size:16px;
+                  font-weight:bold;
+                  background:${isFollowing ? "#eee" : "#111"};
+                  color:${isFollowing ? "#111" : "#fff"};
+                "
+              >
+                ${isFollowing ? "Following" : "Follow"}
+              </button>
+
+            </div>
+
+            <div style="
+              margin-top:28px;
+              border-top:1px solid #eee;
+              padding-top:20px;
+            ">
+
+              <h3>Posts</h3>
+
+              <div style="
+                display:grid;
+                grid-template-columns:repeat(3,1fr);
+                gap:3px;
+              ">
+
+                <div style="
+                  aspect-ratio:1;
+                  background:#eee;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  font-size:28px;
+                ">
+                  📸
+                </div>
+
+                <div style="
+                  aspect-ratio:1;
+                  background:#eee;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  font-size:28px;
+                ">
+                  🌄
+                </div>
+
+                <div style="
+                  aspect-ratio:1;
+                  background:#eee;
+                  display:flex;
+                  align-items:center;
+                  justify-content:center;
+                  font-size:28px;
+                ">
+                  ✨
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    `;
+
+    document.body.appendChild(modal);
+
+    document
+      .getElementById("closePublicProfileFix")
+      .onclick = function () {
+        modal.remove();
+      };
+
+    const followButton =
+      document.getElementById(
+        "publicProfileFollowButton"
+      );
+
+    followButton.onclick = async function () {
+
+      followButton.disabled = true;
+      followButton.textContent = "Please wait...";
+
+      let result;
+
+      if (isFollowing) {
+
+        result =
+          await sb
+            .from("follows")
+            .delete()
+            .eq("follower_id", me.user.id)
+            .eq("following_id", userId);
+
+      } else {
+
+        result =
+          await sb
+            .from("follows")
+            .insert({
+              follower_id: me.user.id,
+              following_id: userId
+            });
+
+      }
+
+      if (result.error) {
+
+        alert(result.error.message);
+
+        followButton.disabled = false;
+        followButton.textContent =
+          isFollowing
+            ? "Following"
+            : "Follow";
+
+        return;
+      }
+
+      isFollowing = !isFollowing;
+
+      followButton.textContent =
+        isFollowing
+          ? "Following"
+          : "Follow";
+
+      followButton.style.background =
+        isFollowing
+          ? "#eee"
+          : "#111";
+
+      followButton.style.color =
+        isFollowing
+          ? "#111"
+          : "#fff";
+
+      followButton.disabled = false;
+
+    };
+
+  };
+
+  /*
+    Make the existing People search cards clickable.
+    The Follow button itself remains functional.
+  */
+
+  document.addEventListener(
+    "click",
+    function (event) {
+
+      if (
+        event.target.closest(
+          ".picflow-follow-btn"
+        )
+      ) {
+        return;
+      }
+
+      const button =
+        event.target.closest(
+          ".picflow-follow-btn"
+        );
+
+      if (button) {
+
+        const userId =
+          button.dataset.userId;
+
+        if (userId) {
+          window.picflowOpenPublicProfile(
+            userId
+          );
+        }
+
+        return;
+      }
+
+      const card =
+        event.target.closest(
+          "[data-picflow-user-card]"
+        );
+
+      if (card) {
+
+        const userId =
+          card.getAttribute(
+            "data-picflow-user-card"
+          );
+
+        if (userId) {
+          window.picflowOpenPublicProfile(
+            userId
+          );
+        }
+
+      }
+
+    }
+  );
+
+  /*
+    Also directly attach click to People result cards.
+  */
+
+  setInterval(function () {
+
+    const results =
+      document.getElementById(
+        "picflowPeopleResults"
+      );
+
+    if (!results) return;
+
+    results
+      .querySelectorAll(
+        ".picflow-follow-btn"
+      )
+      .forEach(function (button) {
+
+        const userId =
+          button.dataset.userId;
+
+        if (!userId) return;
+
+        const card =
+          button.closest("div");
+
+        if (
+          card &&
+          !card.dataset.picflowProfileReady
+        ) {
+
+          card.dataset.picflowProfileReady =
+            "true";
+
+          card.addEventListener(
+            "click",
+            function (event) {
+
+              if (
+                event.target.closest(
+                  ".picflow-follow-btn"
+                )
+              ) {
+                return;
+              }
+
+              window.picflowOpenPublicProfile(
+                userId
+              );
+
+            }
+          );
+
+        }
+
+      });
+
+  }, 500);
+
+})();
+
+/* =========================================================
+   END WORKING PUBLIC PROFILE
+   ========================================================= */
+
