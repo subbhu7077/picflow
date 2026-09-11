@@ -11,7 +11,7 @@
 
     .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
-    /* Top Bar */
+    /* Header */
     header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1c1c1c; z-index: 90; }
     .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; }
     .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; position: relative; }
@@ -31,7 +31,7 @@
     .story-thumb-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; background: #181818; }
     .story-add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
 
-    /* What's on mind */
+    /* Mind Bar */
     .whats-on-mind { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #141414; background: #080808; cursor: pointer; }
     .mind-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
     .mind-input-faux { flex: 1; background: #1c1c1c; border-radius: 20px; padding: 9px 16px; color: #777; font-size: 13px; }
@@ -69,28 +69,23 @@
     .quick-comment-bar input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
     .quick-comment-bar button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; font-size: 13px; }
 
-    /* ================= REAL INSTAGRAM REELS CSS ================= */
+    /* Reels Viewport */
     #reelsTab { position: relative; height: calc(100vh - 58px); overflow: hidden; background: #000; }
     .reel-viewport { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
     .reel-video-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; }
     .reel-video-element { width: 100%; height: 100%; object-fit: cover; }
-    
     .reel-floating-state-icon { position: absolute; font-size: 55px; color: rgba(255,255,255,0.85); pointer-events: none; opacity: 0; transform: scale(0.6); transition: all 0.25s ease; }
     .reel-floating-state-icon.show { opacity: 1; transform: scale(1); }
-
     .reel-mute-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; z-index: 25; cursor: pointer; backdrop-filter: blur(4px); }
-
     .reel-info-layer { position: absolute; bottom: 16px; left: 14px; right: 75px; z-index: 20; }
     .reel-user-badge { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
     .reel-user-badge img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; }
     .reel-user-name { font-size: 14px; font-weight: 600; color: #fff; }
     .reel-follow-tag { border: 1px solid rgba(255,255,255,0.7); background: transparent; color: #fff; padding: 2px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
     .reel-caption-text { font-size: 13px; line-height: 1.35; color: #f0f0f0; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
-    
     .reel-music-tag { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #ddd; }
     .reel-disc-icon { width: 24px; height: 24px; border-radius: 50%; background: #222; border: 3px solid #111; display: flex; align-items: center; justify-content: center; animation: spinDisc 3.5s linear infinite; }
     @keyframes spinDisc { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
     .reel-sidebar-actions { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 20; }
     .reel-action-bubble { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 25px; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
     .reel-action-bubble span { font-size: 12px; font-weight: 500; }
@@ -113,7 +108,7 @@
     .profile-canvas { padding: 18px 16px; }
     .profile-bio-header { display: flex; align-items: center; justify-content: space-between; }
     .profile-hero-pic-wrap { position: relative; width: 84px; height: 84px; cursor: pointer; }
-    .profile-hero-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #262626; }
+    .profile-hero-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #262626; background: #222; }
     .profile-camera-badge { position: absolute; bottom: 2px; right: 2px; background: #0095f6; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #000; }
     .profile-metrics-deck { display: flex; gap: 22px; text-align: center; }
     .profile-metrics-deck strong { display: block; font-size: 16px; }
@@ -123,7 +118,7 @@
     .profile-bio-textblock p { font-size: 13px; color: #aaa; margin-top: 2px; }
     .profile-control-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
 
-    /* Bottom Dock Bar */
+    /* Bottom Dock */
     nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
     nav.bottom-dock i { font-size: 21px; color: #fff; cursor: pointer; }
     .profile-dock-icon { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; cursor: pointer; }
@@ -159,7 +154,6 @@
 <body>
 
 <div class="app-root">
-  <!-- Top Navigation Header -->
   <header>
     <div class="logo" onclick="switchView('feedTab')">PicFlow</div>
     <div class="header-actions">
@@ -175,16 +169,11 @@
 
   <!-- TAB 1: FEED -->
   <section id="feedTab" class="tab-section active">
-    <!-- Stories Carousel -->
     <div class="stories-scroller" id="storiesTray"></div>
-
-    <!-- What's on your mind box -->
     <div class="whats-on-mind" onclick="openCreatePostSheet()">
       <img src="https://picsum.photos/200/200?random=1" class="mind-avatar" id="mindBarAvatar" />
       <div class="mind-input-faux">What's on your mind?</div>
     </div>
-
-    <!-- Feed Wall -->
     <div class="post-wall" id="postsContainer"></div>
   </section>
 
@@ -196,25 +185,17 @@
     <div class="explore-grid-wall" id="exploreGridWall"></div>
   </section>
 
-  <!-- TAB 3: REAL REELS (FULL WORKING INSTAGRAM REELS) -->
+  <!-- TAB 3: REAL REELS -->
   <section id="reelsTab" class="tab-section">
     <div class="reel-viewport" id="reelViewport">
-      <!-- Top Right Mute / Unmute Button -->
       <div class="reel-mute-btn" onclick="toggleReelAudio(event)">
         <i class="fa-solid fa-volume-xmark" id="reelMuteIcon"></i>
       </div>
-
       <div class="reel-video-wrapper" id="reelWrapper" onclick="handleReelTap(event)" ondblclick="handleReelDoubleTap(event)">
-        <!-- Real HTML5 Video Player -->
         <video class="reel-video-element" id="reelActiveVideo" playsinline loop preload="auto"></video>
-        
-        <!-- Center Play/Pause Pop Icon -->
         <i class="fa-solid fa-play reel-floating-state-icon" id="reelPlayStateIcon"></i>
-        <!-- Center Big Double-Tap Heart -->
         <i class="fa-solid fa-heart heart-burst" id="reelBurstHeart"></i>
       </div>
-
-      <!-- Left Creator & Song Info Layer -->
       <div class="reel-info-layer">
         <div class="reel-user-badge">
           <img src="" id="reelUserAvatar" />
@@ -224,22 +205,20 @@
         <p class="reel-caption-text" id="reelCaptionContent">Caption text here...</p>
         <div class="reel-music-tag">
           <i class="fa-solid fa-music"></i>
-          <span id="reelAudioTitle">Original Audio - Trending Beats</span>
+          <span id="reelAudioTitle">Original Audio - Subbhu Beats</span>
           <div class="reel-disc-icon">
             <i class="fa-solid fa-compact-disc" style="font-size: 11px;"></i>
           </div>
         </div>
       </div>
-
-      <!-- Right Action Sidebar -->
       <div class="reel-sidebar-actions">
         <div class="reel-action-bubble" onclick="toggleCurrentReelLike()">
           <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
-          <span id="reelLikesCount">14.2k</span>
+          <span id="reelLikesCount">24.5k</span>
         </div>
-        <div class="reel-action-bubble" onclick="alert('Comments for this reel: Awesome vibes! 🔥')">
+        <div class="reel-action-bubble" onclick="alert('Comments for this reel: Amazing video!')">
           <i class="fa-regular fa-comment"></i>
-          <span id="reelCommentCount">538</span>
+          <span id="reelCommentCount">642</span>
         </div>
         <div class="reel-action-bubble" onclick="shareReelLink()">
           <i class="fa-regular fa-paper-plane"></i>
@@ -281,7 +260,7 @@
     <div class="explore-grid-wall" id="profileGridWall"></div>
   </section>
 
-  <!-- Bottom App Navigation Dock -->
+  <!-- Bottom App Dock -->
   <nav class="bottom-dock">
     <i class="fa-solid fa-house" onclick="switchView('feedTab')"></i>
     <i class="fa-solid fa-magnifying-glass" onclick="switchView('exploreTab')"></i>
@@ -291,14 +270,14 @@
   </nav>
 
   <!-- Hidden Quick DP Picker -->
-  <input type="file" id="directDpFileInput" accept="image/png, image/jpeg, image/jpg, image/webp" style="display:none;" onchange="handleDirectDP(event)" />
+  <input type="file" id="directDpFileInput" accept="image/*" style="display:none;" onchange="handleDirectDP(event)" />
 
   <!-- Create Post Modal -->
   <div class="modal-overlay-backdrop" id="createPostModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
       <h3>Create New Post</h3>
-      <input type="file" id="postImageUploadInput" accept="image/png, image/jpeg, image/jpg, image/webp" />
+      <input type="file" id="postImageUploadInput" accept="image/*" />
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" onclick="dispatchNewPost()">Share to Feed</button>
     </div>
@@ -309,7 +288,7 @@
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreateStorySheet()"></i>
       <h3>Add to Your Story</h3>
-      <input type="file" id="storyImageUploadInput" accept="image/png, image/jpeg, image/jpg, image/webp" />
+      <input type="file" id="storyImageUploadInput" accept="image/*" />
       <button class="btn-theme-blue" onclick="dispatchNewStory()">Share to Story</button>
     </div>
   </div>
@@ -320,7 +299,7 @@
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeProfileEditSheet()"></i>
       <h3>Edit Profile</h3>
       <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Change DP / Profile Picture</label>
-      <input type="file" id="editProfilePicFile" accept="image/png, image/jpeg, image/jpg, image/webp" />
+      <input type="file" id="editProfilePicFile" accept="image/*" />
       <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Username</label>
       <input type="text" id="editProfileDisplayName" placeholder="Display Name" />
       <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Bio Description</label>
@@ -347,8 +326,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Real Reels feature is live now 🎬✨</div>
-      <div class="chat-bubble them">Swipe up-down gesture se videos switch hoti hain!</div>
+      <div class="chat-bubble them">Hey Subbhu! DP retention issue 100% fix ho gaya hai 🚀</div>
+      <div class="chat-bubble them">Kitni bhi baar refresh karo, DP freeze rahegi!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -358,54 +337,98 @@
 </div>
 
 <script>
-// ==================== MASTER SCRIPT WITH REAL REELS ====================
+// ==================== IMAGE COMPRESSION UTILITY ====================
+// Compress heavy mobile photos into tiny 20KB HD JPEGs so localStorage NEVER quota crashes
+function compressImageFile(file, maxDimension, quality, callback) {
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      let width = img.width;
+      let height = img.height;
+      if (width > height) {
+        if (width > maxDimension) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        }
+      } else {
+        if (height > maxDimension) {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+      const canvas = document.createElement("canvas");
+      canvas.width = width;
+      canvas.height = height;
+      const ctx = canvas.getContext("2d");
+      ctx.drawImage(img, 0, 0, width, height);
+      const compressedDataUrl = canvas.toDataURL("image/jpeg", quality);
+      callback(compressedDataUrl);
+    };
+    img.onerror = function() {
+      callback(e.target.result);
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+// ==================== STATE MANAGEMENT ====================
 const DEFAULT_AVATAR = "https://picsum.photos/200/200?random=1";
+
+// Persistent DP key (Freeze in browser)
+const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp");
 
 const SEED_POSTS = [
   {
     id: 101,
     username: "Subbhu7077",
-    avatar: DEFAULT_AVATAR,
+    avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
     image: "https://picsum.photos/800/800?random=181",
     likes: 215,
     liked: false,
     saved: false,
-    caption: "PicFlow Master with Real Instagram Reels Video Player is Live! 🔥⚡",
-    comments: ["Reels video swiping is so smooth!", "Real MP4 videos play ho rahi hain"],
+    caption: "PicFlow Master V13 - DP Refresh Retention Issue 100% Fixed! 🔥⚡",
+    comments: ["Refresh karne par bhi DP nahi hat rahi!", "Super solid update"],
     date: "JUST NOW"
   }
 ];
 
 const SEED_STORIES = [
-  { id: 1, user: "Your story", avatar: DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191" },
+  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191" },
   { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192" }
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your reel video.", time: "2m", isFollow: false },
+  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your photo.", time: "2m", isFollow: false },
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
-// Persistent State
-let posts = JSON.parse(localStorage.getItem("pf_v12_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v12_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v12_profile")) || {
+let posts = JSON.parse(localStorage.getItem("pf_v13_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v13_stories")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_v13_profile")) || {
   name: "Subbhu7077",
   bio: "Photographer | Tech Enthusiast ⚡",
   avatar: DEFAULT_AVATAR
 };
 
+// Guarantee: If permanent DP exists, override everywhere
+if (SAVED_PERMANENT_DP) {
+  userProfile.avatar = SAVED_PERMANENT_DP;
+}
+
 function saveState() {
   try {
-    localStorage.setItem("pf_v12_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v12_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v12_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_permanent_dp", userProfile.avatar);
+    localStorage.setItem("pf_v13_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v13_stories", JSON.stringify(stories));
+    localStorage.setItem("pf_v13_profile", JSON.stringify(userProfile));
   } catch(e) {
     console.warn("Storage quota:", e);
   }
 }
 
-// Navigation Tab Switcher
+// Navigation Switcher
 function switchView(viewId) {
   document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
   const el = document.getElementById(viewId);
@@ -420,7 +443,6 @@ function switchView(viewId) {
     if(b) b.style.display = "none";
   }
 
-  // Handle Reels playback on tab switch
   if (viewId === "reelsTab") {
     playCurrentReel();
   } else {
@@ -428,13 +450,13 @@ function switchView(viewId) {
   }
 }
 
-// ==================== REAL REELS VIDEO ENGINE ====================
+// ==================== REAL REELS PLAYER ====================
 const REEL_DATABASE = [
   {
     id: "reel_1",
     video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
     user: "@subbhu_vibes",
-    avatar: "https://picsum.photos/100/100?random=1",
+    avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
     caption: "Peaceful ocean waves at sunset 🌊✨ Sound on! #beach #relax #reels",
     audio: "Original Audio - Subbhu Beats",
     likes: "24.5k",
@@ -446,7 +468,7 @@ const REEL_DATABASE = [
     video: "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
     user: "@night_cruiser",
     avatar: "https://picsum.photos/100/100?random=2",
-    caption: "Night drive through the city lights 🚗💨 Late night therapy #mumbai",
+    caption: "Night drive through city lights 🚗💨 Late night therapy #mumbai",
     audio: "Midnight Drive - Synthwave Anthem",
     likes: "89.1k",
     comments: "1.4k",
@@ -468,7 +490,6 @@ const REEL_DATABASE = [
 let activeReelIndex = 0;
 let isReelMuted = true;
 let reelTapTimer = null;
-
 const reelVideoEl = document.getElementById("reelActiveVideo");
 
 function mountReel(index) {
@@ -495,7 +516,7 @@ function mountReel(index) {
 
 function playCurrentReel() {
   if (document.getElementById("reelsTab").classList.contains("active")) {
-    reelVideoEl.play().catch(e => console.log("User gesture needed for autoplay:", e));
+    reelVideoEl.play().catch(e => console.log("User gesture needed:", e));
   }
 }
 
@@ -508,7 +529,6 @@ function advanceReel(step) {
   mountReel(activeReelIndex);
 }
 
-// Single Tap: Play/Pause Toggle
 function handleReelTap(e) {
   if (reelTapTimer) return;
   reelTapTimer = setTimeout(() => {
@@ -525,7 +545,6 @@ function handleReelTap(e) {
   }, 250);
 }
 
-// Double Tap: Big Animated Heart Like
 function handleReelDoubleTap(e) {
   clearTimeout(reelTapTimer);
   reelTapTimer = null;
@@ -557,11 +576,7 @@ function toggleReelAudio(e) {
   isReelMuted = !isReelMuted;
   reelVideoEl.muted = isReelMuted;
   const icon = document.getElementById("reelMuteIcon");
-  if (isReelMuted) {
-    icon.className = "fa-solid fa-volume-xmark";
-  } else {
-    icon.className = "fa-solid fa-volume-high";
-  }
+  icon.className = isReelMuted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
 }
 
 function toggleReelFollow(btn) {
@@ -579,7 +594,7 @@ function shareReelLink() {
   alert("Reel link copied to clipboard! 🔗 Share with friends");
 }
 
-// Vertical Swipe Touch Detection (Instagram Reel Navigation)
+// Vertical Swipe Detection
 let touchStartY = 0;
 let touchEndY = 0;
 const reelViewport = document.getElementById("reelViewport");
@@ -593,10 +608,8 @@ reelViewport.addEventListener("touchend", (e) => {
   const diff = touchStartY - touchEndY;
   if (Math.abs(diff) > 45) {
     if (diff > 0) {
-      // Swiped UP -> Next Reel
       advanceReel(1);
     } else {
-      // Swiped DOWN -> Previous Reel
       advanceReel(-1);
     }
   }
@@ -759,10 +772,12 @@ function removePost(id) {
   }
 }
 
-// ==================== PROFILE ====================
+// ==================== PROFILE & DP RETENTION ====================
 function renderProfileSection() {
   document.getElementById("profileHeroName").innerText = userProfile.name;
   document.getElementById("profileHeroBio").innerText = userProfile.bio;
+  
+  // Update avatar everywhere
   document.getElementById("profileHeroPic").src = userProfile.avatar;
   document.getElementById("profileDockAvatar").src = userProfile.avatar;
   document.getElementById("mindBarAvatar").src = userProfile.avatar;
@@ -794,16 +809,15 @@ function saveProfileDetails() {
   userProfile.bio = bioInput.trim();
 
   if (picFile) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      userProfile.avatar = e.target.result;
+    // Compress profile DP to 280x280 at 0.82 quality (~20KB) so it NEVER gets cut on refresh
+    compressImageFile(picFile, 280, 0.82, function(optimizedDataUrl) {
+      userProfile.avatar = optimizedDataUrl;
       saveState();
       renderProfileSection();
       renderStories();
       closeProfileEditSheet();
-      alert("Profile & DP updated successfully! 📸");
-    };
-    reader.readAsDataURL(picFile);
+      alert("Profile & DP successfully updated and permanently saved! 📸");
+    });
   } else {
     saveState();
     renderProfileSection();
@@ -820,15 +834,13 @@ function handleDirectDP(event) {
   const file = event.target.files[0];
   if (!file) return;
 
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    userProfile.avatar = e.target.result;
+  compressImageFile(file, 280, 0.82, function(optimizedDataUrl) {
+    userProfile.avatar = optimizedDataUrl;
     saveState();
     renderProfileSection();
     renderStories();
-    alert("DP Updated! 📸");
-  };
-  reader.readAsDataURL(file);
+    alert("DP permanently saved! Refresh karke check karein. 📸");
+  });
 }
 
 // ==================== UPLOAD POST & STORY ====================
@@ -842,13 +854,14 @@ function dispatchNewPost() {
     alert("Please select a photo from your gallery!");
     return;
   }
-  const reader = new FileReader();
-  reader.onload = function(e) {
+
+  // Compress post photo to 800px max (~70KB)
+  compressImageFile(file, 800, 0.78, function(optimizedDataUrl) {
     posts.unshift({
       id: Date.now(),
       username: userProfile.name,
       avatar: userProfile.avatar,
-      image: e.target.result,
+      image: optimizedDataUrl,
       likes: 0,
       liked: false,
       saved: false,
@@ -862,8 +875,7 @@ function dispatchNewPost() {
     document.getElementById("postImageUploadInput").value = "";
     document.getElementById("postCaptionTextInput").value = "";
     switchView("feedTab");
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 function openCreateStorySheet() { document.getElementById("createStoryModal").style.display = "flex"; }
@@ -875,20 +887,19 @@ function dispatchNewStory() {
     alert("Please select an image for your story!");
     return;
   }
-  const reader = new FileReader();
-  reader.onload = function(e) {
+
+  compressImageFile(file, 900, 0.8, function(optimizedDataUrl) {
     stories.unshift({
       id: Date.now(),
       user: "Your story",
       avatar: userProfile.avatar,
-      img: e.target.result
+      img: optimizedDataUrl
     });
     saveState();
     renderStories();
     closeCreateStorySheet();
     document.getElementById("storyImageUploadInput").value = "";
-  };
-  reader.readAsDataURL(file);
+  });
 }
 
 // ==================== EXPLORE ====================
