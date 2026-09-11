@@ -31,7 +31,7 @@
     .story-thumb-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; background: #181818; }
     .story-add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
 
-    /* Mind Bar */
+    /* What's on mind */
     .whats-on-mind { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #141414; background: #080808; cursor: pointer; }
     .mind-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
     .mind-input-faux { flex: 1; background: #1c1c1c; border-radius: 20px; padding: 9px 16px; color: #777; font-size: 13px; }
@@ -69,21 +69,38 @@
     .quick-comment-bar input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
     .quick-comment-bar button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; font-size: 13px; }
 
+    /* ================= REAL INSTAGRAM REELS CSS ================= */
+    #reelsTab { position: relative; height: calc(100vh - 58px); overflow: hidden; background: #000; }
+    .reel-viewport { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
+    .reel-video-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; }
+    .reel-video-element { width: 100%; height: 100%; object-fit: cover; }
+    
+    .reel-floating-state-icon { position: absolute; font-size: 55px; color: rgba(255,255,255,0.85); pointer-events: none; opacity: 0; transform: scale(0.6); transition: all 0.25s ease; }
+    .reel-floating-state-icon.show { opacity: 1; transform: scale(1); }
+
+    .reel-mute-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(0,0,0,0.55); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #fff; z-index: 25; cursor: pointer; backdrop-filter: blur(4px); }
+
+    .reel-info-layer { position: absolute; bottom: 16px; left: 14px; right: 75px; z-index: 20; }
+    .reel-user-badge { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .reel-user-badge img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; }
+    .reel-user-name { font-size: 14px; font-weight: 600; color: #fff; }
+    .reel-follow-tag { border: 1px solid rgba(255,255,255,0.7); background: transparent; color: #fff; padding: 2px 10px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; }
+    .reel-caption-text { font-size: 13px; line-height: 1.35; color: #f0f0f0; margin-bottom: 8px; text-shadow: 0 1px 3px rgba(0,0,0,0.8); }
+    
+    .reel-music-tag { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #ddd; }
+    .reel-disc-icon { width: 24px; height: 24px; border-radius: 50%; background: #222; border: 3px solid #111; display: flex; align-items: center; justify-content: center; animation: spinDisc 3.5s linear infinite; }
+    @keyframes spinDisc { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+    .reel-sidebar-actions { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 20; }
+    .reel-action-bubble { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 25px; cursor: pointer; text-shadow: 0 2px 4px rgba(0,0,0,0.6); }
+    .reel-action-bubble span { font-size: 12px; font-weight: 500; }
+    .reel-liked-heart { color: #ed4956 !important; }
+
     /* Explore Tab */
     .explore-search-wrap { padding: 12px 14px; }
     .explore-search-input { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 14px; }
     .explore-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
     .explore-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; }
-
-    /* Reels Tab */
-    .reels-fullscreen { height: calc(100vh - 115px); position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 4px; border-radius: 8px; }
-    .reels-bg-photo { width: 100%; height: 100%; object-fit: cover; }
-    .reels-meta-bar { position: absolute; bottom: 20px; left: 14px; right: 70px; z-index: 10; }
-    .reels-creator { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .reels-creator img { width: 32px; height: 32px; border-radius: 50%; }
-    .reels-sidebar { position: absolute; bottom: 30px; right: 14px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
-    .reels-btn-wrap { display: flex; flex-direction: column; align-items: center; font-size: 24px; gap: 4px; cursor: pointer; }
-    .reels-btn-wrap span { font-size: 12px; }
 
     /* Notifications Tab */
     .notifications-holder { display: flex; flex-direction: column; }
@@ -179,27 +196,56 @@
     <div class="explore-grid-wall" id="exploreGridWall"></div>
   </section>
 
-  <!-- TAB 3: REELS -->
+  <!-- TAB 3: REAL REELS (FULL WORKING INSTAGRAM REELS) -->
   <section id="reelsTab" class="tab-section">
-    <div class="reels-fullscreen">
-      <img src="https://picsum.photos/600/1000?random=601" class="reels-bg-photo" id="reelBgMedia" />
-      <div class="reels-meta-bar">
-        <div class="reels-creator">
-          <img src="https://picsum.photos/100/100?random=1" />
-          <strong id="reelCreatorTag">@subbhu_vibes</strong>
-        </div>
-        <p id="reelTitle">Drive into the neon lights 🚗✨ #picflow #master</p>
+    <div class="reel-viewport" id="reelViewport">
+      <!-- Top Right Mute / Unmute Button -->
+      <div class="reel-mute-btn" onclick="toggleReelAudio(event)">
+        <i class="fa-solid fa-volume-xmark" id="reelMuteIcon"></i>
       </div>
-      <div class="reels-sidebar">
-        <div class="reels-btn-wrap" onclick="toggleReelHeart()">
-          <i class="fa-solid fa-heart" id="reelHeartIcon" style="color: #fff;"></i>
-          <span id="reelLikesStat">4.8k</span>
+
+      <div class="reel-video-wrapper" id="reelWrapper" onclick="handleReelTap(event)" ondblclick="handleReelDoubleTap(event)">
+        <!-- Real HTML5 Video Player -->
+        <video class="reel-video-element" id="reelActiveVideo" playsinline loop preload="auto"></video>
+        
+        <!-- Center Play/Pause Pop Icon -->
+        <i class="fa-solid fa-play reel-floating-state-icon" id="reelPlayStateIcon"></i>
+        <!-- Center Big Double-Tap Heart -->
+        <i class="fa-solid fa-heart heart-burst" id="reelBurstHeart"></i>
+      </div>
+
+      <!-- Left Creator & Song Info Layer -->
+      <div class="reel-info-layer">
+        <div class="reel-user-badge">
+          <img src="" id="reelUserAvatar" />
+          <span class="reel-user-name" id="reelAuthorName">@user</span>
+          <button class="reel-follow-tag" onclick="toggleReelFollow(this)">Follow</button>
         </div>
-        <div class="reels-btn-wrap" onclick="alert('Comment added on reel!')">
+        <p class="reel-caption-text" id="reelCaptionContent">Caption text here...</p>
+        <div class="reel-music-tag">
+          <i class="fa-solid fa-music"></i>
+          <span id="reelAudioTitle">Original Audio - Trending Beats</span>
+          <div class="reel-disc-icon">
+            <i class="fa-solid fa-compact-disc" style="font-size: 11px;"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Action Sidebar -->
+      <div class="reel-sidebar-actions">
+        <div class="reel-action-bubble" onclick="toggleCurrentReelLike()">
+          <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
+          <span id="reelLikesCount">14.2k</span>
+        </div>
+        <div class="reel-action-bubble" onclick="alert('Comments for this reel: Awesome vibes! 🔥')">
           <i class="fa-regular fa-comment"></i>
-          <span>312</span>
+          <span id="reelCommentCount">538</span>
         </div>
-        <div class="reels-btn-wrap" onclick="advanceNextReel()">
+        <div class="reel-action-bubble" onclick="shareReelLink()">
+          <i class="fa-regular fa-paper-plane"></i>
+          <span>Share</span>
+        </div>
+        <div class="reel-action-bubble" onclick="advanceReel(1)">
           <i class="fa-solid fa-angles-down"></i>
           <span>Next</span>
         </div>
@@ -279,7 +325,7 @@
       <input type="text" id="editProfileDisplayName" placeholder="Display Name" />
       <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Bio Description</label>
       <textarea id="editProfileBioDetails" placeholder="Bio description" rows="3"></textarea>
-      <button class="btn-theme-blue" id="btnSaveProfile" onclick="saveProfileDetails()">Save Profile Changes</button>
+      <button class="btn-theme-blue" onclick="saveProfileDetails()">Save Profile Changes</button>
     </div>
   </div>
 
@@ -301,8 +347,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Welcome to PicFlow Messenger ⚡</div>
-      <div class="chat-bubble them">Sab buttons fully working hain!</div>
+      <div class="chat-bubble them">Hey Subbhu! Real Reels feature is live now 🎬✨</div>
+      <div class="chat-bubble them">Swipe up-down gesture se videos switch hoti hain!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -312,7 +358,7 @@
 </div>
 
 <script>
-// ==================== MASTER EMBEDDED JAVASCRIPT ====================
+// ==================== MASTER SCRIPT WITH REAL REELS ====================
 const DEFAULT_AVATAR = "https://picsum.photos/200/200?random=1";
 
 const SEED_POSTS = [
@@ -324,8 +370,8 @@ const SEED_POSTS = [
     likes: 215,
     liked: false,
     saved: false,
-    caption: "PicFlow Master V11 Final - All Buttons 100% Working! 🔥⚡",
-    comments: ["Working so smoothly!", "Best UI clone ever"],
+    caption: "PicFlow Master with Real Instagram Reels Video Player is Live! 🔥⚡",
+    comments: ["Reels video swiping is so smooth!", "Real MP4 videos play ho rahi hain"],
     date: "JUST NOW"
   }
 ];
@@ -336,14 +382,14 @@ const SEED_STORIES = [
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your photo.", time: "5m", isFollow: false },
+  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your reel video.", time: "2m", isFollow: false },
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
 // Persistent State
-let posts = JSON.parse(localStorage.getItem("pf_v11_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v11_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v11_profile")) || {
+let posts = JSON.parse(localStorage.getItem("pf_v12_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v12_stories")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_v12_profile")) || {
   name: "Subbhu7077",
   bio: "Photographer | Tech Enthusiast ⚡",
   avatar: DEFAULT_AVATAR
@@ -351,15 +397,15 @@ let userProfile = JSON.parse(localStorage.getItem("pf_v11_profile")) || {
 
 function saveState() {
   try {
-    localStorage.setItem("pf_v11_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v11_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v11_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_v12_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v12_stories", JSON.stringify(stories));
+    localStorage.setItem("pf_v12_profile", JSON.stringify(userProfile));
   } catch(e) {
-    console.warn("Storage quota full, retaining in memory:", e);
+    console.warn("Storage quota:", e);
   }
 }
 
-// Navigation View Switcher
+// Navigation Tab Switcher
 function switchView(viewId) {
   document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
   const el = document.getElementById(viewId);
@@ -373,9 +419,190 @@ function switchView(viewId) {
     const b = document.getElementById("notifBadge");
     if(b) b.style.display = "none";
   }
+
+  // Handle Reels playback on tab switch
+  if (viewId === "reelsTab") {
+    playCurrentReel();
+  } else {
+    pauseCurrentReel();
+  }
 }
 
-// Stories
+// ==================== REAL REELS VIDEO ENGINE ====================
+const REEL_DATABASE = [
+  {
+    id: "reel_1",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
+    user: "@subbhu_vibes",
+    avatar: "https://picsum.photos/100/100?random=1",
+    caption: "Peaceful ocean waves at sunset 🌊✨ Sound on! #beach #relax #reels",
+    audio: "Original Audio - Subbhu Beats",
+    likes: "24.5k",
+    comments: "642",
+    liked: false
+  },
+  {
+    id: "reel_2",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
+    user: "@night_cruiser",
+    avatar: "https://picsum.photos/100/100?random=2",
+    caption: "Night drive through the city lights 🚗💨 Late night therapy #mumbai",
+    audio: "Midnight Drive - Synthwave Anthem",
+    likes: "89.1k",
+    comments: "1.4k",
+    liked: false
+  },
+  {
+    id: "reel_3",
+    video: "https://assets.mixkit.co/videos/preview/mixkit-young-woman-skater-riding-a-skateboard-41604-large.mp4",
+    user: "@skater_girl",
+    avatar: "https://picsum.photos/100/100?random=3",
+    caption: "Golden hour skate session 🛹🔥 Practice makes perfect!",
+    audio: "Urban Vibes - Trending Track",
+    likes: "45.7k",
+    comments: "812",
+    liked: false
+  }
+];
+
+let activeReelIndex = 0;
+let isReelMuted = true;
+let reelTapTimer = null;
+
+const reelVideoEl = document.getElementById("reelActiveVideo");
+
+function mountReel(index) {
+  const data = REEL_DATABASE[index];
+  reelVideoEl.src = data.video;
+  reelVideoEl.muted = isReelMuted;
+  
+  document.getElementById("reelAuthorName").innerText = data.user;
+  document.getElementById("reelUserAvatar").src = data.avatar;
+  document.getElementById("reelCaptionContent").innerText = data.caption;
+  document.getElementById("reelAudioTitle").innerText = data.audio;
+  document.getElementById("reelLikesCount").innerText = data.likes;
+  document.getElementById("reelCommentCount").innerText = data.comments;
+
+  const heartBtn = document.getElementById("reelHeartBtn");
+  if (data.liked) {
+    heartBtn.classList.add("reel-liked-heart");
+  } else {
+    heartBtn.classList.remove("reel-liked-heart");
+  }
+
+  playCurrentReel();
+}
+
+function playCurrentReel() {
+  if (document.getElementById("reelsTab").classList.contains("active")) {
+    reelVideoEl.play().catch(e => console.log("User gesture needed for autoplay:", e));
+  }
+}
+
+function pauseCurrentReel() {
+  reelVideoEl.pause();
+}
+
+function advanceReel(step) {
+  activeReelIndex = (activeReelIndex + step + REEL_DATABASE.length) % REEL_DATABASE.length;
+  mountReel(activeReelIndex);
+}
+
+// Single Tap: Play/Pause Toggle
+function handleReelTap(e) {
+  if (reelTapTimer) return;
+  reelTapTimer = setTimeout(() => {
+    reelTapTimer = null;
+    const playIcon = document.getElementById("reelPlayStateIcon");
+    if (reelVideoEl.paused) {
+      reelVideoEl.play();
+      playIcon.className = "fa-solid fa-play reel-floating-state-icon show";
+    } else {
+      reelVideoEl.pause();
+      playIcon.className = "fa-solid fa-pause reel-floating-state-icon show";
+    }
+    setTimeout(() => playIcon.classList.remove("show"), 500);
+  }, 250);
+}
+
+// Double Tap: Big Animated Heart Like
+function handleReelDoubleTap(e) {
+  clearTimeout(reelTapTimer);
+  reelTapTimer = null;
+
+  const burst = document.getElementById("reelBurstHeart");
+  burst.classList.add("pop");
+  setTimeout(() => burst.classList.remove("pop"), 500);
+
+  const data = REEL_DATABASE[activeReelIndex];
+  if (!data.liked) {
+    data.liked = true;
+    document.getElementById("reelHeartBtn").classList.add("reel-liked-heart");
+  }
+}
+
+function toggleCurrentReelLike() {
+  const data = REEL_DATABASE[activeReelIndex];
+  data.liked = !data.liked;
+  const heartBtn = document.getElementById("reelHeartBtn");
+  if (data.liked) {
+    heartBtn.classList.add("reel-liked-heart");
+  } else {
+    heartBtn.classList.remove("reel-liked-heart");
+  }
+}
+
+function toggleReelAudio(e) {
+  e.stopPropagation();
+  isReelMuted = !isReelMuted;
+  reelVideoEl.muted = isReelMuted;
+  const icon = document.getElementById("reelMuteIcon");
+  if (isReelMuted) {
+    icon.className = "fa-solid fa-volume-xmark";
+  } else {
+    icon.className = "fa-solid fa-volume-high";
+  }
+}
+
+function toggleReelFollow(btn) {
+  if (btn.innerText === "Follow") {
+    btn.innerText = "Following";
+    btn.style.background = "rgba(255,255,255,0.2)";
+  } else {
+    btn.innerText = "Follow";
+    btn.style.background = "transparent";
+  }
+}
+
+function shareReelLink() {
+  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+  alert("Reel link copied to clipboard! 🔗 Share with friends");
+}
+
+// Vertical Swipe Touch Detection (Instagram Reel Navigation)
+let touchStartY = 0;
+let touchEndY = 0;
+const reelViewport = document.getElementById("reelViewport");
+
+reelViewport.addEventListener("touchstart", (e) => {
+  touchStartY = e.changedTouches[0].screenY;
+}, { passive: true });
+
+reelViewport.addEventListener("touchend", (e) => {
+  touchEndY = e.changedTouches[0].screenY;
+  const diff = touchStartY - touchEndY;
+  if (Math.abs(diff) > 45) {
+    if (diff > 0) {
+      // Swiped UP -> Next Reel
+      advanceReel(1);
+    } else {
+      // Swiped DOWN -> Previous Reel
+      advanceReel(-1);
+    }
+  }
+}, { passive: true });
+
+// ==================== STORIES ====================
 function renderStories() {
   const container = document.getElementById("storiesTray");
   if (!container) return;
@@ -424,7 +651,7 @@ function closeStoryPlayerApp() {
   document.getElementById("storyMeterFill").style.width = "0%";
 }
 
-// Feed Posts
+// ==================== FEED POSTS ====================
 function renderFeed() {
   const wall = document.getElementById("postsContainer");
   if (!wall) return;
@@ -532,7 +759,7 @@ function removePost(id) {
   }
 }
 
-// Profile Section & Edit
+// ==================== PROFILE ====================
 function renderProfileSection() {
   document.getElementById("profileHeroName").innerText = userProfile.name;
   document.getElementById("profileHeroBio").innerText = userProfile.bio;
@@ -574,7 +801,7 @@ function saveProfileDetails() {
       renderProfileSection();
       renderStories();
       closeProfileEditSheet();
-      alert("Profile & DP successfully updated! 📸");
+      alert("Profile & DP updated successfully! 📸");
     };
     reader.readAsDataURL(picFile);
   } else {
@@ -604,7 +831,7 @@ function handleDirectDP(event) {
   reader.readAsDataURL(file);
 }
 
-// Upload Post
+// ==================== UPLOAD POST & STORY ====================
 function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
 function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
 
@@ -639,7 +866,6 @@ function dispatchNewPost() {
   reader.readAsDataURL(file);
 }
 
-// Upload Story
 function openCreateStorySheet() { document.getElementById("createStoryModal").style.display = "flex"; }
 function closeCreateStorySheet() { document.getElementById("createStoryModal").style.display = "none"; }
 
@@ -665,7 +891,7 @@ function dispatchNewStory() {
   reader.readAsDataURL(file);
 }
 
-// Explore
+// ==================== EXPLORE ====================
 const EXPLORE_PHOTOS = [
   "https://picsum.photos/400/400?random=11",
   "https://picsum.photos/400/400?random=12",
@@ -693,30 +919,7 @@ function handleExploreSearchLive() {
   wall.innerHTML = EXPLORE_PHOTOS.slice(0, 3).map(url => `<img src="${url}" />`).join("");
 }
 
-// Reels
-const REELS = [
-  { img: "https://picsum.photos/600/1000?random=601", user: "@subbhu_vibes", caption: "Night drives in Mumbai 🚗✨ #reels", likes: "4.8k" },
-  { img: "https://picsum.photos/600/1000?random=602", user: "@chef_kunal", caption: "Street food specials 🍲🔥", likes: "18.4k" }
-];
-let rIdx = 0;
-let rLiked = false;
-
-function advanceNextReel() {
-  rIdx = (rIdx + 1) % REELS.length;
-  document.getElementById("reelBgMedia").src = REELS[rIdx].img;
-  document.getElementById("reelCreatorTag").innerText = REELS[rIdx].user;
-  document.getElementById("reelTitle").innerText = REELS[rIdx].caption;
-  document.getElementById("reelLikesStat").innerText = REELS[rIdx].likes;
-  rLiked = false;
-  document.getElementById("reelHeartIcon").style.color = "#fff";
-}
-
-function toggleReelHeart() {
-  rLiked = !rLiked;
-  document.getElementById("reelHeartIcon").style.color = rLiked ? "#ed4956" : "#fff";
-}
-
-// Notifications
+// ==================== NOTIFICATIONS ====================
 function renderNotifications() {
   const list = document.getElementById("notifListContainer");
   if (!list) return;
@@ -731,7 +934,7 @@ function renderNotifications() {
   `).join("");
 }
 
-// Messenger
+// ==================== MESSENGER ====================
 function openMessenger() { 
   document.getElementById("dmDrawer").style.display = "flex"; 
   const b = document.getElementById("msgBadge");
@@ -755,11 +958,12 @@ function dispatchDirectMessage() {
   }, 600);
 }
 
-// INITIAL STARTUP
+// ==================== INITIAL BOOT ====================
 window.addEventListener("DOMContentLoaded", () => {
   renderProfileSection();
   renderStories();
   renderFeed();
+  mountReel(0);
 });
 </script>
 </body>
