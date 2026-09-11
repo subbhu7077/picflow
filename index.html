@@ -9,169 +9,175 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
     body { background: #000; color: #fff; padding-bottom: 55px; overflow-x: hidden; }
 
-    /* App Shell */
-    .app-container { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
+    .app-wrap { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
-    /* Header */
+    /* Top Bar */
     header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1c1c1c; z-index: 90; }
-    .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; }
-    .header-icons { display: flex; gap: 20px; font-size: 21px; }
-    .header-icons i { cursor: pointer; }
+    .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; }
+    .top-icons { display: flex; gap: 20px; font-size: 21px; align-items: center; }
+    .top-icons i { cursor: pointer; }
 
-    /* Tab Panels */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    /* Tabs */
+    .tab-page { display: none; }
+    .tab-page.active { display: block; }
 
-    /* Stories Bar */
-    .stories-tray { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #1c1c1c; }
-    .stories-tray::-webkit-scrollbar { display: none; }
-    .story-item { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
-    .story-ring { width: 66px; height: 66px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
-    .story-ring.my-ring { background: transparent; border: 1.5px dashed #555; }
-    .story-thumb { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; }
-    .add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #fff; }
+    /* Stories */
+    .stories-bar { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #1c1c1c; background: #000; }
+    .stories-bar::-webkit-scrollbar { display: none; }
+    .story-card { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
+    .story-ring-box { width: 66px; height: 66px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
+    .story-ring-box.self-ring { background: transparent; border: 1.5px dashed #555; }
+    .story-img-circle { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #000; background: #111; }
+    .story-plus { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; color: #fff; }
 
-    /* Feed & Post */
-    .feed { display: flex; flex-direction: column; }
-    .post { border-bottom: 1px solid #1c1c1c; padding-bottom: 10px; }
-    .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
-    .post-user { display: flex; align-items: center; gap: 10px; }
+    /* Feed Posts */
+    .feed-container { display: flex; flex-direction: column; }
+    .post-card { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; }
+    .post-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
+    .post-head-user { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
-    .post-username { font-size: 13px; font-weight: 600; }
-    .post-img-box { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; }
-    .post-img-box img { width: 100%; height: 100%; object-fit: cover; }
-    .heart-popup { position: absolute; font-size: 80px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
-    .heart-popup.pop { opacity: 0.95; transform: scale(1.15); }
-    .post-actions { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; }
+    .post-name { font-size: 13px; font-weight: 600; }
+    .post-more { color: #888; cursor: pointer; font-size: 16px; }
+
+    .post-media { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .post-media img { width: 100%; height: 100%; object-fit: cover; }
+    .heart-pop { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
+    .heart-pop.active { opacity: 0.95; transform: scale(1.15); }
+
+    .post-actions-row { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; }
     .post-actions-left { display: flex; gap: 18px; }
-    .post-actions i { cursor: pointer; }
-    .heart-liked { color: #ed4956 !important; }
-    .saved-active { color: #fff !important; }
-    .post-details { padding: 0 14px; font-size: 13px; line-height: 1.4; }
-    .post-likes { font-weight: 600; margin-bottom: 4px; }
-    .post-caption span { font-weight: 600; margin-right: 6px; }
-    .comments-box { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
-    .comment-item span { font-weight: 600; margin-right: 6px; }
-    .post-time { font-size: 10px; color: #777; margin-top: 4px; text-transform: uppercase; }
-    .comment-bar { display: flex; padding: 8px 14px; border-top: 1px solid #141414; margin-top: 8px; }
-    .comment-bar input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
-    .comment-bar button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    .post-actions-row i { cursor: pointer; transition: transform 0.1s ease; }
+    .post-actions-row i:active { transform: scale(1.2); }
+    .liked-red { color: #ed4956 !important; }
+    .saved-white { color: #fff !important; }
+
+    .post-info { padding: 0 14px; font-size: 13px; line-height: 1.4; }
+    .likes-text { font-weight: 600; margin-bottom: 4px; }
+    .caption-text span { font-weight: 600; margin-right: 6px; }
+    .comments-tray { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+    .comment-line span { font-weight: 600; margin-right: 6px; }
+    .time-text { font-size: 10px; color: #777; margin-top: 4px; text-transform: uppercase; }
+
+    .comment-input-area { display: flex; padding: 8px 14px; border-top: 1px solid #141414; margin-top: 8px; }
+    .comment-input-area input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
+    .comment-input-area button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; font-size: 13px; }
 
     /* Explore Tab */
-    .search-bar-wrap { padding: 10px 14px; }
-    .search-input { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 8px 12px; color: #fff; outline: none; font-size: 14px; }
-    .explore-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-    .explore-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; }
+    .explore-search-wrap { padding: 12px 14px; }
+    .explore-search-box { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 14px; }
+    .explore-mosaic { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
+    .explore-mosaic img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; }
 
     /* Reels Tab */
-    .reel-container { height: calc(100vh - 110px); position: relative; background: #050505; display: flex; align-items: center; justify-content: center; overflow: hidden; border-radius: 8px; margin: 6px; }
-    .reel-bg-img { width: 100%; height: 100%; object-fit: cover; }
-    .reel-overlay { position: absolute; bottom: 20px; left: 14px; right: 70px; }
-    .reel-user { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .reel-user img { width: 32px; height: 32px; border-radius: 50%; }
-    .reel-side-actions { position: absolute; bottom: 30px; right: 14px; display: flex; flex-direction: column; gap: 18px; align-items: center; }
-    .reel-btn-item { display: flex; flex-direction: column; align-items: center; font-size: 22px; gap: 4px; }
-    .reel-btn-item span { font-size: 12px; }
-
-    /* Profile Tab */
-    .profile-header { padding: 18px 16px; }
-    .profile-meta { display: flex; align-items: center; justify-content: space-between; }
-    .profile-img-lg { width: 78px; height: 78px; border-radius: 50%; object-fit: cover; }
-    .profile-stats { display: flex; gap: 22px; text-align: center; }
-    .profile-stats strong { display: block; font-size: 16px; }
-    .profile-stats span { font-size: 12px; color: #888; }
-    .profile-bio-box { margin-top: 14px; }
-    .profile-bio-box h4 { font-size: 14px; }
-    .profile-bio-box p { font-size: 13px; color: #aaa; margin-top: 2px; }
-    .profile-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; }
+    .reel-stage { height: calc(100vh - 110px); position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 4px; border-radius: 8px; }
+    .reel-backdrop { width: 100%; height: 100%; object-fit: cover; }
+    .reel-meta { position: absolute; bottom: 20px; left: 14px; right: 70px; z-index: 10; }
+    .reel-creator { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+    .reel-creator img { width: 32px; height: 32px; border-radius: 50%; }
+    .reel-controls { position: absolute; bottom: 30px; right: 14px; display: flex; flex-direction: column; gap: 20px; align-items: center; z-index: 10; }
+    .reel-action-btn { display: flex; flex-direction: column; align-items: center; font-size: 24px; gap: 4px; cursor: pointer; }
+    .reel-action-btn span { font-size: 12px; }
 
     /* Notifications Tab */
-    .notif-list { display: flex; flex-direction: column; }
-    .notif-item { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #141414; font-size: 13px; }
-    .notif-left { display: flex; align-items: center; gap: 12px; }
-    .notif-avatar { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; }
-    .notif-btn { background: #0095f6; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; }
+    .notif-wrap { display: flex; flex-direction: column; }
+    .notif-row { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #141414; font-size: 13px; }
+    .notif-user-box { display: flex; align-items: center; gap: 12px; }
+    .notif-user-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+    .notif-follow-btn { background: #0095f6; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; }
+
+    /* Profile Tab */
+    .profile-shell { padding: 18px 16px; }
+    .profile-head-info { display: flex; align-items: center; justify-content: space-between; }
+    .profile-big-avatar { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 2px solid #222; }
+    .profile-metrics { display: flex; gap: 22px; text-align: center; }
+    .profile-metrics strong { display: block; font-size: 16px; }
+    .profile-metrics span { font-size: 12px; color: #888; }
+    .profile-about { margin-top: 14px; }
+    .profile-about h4 { font-size: 14px; }
+    .profile-about p { font-size: 13px; color: #aaa; margin-top: 2px; }
+    .profile-edit-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
 
     /* Bottom Nav Bar */
-    nav.dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
-    nav.dock i { font-size: 21px; color: #fff; cursor: pointer; }
-    .profile-dock-avatar { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; cursor: pointer; }
+    nav.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
+    nav.bottom-nav i { font-size: 21px; color: #fff; cursor: pointer; }
+    .profile-dock-img { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; cursor: pointer; }
 
     /* Modals */
-    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
-    .modal-card { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 18px; position: relative; border: 1px solid #2a2a2a; }
-    .modal-card h3 { margin-bottom: 14px; font-size: 16px; }
-    .modal-card input, .modal-card textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
-    .modal-submit-btn { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
-    .modal-close { position: absolute; top: 14px; right: 14px; font-size: 18px; cursor: pointer; }
+    .app-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+    .modal-sheet { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #2a2a2a; }
+    .modal-sheet h3 { margin-bottom: 14px; font-size: 16px; }
+    .modal-sheet input, .modal-sheet textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
+    .modal-confirm-btn { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .modal-x { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
 
-    /* Story Fullscreen Viewer */
-    #storyPlayer { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
-    .story-progress-bg { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
-    .story-progress-fill { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
-    .story-user-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
-    .story-user-tag img { width: 34px; height: 34px; border-radius: 50%; }
-    #storyPlayerImg { width: 100%; height: 100%; object-fit: contain; }
+    /* Story Viewer */
+    #storyViewer { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
+    .story-prog-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
+    .story-prog-fill { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
+    .story-head-author { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
+    .story-head-author img { width: 34px; height: 34px; border-radius: 50%; }
+    #storyDisplayImg { width: 100%; height: 100%; object-fit: contain; }
 
-    /* DM Modal */
-    .dm-sheet { display: none; position: fixed; inset: 0; background: #000; z-index: 250; flex-direction: column; max-width: 480px; margin: 0 auto; }
-    .dm-header { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1c1c1c; }
-    .dm-messages { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
-    .dm-bubble { max-width: 75%; padding: 8px 12px; border-radius: 14px; font-size: 13px; }
-    .dm-bubble.sent { align-self: flex-end; background: #3797f0; color: #fff; }
-    .dm-bubble.received { align-self: flex-start; background: #262626; color: #fff; }
-    .dm-input-bar { display: flex; padding: 10px; border-top: 1px solid #1c1c1c; gap: 10px; }
-    .dm-input-bar input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
-    .dm-input-bar button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    /* Direct Messages Sheet */
+    .chat-drawer { display: none; position: fixed; inset: 0; background: #000; z-index: 250; flex-direction: column; max-width: 480px; margin: 0 auto; }
+    .chat-header { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1c1c1c; }
+    .chat-stream { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .msg-bubble { max-width: 75%; padding: 9px 14px; border-radius: 16px; font-size: 13px; line-height: 1.3; }
+    .msg-bubble.mine { align-self: flex-end; background: #3797f0; color: #fff; }
+    .msg-bubble.theirs { align-self: flex-start; background: #262626; color: #fff; }
+    .chat-input-row { display: flex; padding: 10px; border-top: 1px solid #1c1c1c; gap: 10px; background: #000; }
+    .chat-input-row input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
+    .chat-input-row button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
 
-<div class="app-container">
-  <!-- Top Header -->
+<div class="app-wrap">
+  <!-- Top Bar -->
   <header>
-    <div class="logo">PicFlow</div>
-    <div class="header-icons">
+    <div class="logo" onclick="switchTab('feedTab')">PicFlow</div>
+    <div class="top-icons">
+      <i class="fa-solid fa-magnifying-glass" onclick="switchTab('exploreTab')"></i>
       <i class="fa-regular fa-heart" onclick="switchTab('notifTab')"></i>
-      <i class="fa-brands fa-facebook-messenger" onclick="openDM()"></i>
+      <i class="fa-brands fa-facebook-messenger" onclick="openChat()"></i>
     </div>
   </header>
 
-  <!-- TAB 1: HOME FEED -->
-  <section id="feedTab" class="tab-content active">
-    <div class="stories-tray" id="storiesContainer"></div>
-    <div class="feed" id="feedContainer"></div>
+  <!-- TAB 1: FEED -->
+  <section id="feedTab" class="tab-page active">
+    <div class="stories-bar" id="storiesContainer"></div>
+    <div class="feed-container" id="feedContainer"></div>
   </section>
 
   <!-- TAB 2: EXPLORE -->
-  <section id="exploreTab" class="tab-content">
-    <div class="search-bar-wrap">
-      <input type="text" class="search-input" id="exploreSearchInput" placeholder="🔍 Search creators, photos..." oninput="filterExplore()" />
+  <section id="exploreTab" class="tab-page">
+    <div class="explore-search-wrap">
+      <input type="text" class="explore-search-box" id="exploreSearchInput" placeholder="🔍 Search posts or creators..." oninput="handleExploreSearch()" />
     </div>
-    <div class="explore-grid" id="exploreContainer"></div>
+    <div class="explore-mosaic" id="exploreContainer"></div>
   </section>
 
   <!-- TAB 3: REELS -->
-  <section id="reelsTab" class="tab-content">
-    <div class="reel-container" id="reelBox">
-      <img src="https://picsum.photos/600/1000?random=88" class="reel-bg-img" id="currentReelImg" />
-      <div class="reel-overlay">
-        <div class="reel-user">
+  <section id="reelsTab" class="tab-page">
+    <div class="reel-stage">
+      <img src="https://picsum.photos/600/1000?random=111" class="reel-backdrop" id="activeReelImg" />
+      <div class="reel-meta">
+        <div class="reel-creator">
           <img src="https://picsum.photos/100/100?random=1" />
-          <strong id="reelUsername">@vibes_creator</strong>
+          <strong id="activeReelUser">@subbhu_vibes</strong>
         </div>
-        <p id="reelCaption">Night drives in Mumbai 🚗✨ #reels #india</p>
+        <p id="activeReelText">Midnight drive vibes 🌃🚗 #picflow #reels</p>
       </div>
-      <div class="reel-side-actions">
-        <div class="reel-btn-item" onclick="likeCurrentReel()">
-          <i class="fa-solid fa-heart" id="reelLikeIcon" style="color: #fff;"></i>
-          <span id="reelLikeCount">3.2k</span>
+      <div class="reel-controls">
+        <div class="reel-action-btn" onclick="toggleReelHeart()">
+          <i class="fa-solid fa-heart" id="reelHeartIcon" style="color: #fff;"></i>
+          <span id="activeReelLikes">4.5k</span>
         </div>
-        <div class="reel-btn-item" onclick="alert('Reel comments section ready!')">
+        <div class="reel-action-btn" onclick="alert('Comment on Reel: Awesome video!')">
           <i class="fa-regular fa-comment"></i>
-          <span>142</span>
+          <span>210</span>
         </div>
-        <div class="reel-btn-item" onclick="nextReel()">
+        <div class="reel-action-btn" onclick="nextReelCard()">
           <i class="fa-solid fa-angles-down"></i>
           <span>Next</span>
         </div>
@@ -180,99 +186,99 @@
   </section>
 
   <!-- TAB 4: NOTIFICATIONS -->
-  <section id="notifTab" class="tab-content">
-    <div class="notif-list" id="notifContainer"></div>
+  <section id="notifTab" class="tab-page">
+    <div class="notif-wrap" id="notifContainer"></div>
   </section>
 
   <!-- TAB 5: PROFILE -->
-  <section id="profileTab" class="tab-content">
-    <div class="profile-header">
-      <div class="profile-meta">
-        <img src="https://picsum.photos/200/200?random=1" class="profile-img-lg" id="profileHeaderImg" />
-        <div class="profile-stats">
+  <section id="profileTab" class="tab-page">
+    <div class="profile-shell">
+      <div class="profile-head-info">
+        <img src="https://picsum.photos/200/200?random=1" class="profile-big-avatar" id="profileHeaderImg" />
+        <div class="profile-metrics">
           <div><strong id="profilePostCount">0</strong><span>Posts</span></div>
-          <div><strong id="profileFollowers">542</strong><span>Followers</span></div>
-          <div><strong id="profileFollowing">289</strong><span>Following</span></div>
+          <div><strong id="profileFollowersCount">612</strong><span>Followers</span></div>
+          <div><strong id="profileFollowingCount">340</strong><span>Following</span></div>
         </div>
       </div>
-      <div class="profile-bio-box">
-        <h4 id="profileDisplayName">Subbhu</h4>
-        <p id="profileBioText">Full Stack Explorer | Capturing reality ✨</p>
+      <div class="profile-about">
+        <h4 id="profileDisplayName">Subbhu7077</h4>
+        <p id="profileBioText">Tech Creator | Visual Storyteller ⚡</p>
       </div>
-      <button class="profile-btn" onclick="openEditProfileModal()">Edit Profile</button>
+      <button class="profile-edit-btn" onclick="openProfileEditModal()">Edit Profile</button>
     </div>
-    <div class="explore-grid" id="profileGrid"></div>
+    <div class="explore-mosaic" id="profileGrid"></div>
   </section>
 
   <!-- Bottom App Dock -->
-  <nav class="dock">
+  <nav class="bottom-nav">
     <i class="fa-solid fa-house" onclick="switchTab('feedTab')"></i>
     <i class="fa-solid fa-magnifying-glass" onclick="switchTab('exploreTab')"></i>
-    <i class="fa-regular fa-square-plus" onclick="openPostModal()"></i>
+    <i class="fa-regular fa-square-plus" onclick="openNewPostModal()"></i>
     <i class="fa-solid fa-clapperboard" onclick="switchTab('reelsTab')"></i>
-    <img src="https://picsum.photos/200/200?random=1" class="profile-dock-avatar" id="profileDockImg" onclick="switchTab('profileTab')" />
+    <img src="https://picsum.photos/200/200?random=1" class="profile-dock-img" id="profileDockThumb" onclick="switchTab('profileTab')" />
   </nav>
 
   <!-- Create Post Modal -->
-  <div class="modal-overlay" id="postModal">
-    <div class="modal-card">
-      <i class="fa-solid fa-xmark modal-close" onclick="closePostModal()"></i>
+  <div class="app-modal" id="newPostModal">
+    <div class="modal-sheet">
+      <i class="fa-solid fa-xmark modal-x" onclick="closeNewPostModal()"></i>
       <h3>Create New Post</h3>
-      <input type="file" id="postImgFile" accept="image/*" />
-      <textarea id="postCaption" placeholder="Write a caption..." rows="3"></textarea>
-      <button class="modal-submit-btn" onclick="publishPost()">Share Post</button>
+      <input type="file" id="newPostFileInput" accept="image/*" />
+      <textarea id="newPostCaptionInput" placeholder="Write a caption..." rows="3"></textarea>
+      <button class="modal-confirm-btn" onclick="submitPostCreation()">Share Post</button>
     </div>
   </div>
 
   <!-- Create Story Modal -->
-  <div class="modal-overlay" id="storyModal">
-    <div class="modal-card">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeStoryModal()"></i>
+  <div class="app-modal" id="newStoryModal">
+    <div class="modal-sheet">
+      <i class="fa-solid fa-xmark modal-x" onclick="closeNewStoryModal()"></i>
       <h3>Add to Your Story</h3>
-      <input type="file" id="storyImgFile" accept="image/*" />
-      <button class="modal-submit-btn" onclick="publishStory()">Share to Story</button>
+      <input type="file" id="newStoryFileInput" accept="image/*" />
+      <button class="modal-confirm-btn" onclick="submitStoryCreation()">Share Story</button>
     </div>
   </div>
 
   <!-- Edit Profile Modal -->
-  <div class="modal-overlay" id="editProfileModal">
-    <div class="modal-card">
-      <i class="fa-solid fa-xmark modal-close" onclick="closeEditProfileModal()"></i>
+  <div class="app-modal" id="editProfileModal">
+    <div class="modal-sheet">
+      <i class="fa-solid fa-xmark modal-x" onclick="closeProfileEditModal()"></i>
       <h3>Edit Profile</h3>
-      <input type="text" id="editName" placeholder="Full Name" />
-      <textarea id="editBio" placeholder="Bio" rows="3"></textarea>
-      <button class="modal-submit-btn" onclick="saveProfile()">Save Changes</button>
+      <input type="text" id="editProfileNameInput" placeholder="Display Name" />
+      <textarea id="editProfileBioInput" placeholder="Bio" rows="3"></textarea>
+      <button class="modal-confirm-btn" onclick="saveProfileChanges()">Save Profile</button>
     </div>
   </div>
 
-  <!-- Story Player -->
-  <div id="storyPlayer" onclick="closeStoryPlayer()">
-    <div class="story-progress-bg"><div class="story-progress-fill" id="storyFill"></div></div>
-    <div class="story-user-tag">
-      <img id="storyPlayerAvatar" src="" />
-      <span id="storyPlayerUser">User</span>
+  <!-- Fullscreen Story Viewer -->
+  <div id="storyViewer" onclick="closeStoryViewer()">
+    <div class="story-prog-bar"><div class="story-prog-fill" id="storyProgFill"></div></div>
+    <div class="story-head-author">
+      <img id="storyAuthorImg" src="" />
+      <span id="storyAuthorName">user</span>
     </div>
-    <img id="storyPlayerImg" src="" />
+    <img id="storyDisplayImg" src="" />
   </div>
 
-  <!-- Direct Messages Sheet -->
-  <div class="dm-sheet" id="dmSheet">
-    <div class="dm-header">
-      <i class="fa-solid fa-arrow-left" style="font-size: 20px; cursor: pointer;" onclick="closeDM()"></i>
-      <h4>Messages</h4>
-      <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;"></i>
+  <!-- Direct Chat Sheet -->
+  <div class="chat-drawer" id="chatDrawer">
+    <div class="chat-header">
+      <i class="fa-solid fa-arrow-left" style="font-size: 20px; cursor: pointer;" onclick="closeChat()"></i>
+      <h4>Direct Messages</h4>
+      <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
-    <div class="dm-messages" id="dmBox">
-      <div class="dm-bubble received">Hey! Welcome to PicFlow Direct Chat 🚀</div>
-      <div class="dm-bubble received">Sab buttons working hain yahan!</div>
+    <div class="chat-stream" id="chatStream">
+      <div class="msg-bubble theirs">Hey Subbhu! Welcome to PicFlow Messenger ⚡</div>
+      <div class="msg-bubble theirs">Everything is connected and fully working!</div>
     </div>
-    <div class="dm-input-bar">
-      <input type="text" id="dmInput" placeholder="Message..." onkeydown="if(event.key==='Enter') sendDM()" />
-      <button onclick="sendDM()">Send</button>
+    <div class="chat-input-row">
+      <input type="text" id="chatMsgInput" placeholder="Message..." onkeydown="if(event.key==='Enter') sendChatMessage()" />
+      <button onclick="sendChatMessage()">Send</button>
     </div>
   </div>
 </div>
 
-<script src="js/master.js?v=master5"></script>
+<script src="js/master.js?v=master6"></script>
 </body>
 </html>

@@ -1,60 +1,61 @@
-// --- Initial State & Storage ---
+// --- Initial Seed Data ---
 const DEFAULT_POSTS = [
   {
-    id: 101,
+    id: 1001,
     username: "Subbhu7077",
     avatar: "https://picsum.photos/200/200?random=1",
-    image: "https://picsum.photos/800/800?random=11",
-    likes: 132,
+    image: "https://picsum.photos/800/800?random=201",
+    likes: 154,
     liked: false,
     saved: false,
-    caption: "PicFlow V5 full master edition is live! ⚡🔥",
-    comments: ["Working so smoothly!", "Best Instagram dark clone"],
+    caption: "PicFlow Master V6 is live! Every single button is now functional 🔥⚡",
+    comments: ["Working super fast!", "UI looks completely identical to Instagram"],
     time: "JUST NOW"
   },
   {
-    id: 102,
-    username: "rohit_travels",
+    id: 1002,
+    username: "wander_soul",
     avatar: "https://picsum.photos/200/200?random=2",
-    image: "https://picsum.photos/800/800?random=22",
-    likes: 412,
+    image: "https://picsum.photos/800/800?random=202",
+    likes: 520,
     liked: false,
     saved: false,
-    caption: "Golden hour over the western ghats 🌄",
-    comments: ["Location please?", "Stunning capture!"],
-    time: "2 HOURS AGO"
+    caption: "Golden hour hues somewhere in the mountains 🏔️🌄",
+    comments: ["Heaven on earth!", "Incredible shot mate 👏"],
+    time: "3 HOURS AGO"
   }
 ];
 
 const DEFAULT_STORIES = [
-  { id: 1, user: "Your Story", avatar: "https://picsum.photos/200/200?random=1", img: "https://picsum.photos/800/1200?random=31", isSelf: true },
-  { id: 2, user: "aaron_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=32", isSelf: false },
-  { id: 3, user: "priya_art", avatar: "https://picsum.photos/200/200?random=4", img: "https://picsum.photos/800/1200?random=33", isSelf: false },
-  { id: 4, user: "lens_king", avatar: "https://picsum.photos/200/200?random=5", img: "https://picsum.photos/800/1200?random=34", isSelf: false }
+  { id: 1, user: "Your Story", avatar: "https://picsum.photos/200/200?random=1", img: "https://picsum.photos/800/1200?random=301" },
+  { id: 2, user: "aaron_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=302" },
+  { id: 3, user: "priya_art", avatar: "https://picsum.photos/200/200?random=4", img: "https://picsum.photos/800/1200?random=303" },
+  { id: 4, user: "travel_geek", avatar: "https://picsum.photos/200/200?random=5", img: "https://picsum.photos/800/1200?random=304" }
 ];
 
 const DEFAULT_NOTIFS = [
-  { id: 1, user: "priya_art", avatar: "https://picsum.photos/200/200?random=4", text: "liked your photo.", time: "10m", isFollow: false },
-  { id: 2, user: "dev_ankit", avatar: "https://picsum.photos/200/200?random=6", text: "started following you.", time: "1h", isFollow: true },
-  { id: 3, user: "rohit_travels", avatar: "https://picsum.photos/200/200?random=2", text: "commented: Stunning capture!", time: "2h", isFollow: false }
+  { id: 1, user: "priya_art", avatar: "https://picsum.photos/200/200?random=4", msg: "liked your post.", time: "12m", isFollow: false },
+  { id: 2, user: "aaron_v", avatar: "https://picsum.photos/200/200?random=3", msg: "started following you.", time: "45m", isFollow: true },
+  { id: 3, user: "wander_soul", avatar: "https://picsum.photos/200/200?random=2", msg: "commented: 'Working super fast!'", time: "2h", isFollow: false }
 ];
 
+// Persistent State
 let posts = JSON.parse(localStorage.getItem("pf_posts")) || DEFAULT_POSTS;
 let stories = JSON.parse(localStorage.getItem("pf_stories")) || DEFAULT_STORIES;
 let userProfile = JSON.parse(localStorage.getItem("pf_profile")) || {
   name: "Subbhu7077",
-  bio: "Full Stack Explorer | Capturing reality ✨"
+  bio: "Tech Creator | Visual Storyteller ⚡"
 };
 
-function persist() {
+function saveAll() {
   localStorage.setItem("pf_posts", JSON.stringify(posts));
   localStorage.setItem("pf_stories", JSON.stringify(stories));
   localStorage.setItem("pf_profile", JSON.stringify(userProfile));
 }
 
-// --- Tab Switching ---
+// Tab Switching
 function switchTab(tabId) {
-  document.querySelectorAll(".tab-content").forEach(el => el.classList.remove("active"));
+  document.querySelectorAll(".tab-page").forEach(page => page.classList.remove("active"));
   const target = document.getElementById(tabId);
   if (target) target.classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
@@ -64,14 +65,14 @@ function switchTab(tabId) {
   if (tabId === "notifTab") renderNotifs();
 }
 
-// --- Stories Render & View ---
+// Stories Tray
 function renderStories() {
-  const container = document.getElementById("storiesContainer");
+  const box = document.getElementById("storiesContainer");
   let html = `
-    <div class="story-item" onclick="openStoryModal()">
-      <div class="story-ring my-ring">
-        <img class="story-thumb" src="https://picsum.photos/200/200?random=1" />
-        <div class="add-badge">+</div>
+    <div class="story-card" onclick="openNewStoryModal()">
+      <div class="story-ring-box self-ring">
+        <img class="story-img-circle" src="https://picsum.photos/200/200?random=1" />
+        <div class="story-plus">+</div>
       </div>
       <span>Your story</span>
     </div>
@@ -79,156 +80,155 @@ function renderStories() {
 
   stories.forEach(s => {
     html += `
-      <div class="story-item" onclick="playStory('${s.img}', '${s.user}', '${s.avatar}')">
-        <div class="story-ring">
-          <img class="story-thumb" src="${s.avatar}" />
+      <div class="story-card" onclick="launchStoryViewer('${s.img}', '${s.user}', '${s.avatar}')">
+        <div class="story-ring-box">
+          <img class="story-img-circle" src="${s.avatar}" />
         </div>
         <span>${s.user}</span>
       </div>
     `;
   });
-  container.innerHTML = html;
+  box.innerHTML = html;
 }
 
-let storyTimer = null;
-function playStory(imgUrl, username, avatar) {
-  const player = document.getElementById("storyPlayer");
-  const fill = document.getElementById("storyFill");
-  document.getElementById("storyPlayerImg").src = imgUrl;
-  document.getElementById("storyPlayerUser").innerText = username;
-  document.getElementById("storyPlayerAvatar").src = avatar;
+// Story Viewer
+let storyTimeout = null;
+function launchStoryViewer(img, user, avatar) {
+  const viewer = document.getElementById("storyViewer");
+  const fill = document.getElementById("storyProgFill");
+  document.getElementById("storyDisplayImg").src = img;
+  document.getElementById("storyAuthorName").innerText = user;
+  document.getElementById("storyAuthorImg").src = avatar;
 
-  player.style.display = "flex";
+  viewer.style.display = "flex";
   fill.style.width = "0%";
   setTimeout(() => { fill.style.width = "100%"; }, 40);
 
-  clearTimeout(storyTimer);
-  storyTimer = setTimeout(closeStoryPlayer, 4050);
+  clearTimeout(storyTimeout);
+  storyTimeout = setTimeout(closeStoryViewer, 4050);
 }
 
-function closeStoryPlayer() {
-  clearTimeout(storyTimer);
-  document.getElementById("storyPlayer").style.display = "none";
-  document.getElementById("storyFill").style.width = "0%";
+function closeStoryViewer() {
+  clearTimeout(storyTimeout);
+  document.getElementById("storyViewer").style.display = "none";
+  document.getElementById("storyProgFill").style.width = "0%";
 }
 
-// --- Feed Render & Actions ---
+// Feed Posts
 function renderFeed() {
-  const container = document.getElementById("feedContainer");
-  container.innerHTML = posts.map(p => `
-    <article class="post">
-      <div class="post-header">
-        <div class="post-user">
+  const feed = document.getElementById("feedContainer");
+  feed.innerHTML = posts.map(p => `
+    <article class="post-card" id="post-${p.id}">
+      <div class="post-head">
+        <div class="post-head-user" onclick="switchTab('profileTab')">
           <img src="${p.avatar}" class="post-avatar" />
-          <span class="post-username">${p.username}</span>
+          <span class="post-name">${p.username}</span>
         </div>
-        <i class="fa-solid fa-trash-can" style="font-size: 14px; cursor: pointer; color: #888;" onclick="deletePost(${p.id})"></i>
+        <i class="fa-solid fa-ellipsis post-more" onclick="deletePostItem(${p.id})"></i>
       </div>
 
-      <div class="post-img-box" ondblclick="doubleTapLike(${p.id})">
+      <div class="post-media" ondblclick="triggerDoubleTapHeart(${p.id})">
         <img src="${p.image}" loading="lazy" />
-        <i class="fa-solid fa-heart heart-popup" id="heart-anim-${p.id}"></i>
+        <i class="fa-solid fa-heart heart-pop" id="heart-anim-${p.id}"></i>
       </div>
 
-      <div class="post-actions">
+      <div class="post-actions-row">
         <div class="post-actions-left">
-          <i class="${p.liked ? 'fa-solid fa-heart heart-liked' : 'fa-regular fa-heart'}" onclick="toggleLike(${p.id})"></i>
-          <i class="fa-regular fa-comment" onclick="focusComment(${p.id})"></i>
-          <i class="fa-regular fa-paper-plane" onclick="sharePostLink()"></i>
+          <i class="${p.liked ? 'fa-solid fa-heart liked-red' : 'fa-regular fa-heart'}" onclick="togglePostLike(${p.id})"></i>
+          <i class="fa-regular fa-comment" onclick="focusPostComment(${p.id})"></i>
+          <i class="fa-regular fa-paper-plane" onclick="sharePostUrl()"></i>
         </div>
-        <i class="${p.saved ? 'fa-solid fa-bookmark saved-active' : 'fa-regular fa-bookmark'}" onclick="toggleSave(${p.id})"></i>
+        <i class="${p.saved ? 'fa-solid fa-bookmark saved-white' : 'fa-regular fa-bookmark'}" onclick="togglePostSave(${p.id})"></i>
       </div>
 
-      <div class="post-details">
-        <div class="post-likes">${p.likes} likes</div>
-        <div class="post-caption"><span>${p.username}</span>${p.caption}</div>
-        <div class="comments-box">
-          ${p.comments.map(c => `<div class="comment-item"><span>user</span>${c}</div>`).join("")}
+      <div class="post-info">
+        <div class="likes-text">${p.likes} likes</div>
+        <div class="caption-text"><span>${p.username}</span>${p.caption}</div>
+        <div class="comments-tray">
+          ${p.comments.map(c => `<div class="comment-line"><span>User</span>${c}</div>`).join("")}
         </div>
-        <div class="post-time">${p.time}</div>
+        <div class="time-text">${p.time}</div>
       </div>
 
-      <div class="comment-bar">
-        <input type="text" id="comment-input-${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') addComment(${p.id})" />
-        <button onclick="addComment(${p.id})">Post</button>
+      <div class="comment-input-area">
+        <input type="text" id="comment-field-${p.id}" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') submitPostComment(${p.id})" />
+        <button onclick="submitPostComment(${p.id})">Post</button>
       </div>
     </article>
   `).join("");
 }
 
-function toggleLike(id) {
+function togglePostLike(id) {
   const p = posts.find(item => item.id === id);
   if (!p) return;
   p.liked = !p.liked;
   p.likes += p.liked ? 1 : -1;
-  persist();
+  saveAll();
   renderFeed();
 }
 
-function doubleTapLike(id) {
-  const anim = document.getElementById(`heart-anim-${id}`);
-  if (anim) {
-    anim.classList.add("pop");
-    setTimeout(() => anim.classList.remove("pop"), 500);
+function triggerDoubleTapHeart(id) {
+  const heart = document.getElementById(`heart-anim-${id}`);
+  if (heart) {
+    heart.classList.add("active");
+    setTimeout(() => heart.classList.remove("active"), 500);
   }
   const p = posts.find(item => item.id === id);
   if (p && !p.liked) {
     p.liked = true;
     p.likes += 1;
-    persist();
+    saveAll();
     renderFeed();
   }
 }
 
-function toggleSave(id) {
+function togglePostSave(id) {
   const p = posts.find(item => item.id === id);
   if (!p) return;
   p.saved = !p.saved;
-  persist();
+  saveAll();
   renderFeed();
 }
 
-function addComment(id) {
-  const input = document.getElementById(`comment-input-${id}`);
-  if (!input || !input.value.trim()) return;
+function focusPostComment(id) {
+  const field = document.getElementById(`comment-field-${id}`);
+  if (field) field.focus();
+}
+
+function submitPostComment(id) {
+  const field = document.getElementById(`comment-field-${id}`);
+  if (!field || !field.value.trim()) return;
   const p = posts.find(item => item.id === id);
   if (p) {
-    p.comments.push(input.value.trim());
-    persist();
+    p.comments.push(field.value.trim());
+    saveAll();
     renderFeed();
   }
 }
 
-function focusComment(id) {
-  const el = document.getElementById(`comment-input-${id}`);
-  if (el) el.focus();
-}
-
-function sharePostLink() {
+function sharePostUrl() {
   if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Post link copied to clipboard! 🔗");
+  alert("Link copied to clipboard! 🔗 Share anywhere");
 }
 
-function deletePost(id) {
-  if (confirm("Delete this post?")) {
+function deletePostItem(id) {
+  if (confirm("Delete this post from PicFlow?")) {
     posts = posts.filter(p => p.id !== id);
-    persist();
+    saveAll();
     renderFeed();
     renderProfile();
   }
 }
 
-// --- Upload Post & Story ---
-function openPostModal() { document.getElementById("postModal").style.display = "flex"; }
-function closePostModal() { document.getElementById("postModal").style.display = "none"; }
-function openStoryModal() { document.getElementById("storyModal").style.display = "flex"; }
-function closeStoryModal() { document.getElementById("storyModal").style.display = "none"; }
+// Upload Post Modal
+function openNewPostModal() { document.getElementById("newPostModal").style.display = "flex"; }
+function closeNewPostModal() { document.getElementById("newPostModal").style.display = "none"; }
 
-function publishPost() {
-  const file = document.getElementById("postImgFile").files[0];
-  const caption = document.getElementById("postCaption").value;
+function submitPostCreation() {
+  const file = document.getElementById("newPostFileInput").files[0];
+  const caption = document.getElementById("newPostCaptionInput").value;
   if (!file) {
-    alert("Please select a photo first!");
+    alert("Please choose a picture first!");
     return;
   }
   const reader = new FileReader();
@@ -245,20 +245,24 @@ function publishPost() {
       comments: [],
       time: "JUST NOW"
     });
-    persist();
+    saveAll();
     renderFeed();
-    closePostModal();
-    document.getElementById("postImgFile").value = "";
-    document.getElementById("postCaption").value = "";
+    closeNewPostModal();
+    document.getElementById("newPostFileInput").value = "";
+    document.getElementById("newPostCaptionInput").value = "";
     switchTab("feedTab");
   };
   reader.readAsDataURL(file);
 }
 
-function publishStory() {
-  const file = document.getElementById("storyImgFile").files[0];
+// Upload Story Modal
+function openNewStoryModal() { document.getElementById("newStoryModal").style.display = "flex"; }
+function closeNewStoryModal() { document.getElementById("newStoryModal").style.display = "none"; }
+
+function submitStoryCreation() {
+  const file = document.getElementById("newStoryFileInput").files[0];
   if (!file) {
-    alert("Please select a story photo!");
+    alert("Please select a story picture!");
     return;
   }
   const reader = new FileReader();
@@ -269,86 +273,86 @@ function publishStory() {
       avatar: "https://picsum.photos/200/200?random=1",
       img: e.target.result
     });
-    persist();
+    saveAll();
     renderStories();
-    closeStoryModal();
-    document.getElementById("storyImgFile").value = "";
+    closeNewStoryModal();
+    document.getElementById("newStoryFileInput").value = "";
   };
   reader.readAsDataURL(file);
 }
 
-// --- Explore & Search ---
-const explorePhotos = [
-  "https://picsum.photos/400/400?random=50",
-  "https://picsum.photos/400/400?random=51",
-  "https://picsum.photos/400/400?random=52",
-  "https://picsum.photos/400/400?random=53",
-  "https://picsum.photos/400/400?random=54",
-  "https://picsum.photos/400/400?random=55",
-  "https://picsum.photos/400/400?random=56",
-  "https://picsum.photos/400/400?random=57",
-  "https://picsum.photos/400/400?random=58"
+// Explore Section
+const exploreImages = [
+  "https://picsum.photos/400/400?random=401",
+  "https://picsum.photos/400/400?random=402",
+  "https://picsum.photos/400/400?random=403",
+  "https://picsum.photos/400/400?random=404",
+  "https://picsum.photos/400/400?random=405",
+  "https://picsum.photos/400/400?random=406",
+  "https://picsum.photos/400/400?random=407",
+  "https://picsum.photos/400/400?random=408",
+  "https://picsum.photos/400/400?random=409"
 ];
 
 function renderExplore() {
-  const container = document.getElementById("exploreContainer");
-  container.innerHTML = explorePhotos.map(url => `
+  const box = document.getElementById("exploreContainer");
+  box.innerHTML = exploreImages.map(url => `
     <img src="${url}" onclick="alert('Viewing explore snapshot!')" />
   `).join("");
 }
 
-function filterExplore() {
-  const q = document.getElementById("exploreSearchInput").value.toLowerCase();
-  const container = document.getElementById("exploreContainer");
-  if (!q) {
+function handleExploreSearch() {
+  const query = document.getElementById("exploreSearchInput").value.toLowerCase();
+  const box = document.getElementById("exploreContainer");
+  if (!query) {
     renderExplore();
     return;
   }
-  container.innerHTML = explorePhotos.slice(0, 3).map(url => `
-    <img src="${url}" onclick="alert('Result for: ' + '${q}')" />
+  box.innerHTML = exploreImages.slice(0, 3).map(url => `
+    <img src="${url}" onclick="alert('Search hit for: ' + '${query}')" />
   `).join("");
 }
 
-// --- Reels System ---
-const reelsData = [
-  { img: "https://picsum.photos/600/1000?random=71", user: "@vibes_creator", caption: "Night drives in Mumbai 🚗✨ #reels", likes: "3.2k" },
-  { img: "https://picsum.photos/600/1000?random=72", user: "@chef_ravi", caption: "Authentic Biryani in 60 seconds 🥘🔥", likes: "12.4k" },
-  { img: "https://picsum.photos/600/1000?random=73", user: "@travel_diaries", caption: "Snow in Manali ❄️🏔️ #peace", likes: "8.1k" }
+// Reels Logic
+const reelsCollection = [
+  { img: "https://picsum.photos/600/1000?random=501", user: "@subbhu_vibes", caption: "Midnight drive vibes 🌃🚗 #picflow #reels", likes: "4.5k" },
+  { img: "https://picsum.photos/600/1000?random=502", user: "@chef_kunal", caption: "Street food secrets in Delhi 🍲🔥", likes: "19.8k" },
+  { img: "https://picsum.photos/600/1000?random=503", user: "@wanderer_india", caption: "Sunrise at Tiger Point, Lonavala 🌄", likes: "7.3k" }
 ];
-let currentReelIndex = 0;
-let reelLiked = false;
+let reelIndex = 0;
+let isReelLiked = false;
 
-function nextReel() {
-  currentReelIndex = (currentReelIndex + 1) % reelsData.length;
-  const reel = reelsData[currentReelIndex];
-  document.getElementById("currentReelImg").src = reel.img;
-  document.getElementById("reelUsername").innerText = reel.user;
-  document.getElementById("reelCaption").innerText = reel.caption;
-  document.getElementById("reelLikeCount").innerText = reel.likes;
-  reelLiked = false;
-  document.getElementById("reelLikeIcon").style.color = "#fff";
+function nextReelCard() {
+  reelIndex = (reelIndex + 1) % reelsCollection.length;
+  const current = reelsCollection[reelIndex];
+  document.getElementById("activeReelImg").src = current.img;
+  document.getElementById("activeReelUser").innerText = current.user;
+  document.getElementById("activeReelText").innerText = current.caption;
+  document.getElementById("activeReelLikes").innerText = current.likes;
+  isReelLiked = false;
+  document.getElementById("reelHeartIcon").style.color = "#fff";
 }
 
-function likeCurrentReel() {
-  reelLiked = !reelLiked;
-  document.getElementById("reelLikeIcon").style.color = reelLiked ? "#ed4956" : "#fff";
+function toggleReelHeart() {
+  isReelLiked = !isReelLiked;
+  document.getElementById("reelHeartIcon").style.color = isReelLiked ? "#ed4956" : "#fff";
 }
 
-// --- Notifications ---
+// Notifications
 function renderNotifs() {
-  const container = document.getElementById("notifContainer");
-  container.innerHTML = DEFAULT_NOTIFS.map(n => `
-    <div class="notif-item">
-      <div class="notif-left">
-        <img src="${n.avatar}" class="notif-avatar" />
-        <div><strong>${n.user}</strong> ${n.text} <span style="color:#777;">${n.time}</span></div>
+  const box = document.getElementById("notifContainer");
+  box.innerHTML = DEFAULT_NOTIFS.map(n => `
+    <div class="notif-row">
+      <div class="notif-user-box">
+        <img src="${n.avatar}" class="notif-user-avatar" />
+        <div><strong>${n.user}</strong> ${n.msg} <span style="color:#777;">${n.time}</span></div>
       </div>
-      ${n.isFollow ? `<button class="notif-btn" onclick="this.innerText='Following'">Follow</button>` : `<i class="fa-solid fa-heart" style="color: #ed4956;"></i>`}
+      ${n.isFollow ? `<button class="notif-follow-btn" onclick="this.innerText='Following'">Follow</button>` : `<i class="fa-solid fa-heart" style="color: #ed4956;"></i>`}
     </div>
   `).join("");
 }
 
-// --- Profile & Edit Profile ---
+// Profile Section & Edit
 function renderProfile() {
   document.getElementById("profileDisplayName").innerText = userProfile.name;
   document.getElementById("profileBioText").innerText = userProfile.bio;
@@ -358,44 +362,44 @@ function renderProfile() {
   grid.innerHTML = posts.map(p => `<img src="${p.image}" />`).join("");
 }
 
-function openEditProfileModal() {
-  document.getElementById("editName").value = userProfile.name;
-  document.getElementById("editBio").value = userProfile.bio;
+function openProfileEditModal() {
+  document.getElementById("editProfileNameInput").value = userProfile.name;
+  document.getElementById("editProfileBioInput").value = userProfile.bio;
   document.getElementById("editProfileModal").style.display = "flex";
 }
-function closeEditProfileModal() { document.getElementById("editProfileModal").style.display = "none"; }
+function closeProfileEditModal() { document.getElementById("editProfileModal").style.display = "none"; }
 
-function saveProfile() {
-  const name = document.getElementById("editName").value;
-  const bio = document.getElementById("editBio").value;
+function saveProfileChanges() {
+  const name = document.getElementById("editProfileNameInput").value;
+  const bio = document.getElementById("editProfileBioInput").value;
   if (name.trim()) userProfile.name = name;
   userProfile.bio = bio;
-  persist();
+  saveAll();
   renderProfile();
-  closeEditProfileModal();
+  closeProfileEditModal();
 }
 
-// --- Direct Messages (DM) ---
-function openDM() { document.getElementById("dmSheet").style.display = "flex"; }
-function closeDM() { document.getElementById("dmSheet").style.display = "none"; }
+// Direct Messages
+function openChat() { document.getElementById("chatDrawer").style.display = "flex"; }
+function closeChat() { document.getElementById("chatDrawer").style.display = "none"; }
 
-function sendDM() {
-  const input = document.getElementById("dmInput");
-  const text = input.value.trim();
-  if (!text) return;
+function sendChatMessage() {
+  const input = document.getElementById("chatMsgInput");
+  const msg = input.value.trim();
+  if (!msg) return;
 
-  const box = document.getElementById("dmBox");
-  box.innerHTML += `<div class="dm-bubble sent">${text}</div>`;
+  const stream = document.getElementById("chatStream");
+  stream.innerHTML += `<div class="msg-bubble mine">${msg}</div>`;
   input.value = "";
-  box.scrollTop = box.scrollHeight;
+  stream.scrollTop = stream.scrollHeight;
 
   setTimeout(() => {
-    box.innerHTML += `<div class="dm-bubble received">Delivered ✅</div>`;
-    box.scrollTop = box.scrollHeight;
-  }, 700);
+    stream.innerHTML += `<div class="msg-bubble theirs">Received: "${msg}" 👍</div>`;
+    stream.scrollTop = stream.scrollHeight;
+  }, 600);
 }
 
-// --- Initial Boot ---
+// Boot PicFlow
 renderStories();
 renderFeed();
 renderProfile();
