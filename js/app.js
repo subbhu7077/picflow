@@ -756,3 +756,290 @@ function logoutUser() {
 
 }
 
+
+
+/* =========================
+   SIGNUP
+========================= */
+
+function showSignup() {
+
+  const login =
+    document.getElementById("loginScreen");
+
+  const signup =
+    document.getElementById("signupScreen");
+
+  const app =
+    document.getElementById("mainApp");
+
+  if (login) login.style.display = "none";
+  if (app) app.style.display = "none";
+  if (signup) signup.style.display = "flex";
+
+}
+
+
+function showLogin() {
+
+  const login =
+    document.getElementById("loginScreen");
+
+  const signup =
+    document.getElementById("signupScreen");
+
+  if (signup) signup.style.display = "none";
+  if (login) login.style.display = "flex";
+
+}
+
+
+function chooseSignupPhoto() {
+
+  const input =
+    document.createElement("input");
+
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = function () {
+
+    const file = input.files[0];
+
+    if (!file) return;
+
+    const reader =
+      new FileReader();
+
+    reader.onload = function (e) {
+
+      const image = e.target.result;
+
+      localStorage.setItem(
+        "picflow_signup_dp",
+        image
+      );
+
+      const preview =
+        document.getElementById(
+          "signupPhotoPreview"
+        );
+
+      if (preview) {
+
+        preview.innerHTML =
+          '<img src="' +
+          image +
+          '" alt="Profile photo">';
+
+      }
+
+    };
+
+    reader.readAsDataURL(file);
+
+  };
+
+  input.click();
+
+}
+
+
+function toggleSignupPassword() {
+
+  const input =
+    document.getElementById(
+      "signupPassword"
+    );
+
+  if (!input) return;
+
+  input.type =
+    input.type === "password"
+      ? "text"
+      : "password";
+
+}
+
+
+function toggleConfirmPassword() {
+
+  const input =
+    document.getElementById(
+      "signupConfirmPassword"
+    );
+
+  if (!input) return;
+
+  input.type =
+    input.type === "password"
+      ? "text"
+      : "password";
+
+}
+
+
+function createAccount() {
+
+  const username =
+    document.getElementById(
+      "signupUsername"
+    ).value.trim();
+
+  const email =
+    document.getElementById(
+      "signupEmail"
+    ).value.trim();
+
+  const mobile =
+    document.getElementById(
+      "signupMobile"
+    ).value.trim();
+
+  const password =
+    document.getElementById(
+      "signupPassword"
+    ).value;
+
+  const confirmPassword =
+    document.getElementById(
+      "signupConfirmPassword"
+    ).value;
+
+
+  /* VALIDATION */
+
+  if (!username) {
+    alert("Please enter a username.");
+    return;
+  }
+
+  if (username.length < 3) {
+    alert("Username must be at least 3 characters.");
+    return;
+  }
+
+  if (!email) {
+    alert("Please enter your email.");
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert("Please enter a valid email.");
+    return;
+  }
+
+  if (!mobile) {
+    alert("Please enter your mobile number.");
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert("Mobile number must be 10 digits.");
+    return;
+  }
+
+  if (!password) {
+    alert("Please create a password.");
+    return;
+  }
+
+  if (password.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  if (password !== confirmPassword) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+
+  /* SAVE ACCOUNT LOCALLY */
+
+  localStorage.setItem(
+    "picflow_username",
+    username
+  );
+
+  localStorage.setItem(
+    "picflow_email",
+    email
+  );
+
+  localStorage.setItem(
+    "picflow_mobile",
+    mobile
+  );
+
+  localStorage.setItem(
+    "picflow_password",
+    password
+  );
+
+
+  const signupDP =
+    localStorage.getItem(
+      "picflow_signup_dp"
+    );
+
+  if (signupDP) {
+
+    localStorage.setItem(
+      "picflow_dp",
+      signupDP
+    );
+
+  }
+
+
+  localStorage.setItem(
+    "picflow_bio",
+    "Welcome to my PicFlow profile ✨"
+  );
+
+  localStorage.setItem(
+    "picflow_logged_in",
+    "true"
+  );
+
+
+  alert(
+    "Account created successfully! 🎉"
+  );
+
+
+  showMainApp();
+
+}
+
+
+/* =========================
+   LOAD SIGNUP PHOTO
+========================= */
+
+function loadSignupPhoto() {
+
+  const image =
+    localStorage.getItem(
+      "picflow_signup_dp"
+    );
+
+  if (!image) return;
+
+  const preview =
+    document.getElementById(
+      "signupPhotoPreview"
+    );
+
+  if (preview) {
+
+    preview.innerHTML =
+      '<img src="' +
+      image +
+      '" alt="Profile photo">';
+
+  }
+
+}
+
