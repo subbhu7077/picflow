@@ -280,7 +280,7 @@
         </div>
         <div class="profile-metrics-deck">
           <div><strong id="profilePostCountNumber">0</strong><span>Posts</span></div>
-          <div><strong id="profileFollowersNum">1.2M</strong><span>Followers</span></div>
+          <div><strong id="profileFollowersNum">500M</strong><span>Followers</span></div>
           <div><strong id="profileFollowingNum">248</strong><span>Following</span></div>
         </div>
       </div>
@@ -1040,6 +1040,8 @@ reelViewport.addEventListener("touchend", (e) => {
 
 // ==================== PROFILE ====================
 function renderProfileSection() {
+  document.getElementById("profileFollowersNum").innerText = "500M";
+  localStorage.setItem("pf_permanent_followers", "500M");
   document.getElementById("profileHeroName").innerText = userProfile.name;
   document.getElementById("profileHeroBio").innerText = userProfile.bio;
   document.getElementById("profileHeroPic").src = userProfile.avatar;
