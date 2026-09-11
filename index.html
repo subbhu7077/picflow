@@ -2,83 +2,193 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>PicFlow</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-    body { background: #fafafa; color: #262626; padding-bottom: 70px; }
-    header { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #dbdbdb; display: flex; justify-content: space-between; align-items: center; padding: 12px 18px; z-index: 50; }
-    .logo { font-size: 1.4rem; font-weight: 700; font-family: 'Brush Script MT', cursive, sans-serif; }
-    .header-icons i { font-size: 1.3rem; margin-left: 18px; cursor: pointer; }
-    .stories-container { display: flex; overflow-x: auto; padding: 14px 10px; background: #fff; border-bottom: 1px solid #dbdbdb; gap: 14px; }
-    .stories-container::-webkit-scrollbar { display: none; }
-    .story { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; }
-    .story-ring { width: 64px; height: 64px; border-radius: 50%; padding: 2px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; }
-    .story-img { width: 58px; height: 58px; border-radius: 50%; border: 2px solid #fff; object-fit: cover; }
-    .feed { max-width: 470px; margin: 15px auto; display: flex; flex-direction: column; gap: 18px; }
-    .post { background: #fff; border: 1px solid #dbdbdb; border-radius: 8px; overflow: hidden; }
-    .post-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 14px; }
-    .post-user { display: flex; align-items: center; gap: 10px; }
-    .post-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
-    .post-username { font-size: 13px; font-weight: 600; }
-    .post-image { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #000; }
-    .post-actions { display: flex; justify-content: space-between; padding: 10px 14px; font-size: 1.3rem; }
-    .post-actions-left { display: flex; gap: 14px; }
-    .post-actions i { cursor: pointer; }
-    .post-actions .fa-heart.liked { color: #ed4956; }
-    .post-meta { padding: 0 14px 12px; font-size: 13px; }
-    .likes-count { font-weight: 600; margin-bottom: 6px; }
-    .caption span { font-weight: 600; margin-right: 6px; }
-    .comments-list { margin-top: 8px; display: flex; flex-direction: column; gap: 4px; font-size: 12px; }
-    .add-comment { display: flex; border-top: 1px solid #efefef; padding: 8px 14px; margin-top: 8px; }
-    .add-comment input { flex: 1; border: none; outline: none; font-size: 13px; }
-    .add-comment button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
-    nav.bottom-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: #fff; border-top: 1px solid #dbdbdb; display: flex; justify-content: space-around; align-items: center; z-index: 50; }
-    nav.bottom-bar i { font-size: 1.3rem; cursor: pointer; color: #262626; }
-    .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 100; align-items: center; justify-content: center; }
-    .modal-box { background: #fff; width: 90%; max-width: 420px; border-radius: 12px; padding: 18px; position: relative; }
-    .close-btn { position: absolute; top: 12px; right: 14px; font-size: 18px; cursor: pointer; }
-    .modal input { width: 100%; padding: 10px; margin: 8px 0; border: 1px solid #dbdbdb; border-radius: 6px; }
-    .btn-submit { width: 100%; padding: 10px; background: #0095f6; color: #fff; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; margin-top: 10px; }
-    #storyViewer { display: none; position: fixed; inset: 0; background: #000; z-index: 200; justify-content: center; align-items: center; }
-    #storyViewer img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: #000000; color: #f5f5f5; padding-bottom: 60px; overflow-x: hidden; }
+
+    /* Top Bar */
+    header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1a1a1a; z-index: 100; }
+    .logo { font-size: 24px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; letter-spacing: 1px; }
+    .header-icons { display: flex; gap: 20px; font-size: 20px; }
+    .header-icons i { cursor: pointer; }
+
+    /* Views */
+    .tab-view { display: none; }
+    .tab-view.active { display: block; }
+
+    /* Stories */
+    .stories-tray { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #1a1a1a; background: #000; }
+    .stories-tray::-webkit-scrollbar { display: none; }
+    .story-node { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 68px; }
+    .ring { width: 68px; height: 68px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
+    .ring.add-ring { background: transparent; border: 1.5px dashed #444; }
+    .story-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #000; background: #222; }
+    .plus-badge { position: absolute; bottom: 0; right: 2px; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
+
+    /* Feed Posts */
+    .feed { max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; }
+    .post { border-bottom: 1px solid #1a1a1a; padding-bottom: 14px; }
+    .post-head { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
+    .post-head-left { display: flex; align-items: center; gap: 10px; }
+    .post-head-avatar { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; border: 1px solid #222; }
+    .post-username { font-size: 13px; font-weight: 600; color: #fff; }
+    .post-body { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+    .post-body img { width: 100%; height: 100%; object-fit: cover; }
+    .floating-heart { position: absolute; font-size: 80px; color: #ff3040; opacity: 0; transform: scale(0.5); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; }
+    .floating-heart.animate { opacity: 0.95; transform: scale(1.2); }
+
+    .post-buttons { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 6px; font-size: 22px; }
+    .post-buttons-left { display: flex; gap: 18px; }
+    .post-buttons i { cursor: pointer; transition: transform 0.1s ease; }
+    .post-buttons i:active { transform: scale(1.2); }
+    .liked-btn { color: #ed4956 !important; }
+    .saved-btn { color: #fff !important; }
+
+    .post-details { padding: 0 14px; font-size: 13px; line-height: 1.4; }
+    .likes-line { font-weight: 600; margin-bottom: 4px; }
+    .caption-line span { font-weight: 600; margin-right: 6px; }
+    .comment-link { color: #737373; margin-top: 5px; cursor: pointer; font-size: 12px; }
+    .comments-view { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
+    .comments-view span { font-weight: 600; margin-right: 5px; }
+    .post-timestamp { color: #737373; font-size: 10px; margin-top: 5px; text-transform: uppercase; }
+
+    /* Quick Comment Input */
+    .quick-comment-box { display: flex; align-items: center; padding: 8px 14px; border-top: 1px solid #141414; margin-top: 8px; }
+    .quick-comment-box input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
+    .quick-comment-box button { background: none; border: none; color: #0095f6; font-weight: 600; font-size: 13px; cursor: pointer; }
+
+    /* Explore Grid */
+    .explore-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; max-width: 480px; margin: 0 auto; }
+    .explore-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; }
+
+    /* Profile Section */
+    .profile-wrap { max-width: 480px; margin: 0 auto; padding: 20px 16px; }
+    .profile-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+    .profile-pic-large { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; }
+    .profile-stat-box { display: flex; gap: 20px; text-align: center; }
+    .profile-stat-box div strong { display: block; font-size: 16px; }
+    .profile-stat-box div span { font-size: 12px; color: #888; }
+    .profile-bio h4 { font-size: 14px; }
+    .profile-bio p { font-size: 13px; color: #bbb; margin-top: 2px; }
+    .profile-action-btn { width: 100%; padding: 8px; background: #262626; color: #fff; border: none; border-radius: 8px; font-weight: 600; margin-top: 15px; cursor: pointer; }
+
+    /* Bottom Nav Bar */
+    nav.dock { position: fixed; bottom: 0; left: 0; right: 0; height: 50px; background: #000; border-top: 1px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 100; max-width: 480px; margin: 0 auto; }
+    nav.dock i { font-size: 20px; color: #fff; cursor: pointer; }
+    .profile-nav-icon { width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; }
+
+    /* Modals & Fullscreen */
+    .modal-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+    .card-modal { background: #181818; width: 100%; max-width: 380px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #2a2a2a; }
+    .card-modal h3 { font-size: 16px; margin-bottom: 12px; }
+    .card-modal input, .card-modal textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; }
+    .btn-action { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
+    .close-icon { position: absolute; top: 15px; right: 15px; font-size: 18px; cursor: pointer; }
+
+    /* Fullscreen Story Viewer */
+    #storyPlayer { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; }
+    .story-progress-bar { width: 100%; height: 3px; background: rgba(255,255,255,0.2); position: absolute; top: 8px; left: 0; }
+    .story-progress-fill { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
+    .story-header-user { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
+    .story-header-user img { width: 32px; height: 32px; border-radius: 50%; }
+    #storyPlayer img { width: 100%; height: 100%; object-fit: contain; }
   </style>
 </head>
 <body>
+
+  <!-- Top Header -->
   <header>
     <div class="logo">PicFlow</div>
     <div class="header-icons">
-      <i class="fa-regular fa-heart" onclick="alert('No notifications')"></i>
-      <i class="fa-brands fa-facebook-messenger" onclick="alert('Chats loaded')"></i>
+      <i class="fa-regular fa-heart" onclick="alert('No notifications right now')"></i>
+      <i class="fa-brands fa-facebook-messenger" onclick="alert('Direct messages inbox is clear')"></i>
     </div>
   </header>
 
-  <div class="stories-container" id="storiesContainer"></div>
-  <main class="feed" id="feedContainer"></main>
+  <!-- TAB 1: FEED -->
+  <section id="feedTab" class="tab-view active">
+    <!-- Stories Tray -->
+    <div class="stories-tray" id="storiesContainer"></div>
+    <!-- Feed Wall -->
+    <div class="feed" id="feedContainer"></div>
+  </section>
 
-  <nav class="bottom-bar">
-    <i class="fa-solid fa-house" onclick="window.scrollTo({top: 0, behavior: 'smooth'})"></i>
-    <i class="fa-solid fa-magnifying-glass" onclick="alert('Explore')"></i>
+  <!-- TAB 2: EXPLORE -->
+  <section id="exploreTab" class="tab-view">
+    <div class="explore-grid" id="exploreContainer"></div>
+  </section>
+
+  <!-- TAB 3: REELS -->
+  <section id="reelsTab" class="tab-view" style="text-align: center; padding-top: 100px;">
+    <i class="fa-solid fa-clapperboard" style="font-size: 50px; color: #444; margin-bottom: 15px;"></i>
+    <h3>Reels Video Feed</h3>
+    <p style="color: #777; margin-top: 8px;">Reels system ready for streaming updates.</p>
+  </section>
+
+  <!-- TAB 4: PROFILE -->
+  <section id="profileTab" class="tab-view">
+    <div class="profile-wrap">
+      <div class="profile-top">
+        <img src="https://picsum.photos/200/200?random=1" class="profile-pic-large" id="profilePic">
+        <div class="profile-stat-box">
+          <div><strong id="userPostCount">2</strong><span>Posts</span></div>
+          <div><strong>489</strong><span>Followers</span></div>
+          <div><strong>312</strong><span>Following</span></div>
+        </div>
+      </div>
+      <div class="profile-bio">
+        <h4 id="profileName">Subbhu7077</h4>
+        <p>Photographer & Tech Enthusiast ⚡</p>
+        <p>📍 Maharashtra, India</p>
+      </div>
+      <button class="profile-action-btn" onclick="alert('Edit Profile modal ready!')">Edit Profile</button>
+      <div class="explore-grid" id="profilePostsGrid" style="margin-top: 20px;"></div>
+    </div>
+  </section>
+
+  <!-- Bottom App Dock -->
+  <nav class="dock">
+    <i class="fa-solid fa-house" onclick="switchTab('feedTab')"></i>
+    <i class="fa-solid fa-magnifying-glass" onclick="switchTab('exploreTab')"></i>
     <i class="fa-regular fa-square-plus" onclick="openCreateModal()"></i>
-    <i class="fa-solid fa-clapperboard" onclick="alert('Reels')"></i>
-    <i class="fa-regular fa-user" onclick="alert('Profile')"></i>
+    <i class="fa-solid fa-clapperboard" onclick="switchTab('reelsTab')"></i>
+    <img src="https://picsum.photos/200/200?random=1" class="profile-nav-icon" onclick="switchTab('profileTab')" />
   </nav>
 
-  <div class="modal" id="createModal">
-    <div class="modal-box">
-      <span class="close-btn" onclick="closeCreateModal()">&times;</span>
+  <!-- Upload Post Modal -->
+  <div class="modal-sheet" id="createPostModal">
+    <div class="card-modal">
+      <i class="fa-solid fa-xmark close-icon" onclick="closeCreateModal()"></i>
       <h3>Create New Post</h3>
-      <input type="file" id="postImageInput" accept="image/*" />
-      <input type="text" id="postCaptionInput" placeholder="Write a caption..." />
-      <button class="btn-submit" onclick="submitPost()">Share Post</button>
+      <input type="file" id="postFileInput" accept="image/*" />
+      <textarea id="postCaptionInput" placeholder="Write a caption..." rows="3"></textarea>
+      <button class="btn-action" onclick="submitNewPost()">Share to Feed</button>
     </div>
   </div>
 
-  <div id="storyViewer" onclick="closeStoryViewer()">
-    <img id="activeStoryImg" src="" alt="Story" />
+  <!-- Upload Story Modal -->
+  <div class="modal-sheet" id="createStoryModal">
+    <div class="card-modal">
+      <i class="fa-solid fa-xmark close-icon" onclick="closeStoryModal()"></i>
+      <h3>Add to Your Story</h3>
+      <input type="file" id="storyFileInput" accept="image/*" />
+      <button class="btn-action" onclick="submitNewStory()">Share Story</button>
+    </div>
   </div>
 
-  <script src="js/master.js?v=master3"></script>
+  <!-- Fullscreen Story Viewer -->
+  <div id="storyPlayer" onclick="closeStoryViewer()">
+    <div class="story-progress-bar"><div class="story-progress-fill" id="storyFill"></div></div>
+    <div class="story-header-user">
+      <img id="storyViewerAvatar" src="" />
+      <span id="storyViewerName">user</span>
+    </div>
+    <img id="storyPlayerImg" src="" />
+  </div>
+
+  <script src="js/master.js?v=master4"></script>
 </body>
 </html>
