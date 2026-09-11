@@ -1043,3 +1043,187 @@ function loadSignupPhoto() {
 
 }
 
+
+
+/* ===== FORCE SIGNUP SCREEN ===== */
+
+window.showSignup = function () {
+
+  const login = document.getElementById("loginScreen");
+  const signup = document.getElementById("signupScreen");
+  const app = document.getElementById("mainApp");
+
+  if (login) login.style.display = "none";
+  if (app) app.style.display = "none";
+
+  if (signup) {
+    signup.style.display = "flex";
+    return;
+  }
+
+  alert("Signup screen code is not present in index.html. Run the latest index update.");
+};
+
+
+window.showLogin = function () {
+
+  const signup = document.getElementById("signupScreen");
+  const login = document.getElementById("loginScreen");
+
+  if (signup) signup.style.display = "none";
+  if (login) login.style.display = "flex";
+
+};
+
+
+window.chooseSignupPhoto = function () {
+
+  const input = document.createElement("input");
+
+  input.type = "file";
+  input.accept = "image/*";
+
+  input.onchange = function () {
+
+    const file = input.files[0];
+
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+
+      localStorage.setItem(
+        "picflow_signup_dp",
+        e.target.result
+      );
+
+      const preview =
+        document.getElementById("signupPhotoPreview");
+
+      if (preview) {
+        preview.innerHTML =
+          '<img src="' +
+          e.target.result +
+          '" alt="Profile photo">';
+      }
+
+    };
+
+    reader.readAsDataURL(file);
+
+  };
+
+  input.click();
+
+};
+
+
+window.createAccount = function () {
+
+  const username =
+    document.getElementById("signupUsername")?.value.trim();
+
+  const email =
+    document.getElementById("signupEmail")?.value.trim();
+
+  const mobile =
+    document.getElementById("signupMobile")?.value.trim();
+
+  const password =
+    document.getElementById("signupPassword")?.value;
+
+  const confirm =
+    document.getElementById("signupConfirmPassword")?.value;
+
+
+  if (!username) {
+    alert("Please enter username.");
+    return;
+  }
+
+  if (!email) {
+    alert("Please enter email.");
+    return;
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    alert("Please enter a valid email.");
+    return;
+  }
+
+  if (!/^[0-9]{10}$/.test(mobile)) {
+    alert("Please enter a valid 10 digit mobile number.");
+    return;
+  }
+
+  if (!password || password.length < 6) {
+    alert("Password must be at least 6 characters.");
+    return;
+  }
+
+  if (password !== confirm) {
+    alert("Passwords do not match.");
+    return;
+  }
+
+
+  localStorage.setItem("picflow_username", username);
+  localStorage.setItem("picflow_email", email);
+  localStorage.setItem("picflow_mobile", mobile);
+  localStorage.setItem("picflow_password", password);
+  localStorage.setItem("picflow_logged_in", "true");
+
+  const dp =
+    localStorage.getItem("picflow_signup_dp");
+
+  if (dp) {
+    localStorage.setItem("picflow_dp", dp);
+  }
+
+  localStorage.setItem(
+    "picflow_bio",
+    "Welcome to my PicFlow profile ✨"
+  );
+
+
+  alert("Account created successfully! 🎉");
+
+  if (typeof showMainApp === "function") {
+    showMainApp();
+  } else {
+    location.reload();
+  }
+
+};
+
+
+window.toggleSignupPassword = function () {
+
+  const input =
+    document.getElementById("signupPassword");
+
+  if (input) {
+    input.type =
+      input.type === "password"
+        ? "text"
+        : "password";
+  }
+
+};
+
+
+window.toggleConfirmPassword = function () {
+
+  const input =
+    document.getElementById("signupConfirmPassword");
+
+  if (input) {
+    input.type =
+      input.type === "password"
+        ? "text"
+        : "password";
+  }
+
+};
+
