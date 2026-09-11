@@ -44,12 +44,12 @@
     .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
     .post-user-text { display: flex; flex-direction: column; }
     .post-author { font-size: 13px; font-weight: 600; }
-    .post-audio-badge { font-size: 11px; color: #bbb; display: flex; align-items: center; gap: 5px; margin-top: 1px; cursor: pointer; }
+    .post-audio-badge { font-size: 11px; color: #3897f0; display: flex; align-items: center; gap: 5px; margin-top: 1px; cursor: pointer; }
     .post-more-btn { color: #888; cursor: pointer; font-size: 16px; }
 
     .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #0d0d0d; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .post-stage img { width: 100%; height: 100%; object-fit: cover; }
-    .post-audio-play-pill { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.7); padding: 5px 12px; border-radius: 14px; font-size: 11px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(5px); z-index: 5; }
+    .post-audio-play-pill { position: absolute; bottom: 12px; right: 12px; background: rgba(0,0,0,0.75); padding: 6px 14px; border-radius: 20px; font-size: 12px; display: flex; align-items: center; gap: 6px; backdrop-filter: blur(6px); z-index: 5; border: 1px solid rgba(255,255,255,0.15); }
     .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 10; }
     .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
 
@@ -135,11 +135,11 @@
     .btn-theme-secondary { width: 100%; padding: 9px; background: #262626; color: #3897f0; border: 1px solid #3897f0; font-weight: 600; border-radius: 6px; cursor: pointer; font-size: 13px; margin-bottom: 12px; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
 
-    /* Instagram Live Music Sheet & Genre Pills */
-    .music-picker-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 260; flex-direction: column; padding: 16px 14px; max-width: 480px; margin: 0 auto; }
+    /* Worldwide Music Picker Sheet */
+    .music-picker-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.96); z-index: 260; flex-direction: column; padding: 16px 14px; max-width: 480px; margin: 0 auto; }
     .music-picker-header { display: flex; justify-content: space-between; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #222; }
     .music-search-box { margin: 10px 0 6px; }
-    .music-search-box input { width: 100%; background: #222; border: 1px solid #333; border-radius: 8px; padding: 9px 12px; color: #fff; outline: none; font-size: 13px; }
+    .music-search-box input { width: 100%; background: #222; border: 1px solid #3897f0; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 13px; }
     
     .genre-pills-row { display: flex; gap: 8px; overflow-x: auto; padding: 6px 0 10px; scrollbar-width: none; }
     .genre-pills-row::-webkit-scrollbar { display: none; }
@@ -147,20 +147,20 @@
     .genre-pill.active { background: #0095f6; color: #fff; border-color: #0095f6; }
 
     .music-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-    .music-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #181818; border-radius: 8px; cursor: pointer; }
+    .music-item { display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: #161616; border-radius: 8px; cursor: pointer; border: 1px solid #242424; }
     .music-item-info { display: flex; align-items: center; gap: 12px; }
     .music-item-img { width: 44px; height: 44px; border-radius: 6px; object-fit: cover; }
-    .music-item-name { font-size: 13px; font-weight: 600; }
+    .music-item-name { font-size: 13px; font-weight: 600; color: #fff; }
     .music-item-artist { font-size: 11px; color: #888; }
     .music-item-play-btn { width: 32px; height: 32px; border-radius: 50%; background: #0095f6; display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; }
 
-    /* Story Player Viewer with Music Sticker */
+    /* Story Player Viewer */
     #storyViewerApp { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
     .story-progress-wire { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
     .story-progress-meter { width: 0%; height: 100%; background: #fff; transition: width 4.5s linear; }
     .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 10px; z-index: 10; font-size: 13px; font-weight: 600; }
     .story-author-tag img { width: 34px; height: 34px; border-radius: 50%; }
-    .story-music-sticker { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.2); }
+    .story-music-sticker { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); backdrop-filter: blur(8px); padding: 8px 16px; border-radius: 20px; display: flex; align-items: center; gap: 8px; font-size: 12px; z-index: 15; border: 1px solid rgba(255,255,255,0.2); }
     #storyViewerTargetImg { width: 100%; height: 100%; object-fit: contain; }
 
     /* Direct Messages Sheet */
@@ -178,9 +178,7 @@
 <body>
 
 <div class="app-root">
-  <audio id="feedAudioEngine" preload="auto"></audio>
-  <audio id="storyAudioEngine" preload="auto"></audio>
-  <audio id="reelsAudioEngine" preload="auto" loop></audio>
+  <audio id="globalAudioPlayer" preload="auto"></audio>
 
   <header>
     <div class="logo" onclick="switchView('feedTab')">PicFlow</div>
@@ -233,7 +231,7 @@
         <p class="reel-caption-text" id="reelCaptionContent">Caption text here...</p>
         <div class="reel-music-tag" onclick="toggleReelAudio(event)">
           <i class="fa-solid fa-music"></i>
-          <span id="reelAudioTitle">Trending Track</span>
+          <span id="reelAudioTitle">Trending Sound</span>
           <div class="reel-disc-icon">
             <i class="fa-solid fa-compact-disc" style="font-size: 11px;"></i>
           </div>
@@ -244,7 +242,7 @@
           <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
           <span id="reelLikesCount">45.2k</span>
         </div>
-        <div class="reel-action-bubble" onclick="alert('Reel comments: Pure Phonk & Bass! 🔥')">
+        <div class="reel-action-bubble" onclick="alert('Reel comments: Worldwide audio active!')">
           <i class="fa-regular fa-comment"></i>
           <span id="reelCommentCount">824</span>
         </div>
@@ -307,7 +305,7 @@
       <h3>Create New Post</h3>
       <input type="file" id="postImageUploadInput" accept="image/*" />
       <button class="btn-theme-secondary" onclick="openMusicPicker('post')">
-        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Song (Hindi/Eng/Phonk)</span>
+        <i class="fa-solid fa-music"></i> <span id="selectedPostMusicLabel">🎵 Select Any Song in the World</span>
       </button>
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" onclick="dispatchNewPost()">Share to Feed</button>
@@ -327,23 +325,23 @@
     </div>
   </div>
 
-  <!-- Instagram Live Searchable Music Picker Sheet with Genre Filter -->
+  <!-- Worldwide Searchable Music Picker Sheet -->
   <div class="music-picker-sheet" id="musicPickerSheet">
     <div class="music-picker-header">
-      <h4>Trending Instagram Music</h4>
+      <h4>Trending Worldwide Music</h4>
       <i class="fa-solid fa-xmark" style="font-size: 20px; cursor: pointer;" onclick="closeMusicPicker()"></i>
     </div>
     <div class="music-search-box">
-      <input type="text" id="liveMusicSearchInput" placeholder="🔍 Search any Hindi, English, Phonk, Punjabi..." oninput="debounceMusicSearch()" />
+      <input type="text" id="liveMusicSearchInput" placeholder="🔍 Search any Hindi, English, Phonk, Punjabi..." oninput="handleMusicSearchInput()" />
     </div>
     
-    <!-- Genre Quick Filter Pills -->
     <div class="genre-pills-row">
-      <div class="genre-pill active" onclick="switchMusicGenre('all', this)">🔥 All Trending</div>
-      <div class="genre-pill" onclick="switchMusicGenre('hindi', this)">🇮🇳 Hindi Bollywood</div>
-      <div class="genre-pill" onclick="switchMusicGenre('phonk', this)">⚡ Phonk / Drift</div>
-      <div class="genre-pill" onclick="switchMusicGenre('english', this)">🌍 English Pop</div>
-      <div class="genre-pill" onclick="switchMusicGenre('punjabi', this)">🕺 Punjabi Hits</div>
+      <div class="genre-pill active" onclick="loadGenreSongs('trending', this)">🔥 Trending</div>
+      <div class="genre-pill" onclick="loadGenreSongs('arijit', this)">🇮🇳 Arijit Singh</div>
+      <div class="genre-pill" onclick="loadGenreSongs('phonk', this)">⚡ Phonk / Drift</div>
+      <div class="genre-pill" onclick="loadGenreSongs('punjabi', this)">🕺 Punjabi Hits</div>
+      <div class="genre-pill" onclick="loadGenreSongs('the weeknd', this)">🌍 English Hits</div>
+      <div class="genre-pill" onclick="loadGenreSongs('kpop', this)">✨ K-Pop</div>
     </div>
 
     <div class="music-list" id="musicListContainer"></div>
@@ -386,8 +384,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Hindi, English aur Phonk songs add ho gaye hain 🎵🔥</div>
-      <div class="chat-bubble them">Reels aur posts pe loud and clear sound baj raha hai!</div>
+      <div class="chat-bubble them">Hey Subbhu! Worldwide unlimited music connected 🎵🔥</div>
+      <div class="chat-bubble them">Koi bhi gaana search karke real play karo!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -397,122 +395,52 @@
 </div>
 
 <script>
-// ==================== MULTI-GENRE MUSIC VAULT ====================
-const MUSIC_VAULT = [
-  // --- HINDI BOLLYWOOD ---
+// ==================== UNRESTRICTED WORLDWIDE MUSIC ENGINE ====================
+// Uses JSONP callback to bypass browser CORS block 100% reliably
+const globalAudio = document.getElementById("globalAudioPlayer");
+
+const DEFAULT_PRESET_TRACKS = [
   {
-    id: "h_1",
-    genre: "hindi",
     title: "Apna Bana Le",
-    artist: "Arijit Singh & Sachin-Jigar",
+    artist: "Arijit Singh",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/ec/3b/b7/ec3bb748-024a-c013-176b-3142750352ef/8902894362145_cover.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/a4/09/25/a40925ea-0c4a-67c4-0b19-f538ee5c7bc5/mzaf_13506145324546419163.plus.aac.p.m4a"
   },
   {
-    id: "h_2",
-    genre: "hindi",
-    title: "Chaleya (Jawan)",
-    artist: "Anirudh Ravichander & Arijit",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/05/cf/b9/05cfb90a-115f-5bc0-ee97-3f3d5386db49/8902894364408_cover.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/e5/2c/b6/e52cb66a-d242-7efc-d102-3c22ad65b630/mzaf_16201386762495393169.plus.aac.p.m4a"
-  },
-  {
-    id: "h_3",
-    genre: "hindi",
-    title: "Satranga (Animal)",
-    artist: "Arijit Singh",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/10/d7/a7/10d7a7ae-a6f9-0115-d72b-8ef6420ce29d/8902894365771_cover.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/b5/02/76/b50276d4-8979-450a-e24c-e652c6f11100/mzaf_1241199321481745269.plus.aac.p.m4a"
-  },
-
-  // --- PHONK / DRIFT / BASS ---
-  {
-    id: "p_1",
-    genre: "phonk",
     title: "Murder In My Mind",
-    artist: "KORDHELL (Phonk King)",
+    artist: "KORDHELL (Phonk)",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music122/v4/44/2c/c3/442cc3d9-40c2-5503-7cb7-0db7f94bb403/5063010190539_cover.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview112/v4/91/3c/69/913c6905-eb8b-cce0-128b-6101fe80b91e/mzaf_14002360527411649982.plus.aac.p.m4a"
   },
   {
-    id: "p_2",
-    genre: "phonk",
-    title: "Metamorphosis",
-    artist: "INTERWORLD (Drift Phonk)",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music112/v4/a4/09/a6/a409a6fc-6e54-7f15-0d67-ce6a1ebef03f/cover.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview122/v4/e5/5d/20/e55d209d-cb9e-71c1-4b20-6d4b533cbdbf/mzaf_11306351703273185564.plus.aac.p.m4a"
-  },
-  {
-    id: "p_3",
-    genre: "phonk",
-    title: "Sahara (Slowed + Bass)",
-    artist: "Hensonn Phonk",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/36/45/be/3645be37-a169-23f2-1b15-9c95ff9c7423/artwork.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/33/c4/62/33c46237-7751-bb44-4fe2-3d85d7b5bfdc/mzaf_10014798363385750242.plus.aac.p.m4a"
-  },
-
-  // --- ENGLISH POP & HIP-HOP ---
-  {
-    id: "e_1",
-    genre: "english",
     title: "Starboy",
-    artist: "The Weeknd ft. Daft Punk",
+    artist: "The Weeknd",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/4c/76/8a/4c768a41-c887-b952-b91c-1e8df782e4e1/16UMGIM56449.rgb.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview125/v4/7c/ce/0c/7cce0c27-ce3c-1b77-3e81-cfdc7c569ff4/mzaf_7862788583696803875.plus.aac.p.m4a"
   },
   {
-    id: "e_2",
-    genre: "english",
-    title: "Levitating",
-    artist: "Dua Lipa",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music115/v4/41/49/a0/4149a0d3-3561-1ff5-bc09-5c1285223c34/190295286101.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/03/ce/b1/03ceb1fb-429f-3e8c-8f92-ec225139a665/mzaf_14467389146039578665.plus.aac.p.m4a"
-  },
-  {
-    id: "e_3",
-    genre: "english",
-    title: "Blinding Lights",
-    artist: "The Weeknd",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music125/v4/b9/49/cf/b949cf9d-dcbf-450f-0546-24f0a9bfd5d7/19UMGIM95155.rgb.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview115/v4/10/7c/27/107c2763-71ea-275d-ae4c-4a307c92b0c3/mzaf_8422409555239109723.plus.aac.p.m4a"
-  },
-
-  // --- PUNJABI TRENDING ---
-  {
-    id: "pu_1",
-    genre: "punjabi",
     title: "Softly",
-    artist: "Karan Aujla & Ikky",
+    artist: "Karan Aujla",
     cover: "https://is1-ssl.mzstatic.com/image/thumb/Music126/v4/44/e9/a5/44e9a5c8-1002-861f-1c4e-28d8f3769152/197189196144.jpg/100x100bb.jpg",
     url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview116/v4/1b/38/c2/1b38c267-27b9-d8c8-f9b9-11c504064d4b/mzaf_10526012975924765796.plus.aac.p.m4a"
-  },
-  {
-    id: "pu_2",
-    genre: "punjabi",
-    title: "Cheques",
-    artist: "Shubh",
-    cover: "https://is1-ssl.mzstatic.com/image/thumb/Music116/v4/03/6a/d7/036ad706-e770-5ce3-d250-bc2f40078ce0/197188730240.jpg/100x100bb.jpg",
-    url: "https://audio-ssl.itunes.apple.com/itunes-assets/AudioPreview126/v4/03/a3/b9/03a3b9eb-a4ca-99b0-ae40-e2ff01c65ff6/mzaf_15024734346765778855.plus.aac.p.m4a"
   }
 ];
 
 let musicPickerTarget = "post";
-let currentGenreFilter = "all";
-let selectedPostMusic = MUSIC_VAULT[0];
-let selectedStoryMusic = MUSIC_VAULT[3]; // Default Phonk for story
-let searchDebounceTimer = null;
+let selectedPostMusic = DEFAULT_PRESET_TRACKS[0];
+let selectedStoryMusic = DEFAULT_PRESET_TRACKS[1];
+let searchTimeout = null;
 
-function renderMusicList(items) {
+function renderMusicList(tracks) {
   const container = document.getElementById("musicListContainer");
-  const list = items || (currentGenreFilter === "all" ? MUSIC_VAULT : MUSIC_VAULT.filter(m => m.genre === currentGenreFilter));
-  
+  const list = tracks || DEFAULT_PRESET_TRACKS;
   if (!list.length) {
-    container.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Koi song nahi mila, search karein...</div>`;
+    container.innerHTML = `<div style="text-align:center; padding:30px; color:#888;">Koi song nahi mila. Doosra naam type karein.</div>`;
     return;
   }
 
-  container.innerHTML = list.map(m => `
-    <div class="music-item" onclick="chooseMusicTrack('${encodeURIComponent(JSON.stringify(m))}')">
+  container.innerHTML = list.map((m, idx) => `
+    <div class="music-item" onclick="chooseTrackByIndex(${idx})">
       <div class="music-item-info">
         <img src="${m.cover}" class="music-item-img" />
         <div>
@@ -520,38 +448,17 @@ function renderMusicList(items) {
           <div class="music-item-artist">${m.artist}</div>
         </div>
       </div>
-      <div class="music-item-play-btn">
+      <div class="music-item-play-btn" onclick="event.stopPropagation(); previewMusic('${m.url}')">
         <i class="fa-solid fa-play"></i>
       </div>
     </div>
   `).join("");
 }
 
-function switchMusicGenre(genre, pillEl) {
-  currentGenreFilter = genre;
-  document.querySelectorAll(".genre-pill").forEach(p => p.classList.remove("active"));
-  pillEl.classList.add("active");
-  document.getElementById("liveMusicSearchInput").value = "";
-  renderMusicList();
-}
+let activeMusicList = DEFAULT_PRESET_TRACKS;
 
-function openMusicPicker(target) {
-  musicPickerTarget = target;
-  document.getElementById("liveMusicSearchInput").value = "";
-  currentGenreFilter = "all";
-  document.querySelectorAll(".genre-pill").forEach((p, idx) => {
-    idx === 0 ? p.classList.add("active") : p.classList.remove("active");
-  });
-  renderMusicList();
-  document.getElementById("musicPickerSheet").style.display = "flex";
-}
-
-function closeMusicPicker() {
-  document.getElementById("musicPickerSheet").style.display = "none";
-}
-
-function chooseMusicTrack(encodedJson) {
-  const track = JSON.parse(decodeURIComponent(encodedJson));
+function chooseTrackByIndex(idx) {
+  const track = activeMusicList[idx];
   if (musicPickerTarget === "post") {
     selectedPostMusic = track;
     document.getElementById("selectedPostMusicLabel").innerText = `🎵 ${track.title} - ${track.artist}`;
@@ -559,47 +466,81 @@ function chooseMusicTrack(encodedJson) {
     selectedStoryMusic = track;
     document.getElementById("selectedStoryMusicLabel").innerText = `🎵 ${track.title} - ${track.artist}`;
   }
+  globalAudio.pause();
   closeMusicPicker();
 }
 
-// Global Search via Apple Music API (Hindi, English, Phonk, Punjabi)
-function debounceMusicSearch() {
-  clearTimeout(searchDebounceTimer);
-  searchDebounceTimer = setTimeout(runGlobalSearch, 380);
+function previewMusic(url) {
+  if (!globalAudio.paused && globalAudio.src === url) {
+    globalAudio.pause();
+  } else {
+    globalAudio.src = url;
+    globalAudio.play().catch(() => {});
+  }
 }
 
-function runGlobalSearch() {
+// JSONP Worldwide Search: Works on all networks & devices without CORS errors
+window.handleITunesResponse = function(data) {
+  if (data && data.results && data.results.length > 0) {
+    activeMusicList = data.results.filter(r => r.previewUrl).map(r => ({
+      title: r.trackName,
+      artist: r.artistName,
+      cover: r.artworkUrl100 || "https://picsum.photos/100/100",
+      url: r.previewUrl
+    }));
+    renderMusicList(activeMusicList);
+  } else {
+    renderMusicList([]);
+  }
+};
+
+function searchWorldwideMusic(query) {
+  const container = document.getElementById("musicListContainer");
+  container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Fetching worldwide music...</div>`;
+
+  const oldScript = document.getElementById("jsonp-itunes");
+  if (oldScript) oldScript.remove();
+
+  const script = document.createElement("script");
+  script.id = "jsonp-itunes";
+  script.src = `https://itunes.apple.com/search?term=${encodeURIComponent(query)}&entity=song&limit=25&callback=handleITunesResponse`;
+  document.body.appendChild(script);
+}
+
+function handleMusicSearchInput() {
+  clearTimeout(searchTimeout);
   const q = document.getElementById("liveMusicSearchInput").value.trim();
   if (!q) {
-    renderMusicList();
+    activeMusicList = DEFAULT_PRESET_TRACKS;
+    renderMusicList(DEFAULT_PRESET_TRACKS);
     return;
   }
-  const container = document.getElementById("musicListContainer");
-  container.innerHTML = `<div style="text-align:center; padding:30px; color:#aaa;"><i class="fa-solid fa-spinner fa-spin"></i> Searching hits...</div>`;
+  searchTimeout = setTimeout(() => searchWorldwideMusic(q), 350);
+}
 
-  fetch(`https://itunes.apple.com/search?term=${encodeURIComponent(q)}&entity=song&limit=20`)
-    .then(r => r.json())
-    .then(data => {
-      if (data.results && data.results.length > 0) {
-        const mapped = data.results.map((r, i) => ({
-          id: "search_" + i + "_" + r.trackId,
-          title: r.trackName,
-          artist: r.artistName,
-          cover: r.artworkUrl100 || "https://picsum.photos/100/100",
-          url: r.previewUrl
-        }));
-        renderMusicList(mapped);
-      } else {
-        renderMusicList([]);
-      }
-    })
-    .catch(() => {
-      const fallback = MUSIC_VAULT.filter(m => 
-        m.title.toLowerCase().includes(q.toLowerCase()) || 
-        m.artist.toLowerCase().includes(q.toLowerCase())
-      );
-      renderMusicList(fallback);
-    });
+function loadGenreSongs(query, pillEl) {
+  document.querySelectorAll(".genre-pill").forEach(p => p.classList.remove("active"));
+  pillEl.classList.add("active");
+  document.getElementById("liveMusicSearchInput").value = "";
+  if (query === "trending") {
+    activeMusicList = DEFAULT_PRESET_TRACKS;
+    renderMusicList(DEFAULT_PRESET_TRACKS);
+  } else {
+    searchWorldwideMusic(query);
+  }
+}
+
+function openMusicPicker(target) {
+  musicPickerTarget = target;
+  document.getElementById("liveMusicSearchInput").value = "";
+  activeMusicList = DEFAULT_PRESET_TRACKS;
+  renderMusicList(DEFAULT_PRESET_TRACKS);
+  document.getElementById("musicPickerSheet").style.display = "flex";
+}
+
+function closeMusicPicker() {
+  globalAudio.pause();
+  document.getElementById("musicPickerSheet").style.display = "none";
 }
 
 // ==================== IMAGE COMPRESSION ====================
@@ -647,28 +588,28 @@ const SEED_POSTS = [
     likes: 420,
     liked: false,
     saved: false,
-    caption: "Murder In My Mind - Phonk Edition on PicFlow! Tap photo to turn on Bass ⚡🏎️",
-    comments: ["Pure Phonk energy!", "Sound quality is fire 🔥"],
-    music: MUSIC_VAULT[3], // Kordhell Phonk
+    caption: "Worldwide Music Engine Active on PicFlow! Tap photo or audio pill to listen 🎵⚡",
+    comments: ["Sound is working so crisp!", "Best music player update 🔥"],
+    music: DEFAULT_PRESET_TRACKS[0],
     date: "JUST NOW"
   }
 ];
 
 const SEED_STORIES = [
-  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: MUSIC_VAULT[0] },
-  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: MUSIC_VAULT[6] }
+  { id: 1, user: "Your story", avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR, img: "https://picsum.photos/800/1200?random=191", music: DEFAULT_PRESET_TRACKS[1] },
+  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192", music: DEFAULT_PRESET_TRACKS[2] }
 ];
 
 const SEED_NOTIFS = [
-  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your phonk track.", time: "1m", isFollow: false },
+  { id: 1, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", text: "liked your post track.", time: "1m", isFollow: false },
   { id: 2, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", text: "started following you.", time: "30m", isFollow: true }
 ];
 
-let posts = JSON.parse(localStorage.getItem("pf_v16_posts")) || SEED_POSTS;
-let stories = JSON.parse(localStorage.getItem("pf_v16_stories")) || SEED_STORIES;
-let userProfile = JSON.parse(localStorage.getItem("pf_v16_profile")) || {
+let posts = JSON.parse(localStorage.getItem("pf_v17_posts")) || SEED_POSTS;
+let stories = JSON.parse(localStorage.getItem("pf_v17_stories")) || SEED_STORIES;
+let userProfile = JSON.parse(localStorage.getItem("pf_v17_profile")) || {
   name: "Subbhu7077",
-  bio: "Photographer | Phonk, Hindi & English Hits ⚡",
+  bio: "Photographer | Music & Tech Enthusiast ⚡",
   avatar: DEFAULT_AVATAR
 };
 
@@ -679,9 +620,9 @@ if (SAVED_PERMANENT_DP) {
 function saveState() {
   try {
     localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    localStorage.setItem("pf_v16_posts", JSON.stringify(posts));
-    localStorage.setItem("pf_v16_stories", JSON.stringify(stories));
-    localStorage.setItem("pf_v16_profile", JSON.stringify(userProfile));
+    localStorage.setItem("pf_v17_posts", JSON.stringify(posts));
+    localStorage.setItem("pf_v17_stories", JSON.stringify(stories));
+    localStorage.setItem("pf_v17_profile", JSON.stringify(userProfile));
   } catch(e) {
     console.warn("Storage quota:", e);
   }
@@ -694,7 +635,7 @@ function switchView(viewId) {
   if (el) el.classList.add("active");
   window.scrollTo({ top: 0, behavior: "smooth" });
 
-  stopFeedAudio();
+  globalAudio.pause();
 
   if (viewId === "exploreTab") renderExploreGrid();
   if (viewId === "profileTab") renderProfileSection();
@@ -711,34 +652,22 @@ function switchView(viewId) {
   }
 }
 
-// ==================== FEED & AUDIO ====================
-let activePlayingPostId = null;
-const feedAudioEngine = document.getElementById("feedAudioEngine");
+// ==================== FEED & AUDIO PLAYBACK ====================
+let currentPlayingPostId = null;
 
 function togglePostAudio(postId, audioUrl) {
-  if (activePlayingPostId === postId && !feedAudioEngine.paused) {
-    feedAudioEngine.pause();
-    activePlayingPostId = null;
+  if (currentPlayingPostId === postId && !globalAudio.paused) {
+    globalAudio.pause();
+    currentPlayingPostId = null;
     renderFeed();
   } else {
-    feedAudioEngine.src = audioUrl;
-    feedAudioEngine.currentTime = 0;
-    feedAudioEngine.play()
-      .then(() => {
-        activePlayingPostId = postId;
-        renderFeed();
-      })
-      .catch(e => {
-        console.log("Audio play gesture needed:", e);
-        alert("Audio play karne ke liye ek baar screen par tap karein!");
-      });
-  }
-}
-
-function stopFeedAudio() {
-  if (feedAudioEngine) {
-    feedAudioEngine.pause();
-    activePlayingPostId = null;
+    globalAudio.src = audioUrl;
+    globalAudio.play().then(() => {
+      currentPlayingPostId = postId;
+      renderFeed();
+    }).catch(e => {
+      console.log("Audio play gesture needed:", e);
+    });
   }
 }
 
@@ -746,7 +675,7 @@ function renderFeed() {
   const wall = document.getElementById("postsContainer");
   if (!wall) return;
   wall.innerHTML = posts.map(p => {
-    const isPlaying = activePlayingPostId === p.id && feedAudioEngine && !feedAudioEngine.paused;
+    const isPlaying = currentPlayingPostId === p.id && !globalAudio.paused;
     return `
     <article class="post-block" id="post-${p.id}">
       <div class="post-top">
@@ -764,8 +693,8 @@ function renderFeed() {
         <img src="${p.image}" loading="lazy" />
         ${p.music ? `
           <div class="post-audio-play-pill">
-            <i class="fa-solid ${isPlaying ? 'fa-volume-high' : 'fa-volume-xmark'}"></i>
-            <span>${isPlaying ? 'Playing Audio' : 'Tap for Sound'}</span>
+            <i class="fa-solid ${isPlaying ? 'fa-volume-high' : 'fa-play'}"></i>
+            <span>${isPlaying ? 'Playing Audio' : 'Play Music'}</span>
           </div>
         ` : ''}
         <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
@@ -862,8 +791,6 @@ function removePost(id) {
 }
 
 // ==================== STORIES ====================
-const storyAudioEngine = document.getElementById("storyAudioEngine");
-
 function renderStories() {
   const container = document.getElementById("storiesTray");
   if (!container) return;
@@ -901,9 +828,9 @@ function triggerStoryPlayer(imgUrl, userName, avatarUrl, musicUrl, musicTitle) {
   document.getElementById("storyTargetUserAvatar").src = avatarUrl;
 
   if (musicUrl) {
-    storyAudioEngine.src = musicUrl;
-    storyAudioEngine.currentTime = 0;
-    storyAudioEngine.play().catch(e => console.log("Story audio gesture:", e));
+    globalAudio.src = musicUrl;
+    globalAudio.currentTime = 0;
+    globalAudio.play().catch(() => {});
     musicSticker.style.display = "flex";
     document.getElementById("storyMusicTitle").innerText = musicTitle;
   } else {
@@ -920,21 +847,21 @@ function triggerStoryPlayer(imgUrl, userName, avatarUrl, musicUrl, musicTitle) {
 
 function closeStoryPlayerApp() {
   clearTimeout(storyTimer);
-  storyAudioEngine.pause();
+  globalAudio.pause();
   document.getElementById("storyViewerApp").style.display = "none";
   document.getElementById("storyMeterFill").style.width = "0%";
 }
 
-// ==================== REAL REELS WITH PHONK, HINDI, ENGLISH ====================
+// ==================== REAL REELS PLAYER ====================
 const REEL_DATABASE = [
   {
     id: "reel_1",
     video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
     user: "@subbhu_vibes",
     avatar: SAVED_PERMANENT_DP || DEFAULT_AVATAR,
-    caption: "Apna Bana Le sunset therapy 🌊✨ #bollywood #hindi",
+    caption: "Ocean therapy with Arijit Singh vibes 🌊✨ #beach #music",
     audio: "Apna Bana Le - Arijit Singh",
-    audioUrl: MUSIC_VAULT[0].url,
+    audioUrl: DEFAULT_PRESET_TRACKS[0].url,
     likes: "58.2k",
     comments: "824",
     liked: false
@@ -946,7 +873,7 @@ const REEL_DATABASE = [
     avatar: "https://picsum.photos/100/100?random=2",
     caption: "Night drift mode on 🏎️💨 Kordhell Phonk bass boost! #phonk #drift",
     audio: "Murder In My Mind - KORDHELL",
-    audioUrl: MUSIC_VAULT[3].url,
+    audioUrl: DEFAULT_PRESET_TRACKS[1].url,
     likes: "124.8k",
     comments: "3.2k",
     liked: false
@@ -958,7 +885,7 @@ const REEL_DATABASE = [
     avatar: "https://picsum.photos/100/100?random=3",
     caption: "Golden hour skate vibes with The Weeknd 🛹🔥 #english #starboy",
     audio: "Starboy - The Weeknd",
-    audioUrl: MUSIC_VAULT[6].url,
+    audioUrl: DEFAULT_PRESET_TRACKS[2].url,
     likes: "74.1k",
     comments: "940",
     liked: false
@@ -969,14 +896,13 @@ let activeReelIndex = 0;
 let isReelMuted = false;
 let reelTapTimer = null;
 const reelVideoEl = document.getElementById("reelActiveVideo");
-const reelsAudioEngine = document.getElementById("reelsAudioEngine");
 
 function mountReel(index) {
   const data = REEL_DATABASE[index];
   reelVideoEl.src = data.video;
   reelVideoEl.muted = true;
-  reelsAudioEngine.src = data.audioUrl;
-  reelsAudioEngine.muted = isReelMuted;
+  globalAudio.src = data.audioUrl;
+  globalAudio.muted = isReelMuted;
   
   document.getElementById("reelAuthorName").innerText = data.user;
   document.getElementById("reelUserAvatar").src = data.avatar;
@@ -999,14 +925,14 @@ function playCurrentReel() {
   if (document.getElementById("reelsTab").classList.contains("active")) {
     reelVideoEl.play().catch(() => {});
     if (!isReelMuted) {
-      reelsAudioEngine.play().catch(() => {});
+      globalAudio.play().catch(() => {});
     }
   }
 }
 
 function pauseCurrentReel() {
   reelVideoEl.pause();
-  reelsAudioEngine.pause();
+  globalAudio.pause();
 }
 
 function advanceReel(step) {
@@ -1021,11 +947,11 @@ function handleReelTap(e) {
     const playIcon = document.getElementById("reelPlayStateIcon");
     if (reelVideoEl.paused) {
       reelVideoEl.play();
-      if (!isReelMuted) reelsAudioEngine.play();
+      if (!isReelMuted) globalAudio.play();
       playIcon.className = "fa-solid fa-play reel-floating-state-icon show";
     } else {
       reelVideoEl.pause();
-      reelsAudioEngine.pause();
+      globalAudio.pause();
       playIcon.className = "fa-solid fa-pause reel-floating-state-icon show";
     }
     setTimeout(() => playIcon.classList.remove("show"), 500);
@@ -1061,14 +987,14 @@ function toggleCurrentReelLike() {
 function toggleReelAudio(e) {
   e.stopPropagation();
   isReelMuted = !isReelMuted;
-  reelsAudioEngine.muted = isReelMuted;
+  globalAudio.muted = isReelMuted;
   const icon = document.getElementById("reelMuteIcon");
   if (isReelMuted) {
     icon.className = "fa-solid fa-volume-xmark";
-    reelsAudioEngine.pause();
+    globalAudio.pause();
   } else {
     icon.className = "fa-solid fa-volume-high";
-    reelsAudioEngine.play().catch(() => {});
+    globalAudio.play().catch(() => {});
   }
 }
 
@@ -1175,7 +1101,7 @@ function handleDirectDP(event) {
   });
 }
 
-// ==================== POST & STORY UPLOAD WITH PHONK/HINDI/ENG ====================
+// ==================== POST & STORY UPLOAD ====================
 function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
 function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
 
@@ -1302,7 +1228,7 @@ function dispatchDirectMessage() {
   }, 600);
 }
 
-// ==================== BOOT ====================
+// ==================== INITIAL BOOT ====================
 window.addEventListener("DOMContentLoaded", () => {
   renderProfileSection();
   renderStories();
