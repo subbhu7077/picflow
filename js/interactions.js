@@ -370,7 +370,7 @@
     } else {
 
       comments.forEach(
-        function (item) {
+        async function (item) {
 
           const row =
             document.createElement("div");
