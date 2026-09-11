@@ -1,0 +1,602 @@
+/* =========================================
+   PICFLOW — GLOBAL STYLES
+========================================= */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f7f7f7;
+    color: #111;
+    min-height: 100vh;
+}
+
+
+/* =========================================
+   TOP BAR
+========================================= */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+
+    height: 62px;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 0 18px;
+
+    background: rgba(255, 255, 255, 0.96);
+    border-bottom: 1px solid #e5e5e5;
+    backdrop-filter: blur(12px);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 28px;
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: transform 0.2s ease;
+}
+
+.icon-btn:active {
+    transform: scale(0.8);
+}
+
+
+/* =========================================
+   MAIN APP
+========================================= */
+
+.app {
+    width: 100%;
+    max-width: 620px;
+    margin: 0 auto;
+
+    padding-bottom: 90px;
+}
+
+
+/* =========================================
+   STORIES
+========================================= */
+
+.stories-section {
+    background: #fff;
+    border-bottom: 1px solid #e5e5e5;
+
+    padding: 13px 0;
+}
+
+.stories {
+    display: flex;
+    gap: 15px;
+
+    overflow-x: auto;
+    padding: 0 15px;
+
+    scrollbar-width: none;
+}
+
+.stories::-webkit-scrollbar {
+    display: none;
+}
+
+.story {
+    min-width: 70px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    gap: 6px;
+
+    cursor: pointer;
+}
+
+.story span {
+    width: 70px;
+
+    text-align: center;
+
+    font-size: 12px;
+
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.story-circle {
+    width: 62px;
+    height: 62px;
+
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 23px;
+    font-weight: 700;
+
+    background: #eee;
+
+    border: 3px solid #fff;
+}
+
+.gradient {
+    background: linear-gradient(
+        135deg,
+        #ffcc70,
+        #ff4d6d,
+        #8e44ad
+    );
+
+    color: #fff;
+
+    outline: 2px solid #ff4d6d;
+}
+
+.add-story .story-circle {
+    background: #111;
+    color: #fff;
+}
+
+
+/* =========================================
+   POST
+========================================= */
+
+.post {
+    background: #fff;
+
+    margin-bottom: 10px;
+
+    border-bottom: 1px solid #ddd;
+}
+
+.post-header {
+    height: 62px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 8px 14px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+
+    border-radius: 50%;
+
+    background: linear-gradient(
+        135deg,
+        #111,
+        #777
+    );
+
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-weight: 700;
+}
+
+.user-info strong {
+    display: block;
+    font-size: 14px;
+}
+
+.user-info small {
+    display: block;
+
+    margin-top: 2px;
+
+    font-size: 11px;
+    color: #777;
+}
+
+.more-btn {
+    border: none;
+    background: transparent;
+
+    font-size: 25px;
+
+    cursor: pointer;
+
+    padding: 5px 8px;
+}
+
+
+/* =========================================
+   POST IMAGE
+========================================= */
+
+.post-image {
+    width: 100%;
+
+    background: #eee;
+
+    overflow: hidden;
+}
+
+.post-image img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    aspect-ratio: 1 / 1;
+
+    object-fit: cover;
+
+    transition: transform 0.3s ease;
+}
+
+.post-image img:hover {
+    transform: scale(1.01);
+}
+
+
+/* =========================================
+   POST ACTIONS
+========================================= */
+
+.post-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    padding: 9px 13px 4px;
+}
+
+.left-actions {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.action-btn {
+    width: 42px;
+    height: 42px;
+
+    border: none;
+    background: transparent;
+
+    font-size: 28px;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.action-btn:active {
+    transform: scale(0.78);
+}
+
+.save-btn {
+    font-size: 25px;
+}
+
+
+/* =========================================
+   LIKES
+========================================= */
+
+.likes {
+    padding: 0 14px;
+
+    font-size: 14px;
+}
+
+.like-count {
+    font-weight: 700;
+}
+
+
+/* =========================================
+   CAPTION
+========================================= */
+
+.caption {
+    padding: 7px 14px 0;
+
+    font-size: 14px;
+
+    line-height: 21px;
+}
+
+.caption strong {
+    margin-right: 5px;
+}
+
+.hashtags {
+    display: block;
+
+    color: #555;
+
+    margin-top: 2px;
+}
+
+
+/* =========================================
+   COMMENTS
+========================================= */
+
+.comments-btn {
+    border: none;
+    background: transparent;
+
+    padding: 8px 14px;
+
+    color: #777;
+
+    font-size: 14px;
+
+    cursor: pointer;
+}
+
+
+/* =========================================
+   TIME
+========================================= */
+
+.time {
+    padding: 0 14px 14px;
+
+    color: #999;
+
+    font-size: 9px;
+
+    letter-spacing: 0.4px;
+}
+
+
+/* =========================================
+   BOTTOM NAVIGATION
+========================================= */
+
+.bottom-nav {
+    position: fixed;
+
+    left: 0;
+    bottom: 0;
+
+    z-index: 1000;
+
+    width: 100%;
+    height: 68px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+
+    background: rgba(255, 255, 255, 0.97);
+
+    border-top: 1px solid #ddd;
+
+    backdrop-filter: blur(12px);
+}
+
+.nav-btn {
+    position: relative;
+
+    width: 20%;
+    height: 100%;
+
+    border: none;
+    background: transparent;
+
+    cursor: pointer;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+
+    color: #777;
+
+    transition:
+        transform 0.15s ease,
+        color 0.15s ease;
+}
+
+.nav-btn span {
+    font-size: 25px;
+    line-height: 25px;
+}
+
+.nav-btn small {
+    font-size: 9px;
+}
+
+.nav-btn.active {
+    color: #111;
+    font-weight: 700;
+}
+
+.nav-btn:active {
+    transform: scale(0.85);
+}
+
+.create-btn span {
+    width: 39px;
+    height: 39px;
+
+    border-radius: 12px;
+
+    background: #111;
+    color: #fff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 27px;
+}
+
+
+/* =========================================
+   TOAST
+========================================= */
+
+.toast {
+    position: fixed;
+
+    left: 50%;
+    bottom: 85px;
+
+    transform: translate(-50%, 20px);
+
+    z-index: 2000;
+
+    background: #111;
+    color: #fff;
+
+    padding: 11px 18px;
+
+    border-radius: 25px;
+
+    font-size: 13px;
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        transform 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.toast.show {
+    opacity: 1;
+    visibility: visible;
+
+    transform: translate(-50%, 0);
+}
+
+
+/* =========================================
+   TABLET / DESKTOP
+========================================= */
+
+@media (min-width: 700px) {
+
+    body {
+        background: #eeeeee;
+    }
+
+    .topbar {
+        position: sticky;
+
+        max-width: 620px;
+
+        margin: 0 auto;
+    }
+
+    .stories-section {
+        border: 1px solid #ddd;
+    }
+
+    .post {
+        border: 1px solid #ddd;
+
+        border-radius: 4px;
+
+        margin-top: 15px;
+        margin-bottom: 15px;
+
+        overflow: hidden;
+    }
+
+    .bottom-nav {
+        max-width: 620px;
+
+        left: 50%;
+
+        transform: translateX(-50%);
+
+        border-left: 1px solid #ddd;
+        border-right: 1px solid #ddd;
+    }
+}
+
+
+/* =========================================
+   ACCESSIBILITY
+========================================= */
+
+button {
+    -webkit-tap-highlight-color: transparent;
+}
+
+img {
+    user-select: none;
+    -webkit-user-drag: none;
+}
+
+
+/* =========================================
+   DARK MODE PREPARATION
+========================================= */
+
+@media (prefers-color-scheme: dark) {
+
+    /*
+       Dark mode intentionally disabled for now.
+       We will add PicFlow's custom dark mode
+       in a later version.
+    */
+
+}
