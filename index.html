@@ -3,75 +3,97 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Official Verified</title>
+  <title>PicFlow - Verified Official</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: #000; color: #fff; padding-bottom: 58px; overflow-x: hidden; }
+    :root {
+      --bg-color: #000000;
+      --card-bg: #121212;
+      --card-sub-bg: #1a1a1a;
+      --border-color: #1c1c1c;
+      --text-color: #ffffff;
+      --sub-text: #888888;
+      --input-bg: #222222;
+      --hover-bg: #262626;
+      --brand-blue: #0095f6;
+    }
 
-    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
+    body.light-theme {
+      --bg-color: #ffffff;
+      --card-bg: #fafafa;
+      --card-sub-bg: #f0f0f0;
+      --border-color: #dbdbdb;
+      --text-color: #262626;
+      --sub-text: #737373;
+      --input-bg: #efefef;
+      --hover-bg: #e5e5e5;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: var(--bg-color); color: var(--text-color); padding-bottom: 58px; overflow-x: hidden; transition: background 0.2s ease, color 0.2s ease; }
+
+    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg-color); position: relative; }
 
     /* Top Bar */
-    header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid #1c1c1c; z-index: 90; }
-    .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; }
+    header { position: sticky; top: 0; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-color); z-index: 90; }
+    .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; color: var(--text-color); }
     .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; }
-    .header-actions i { cursor: pointer; position: relative; }
+    .header-actions i { cursor: pointer; position: relative; color: var(--text-color); }
     .notif-badge { position: absolute; top: -5px; right: -6px; background: #ed4956; width: 8px; height: 8px; border-radius: 50%; }
 
-    .verified-tick { color: #0095f6; font-size: 13px; margin-left: 4px; display: inline-flex; align-items: center; }
+    .verified-tick { color: var(--brand-blue); font-size: 13px; margin-left: 4px; display: inline-flex; align-items: center; }
 
-    /* Views */
     .tab-section { display: none; }
     .tab-section.active { display: block; }
 
     /* Stories */
-    .stories-scroller { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid #1c1c1c; background: #000; }
+    .stories-scroller { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border-color); background: var(--bg-color); }
     .stories-scroller::-webkit-scrollbar { display: none; }
     .story-slot { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
     .story-ring-wrap { width: 66px; height: 66px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
-    .story-ring-wrap.self-empty { background: transparent; border: 1.5px dashed #444; }
-    .story-thumb-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #000; background: #181818; }
-    .story-add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: #0095f6; border-radius: 50%; border: 2px solid #000; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
+    .story-ring-wrap.self-empty { background: transparent; border: 1.5px dashed var(--sub-text); }
+    .story-thumb-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg-color); background: var(--card-bg); }
+    .story-add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: var(--brand-blue); border-radius: 50%; border: 2px solid var(--bg-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
 
     /* Mind Bar */
-    .whats-on-mind { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #141414; background: #080808; cursor: pointer; }
+    .whats-on-mind { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); cursor: pointer; }
     .mind-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-    .mind-input-faux { flex: 1; background: #1c1c1c; border-radius: 20px; padding: 9px 16px; color: #777; font-size: 13px; }
+    .mind-input-faux { flex: 1; background: var(--input-bg); border-radius: 20px; padding: 9px 16px; color: var(--sub-text); font-size: 13px; }
 
     /* Feed Posts */
     .post-wall { display: flex; flex-direction: column; width: 100%; }
-    .post-block { border-bottom: 1px solid #1c1c1c; padding-bottom: 12px; margin-bottom: 4px; }
+    .post-block { border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 4px; background: var(--bg-color); }
     .post-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
     .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
+    .post-user-text { display: flex; flex-direction: column; }
     .post-author-row { display: flex; align-items: center; gap: 2px; }
-    .post-author { font-size: 13px; font-weight: 600; }
+    .post-author { font-size: 13px; font-weight: 600; color: var(--text-color); }
 
     .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
     .post-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 10; }
     .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
 
-    .post-action-bar { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; }
+    .post-action-bar { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; color: var(--text-color); }
     .post-action-left { display: flex; gap: 18px; }
     .post-action-bar i { cursor: pointer; transition: transform 0.1s ease; }
     .liked-red { color: #ed4956 !important; }
-    .saved-gold { color: #fff !important; }
+    .saved-gold { color: var(--brand-blue) !important; }
 
-    .post-caption-box { padding: 0 14px; font-size: 13px; line-height: 1.4; }
+    .post-caption-box { padding: 0 14px; font-size: 13px; line-height: 1.4; color: var(--text-color); }
     .likes-stat { font-weight: 600; margin-bottom: 4px; }
     .caption-content span { font-weight: 600; margin-right: 6px; }
     .comments-view { margin-top: 6px; display: flex; flex-direction: column; gap: 3px; font-size: 12px; }
     .comment-line span { font-weight: 600; margin-right: 6px; }
 
-    /* Quick Comment Bar */
-    .quick-comment-bar { display: flex; padding: 8px 14px; border-top: 1px solid #141414; margin-top: 8px; }
-    .quick-comment-bar input { flex: 1; background: transparent; border: none; outline: none; color: #fff; font-size: 13px; }
-    .quick-comment-bar button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; font-size: 13px; }
+    .quick-comment-bar { display: flex; padding: 8px 14px; border-top: 1px solid var(--border-color); margin-top: 8px; }
+    .quick-comment-bar input { flex: 1; background: transparent; border: none; outline: none; color: var(--text-color); font-size: 13px; }
+    .quick-comment-bar button { background: none; border: none; color: var(--brand-blue); font-weight: 600; cursor: pointer; font-size: 13px; }
 
     /* Explore Tab */
     .explore-search-wrap { padding: 12px 14px; }
-    .explore-search-input { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 14px; }
+    .explore-search-input { width: 100%; background: var(--input-bg); border: none; border-radius: 8px; padding: 10px 14px; color: var(--text-color); outline: none; font-size: 14px; }
     .explore-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
     .explore-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
 
@@ -88,65 +110,86 @@
     .reel-user-badge img { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; }
     .reel-user-name { font-size: 14px; font-weight: 600; color: #fff; display: flex; align-items: center; gap: 4px; }
     .reel-caption-text { font-size: 13px; line-height: 1.35; color: #f0f0f0; margin-bottom: 8px; }
-    .reel-sidebar-actions { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 20; }
+    .reel-sidebar-actions { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 20; color: #fff; }
     .reel-action-bubble { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 25px; cursor: pointer; }
     .reel-action-bubble span { font-size: 12px; font-weight: 500; }
 
-    /* Notifications Tab */
-    .notif-list-wall { display: flex; flex-direction: column; }
-    .notif-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid #141414; font-size: 13px; }
-    .notif-user-flex { display: flex; align-items: center; gap: 12px; }
-    .notif-pfp { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
-    .notif-follow-btn { background: #0095f6; color: #fff; border: none; padding: 6px 14px; border-radius: 6px; font-weight: 600; font-size: 12px; cursor: pointer; }
-
     /* Profile Tab */
     .profile-canvas { padding: 18px 16px; }
+    .profile-top-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .profile-username-tag { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
+    .profile-settings-btn { font-size: 22px; cursor: pointer; color: var(--text-color); }
+    
     .profile-bio-header { display: flex; align-items: center; justify-content: space-between; }
     .profile-hero-pic-wrap { position: relative; width: 84px; height: 84px; cursor: pointer; }
-    .profile-hero-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #262626; background: #222; }
-    .profile-camera-badge { position: absolute; bottom: 2px; right: 2px; background: #0095f6; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid #000; }
+    .profile-hero-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--border-color); background: var(--card-bg); }
+    .profile-camera-badge { position: absolute; bottom: 2px; right: 2px; background: var(--brand-blue); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid var(--bg-color); color: #fff; }
     .profile-metrics-deck { display: flex; gap: 22px; text-align: center; }
-    .profile-metrics-deck strong { display: block; font-size: 16px; }
-    .profile-metrics-deck span { font-size: 12px; color: #888; }
+    .profile-metrics-deck strong { display: block; font-size: 16px; color: var(--text-color); }
+    .profile-metrics-deck span { font-size: 12px; color: var(--sub-text); }
     .profile-bio-textblock { margin-top: 14px; }
     .profile-name-row { display: flex; align-items: center; gap: 6px; }
-    .profile-name-row h4 { font-size: 15px; font-weight: 700; }
-    .profile-bio-textblock p { font-size: 13px; color: #aaa; margin-top: 2px; }
-    .profile-control-btn { width: 100%; padding: 8px; background: #262626; color: #fff; font-weight: 600; border: none; border-radius: 8px; margin-top: 14px; cursor: pointer; font-size: 13px; }
+    .profile-name-row h4 { font-size: 15px; font-weight: 700; color: var(--text-color); }
+    .profile-bio-textblock p { font-size: 13px; color: var(--sub-text); margin-top: 2px; }
+    
+    .profile-action-btns-row { display: flex; gap: 8px; margin-top: 14px; }
+    .profile-control-btn { flex: 1; padding: 8px; background: var(--hover-bg); color: var(--text-color); font-weight: 600; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; }
     .profile-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 20px; }
     .profile-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
 
     /* Bottom Dock */
-    nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: #000; border-top: 1px solid #1c1c1c; display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
-    nav.bottom-dock i { font-size: 21px; color: #fff; cursor: pointer; }
-    .profile-dock-icon { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid #fff; object-fit: cover; cursor: pointer; }
+    nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: var(--bg-color); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
+    nav.bottom-dock i { font-size: 21px; color: var(--text-color); cursor: pointer; }
+    .profile-dock-icon { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid var(--text-color); object-fit: cover; cursor: pointer; }
 
-    /* Modals & Sheets */
+    /* Modals & Drawers */
     .modal-overlay-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
-    .modal-sheet-inner { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #2a2a2a; }
+    .modal-sheet-inner { background: var(--card-sub-bg); color: var(--text-color); width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid var(--border-color); }
     .modal-sheet-inner h3 { margin-bottom: 14px; font-size: 16px; }
-    .modal-sheet-inner input, .modal-sheet-inner textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
-    .btn-theme-blue { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-    .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #aaa; }
+    .modal-sheet-inner input, .modal-sheet-inner textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
+    .btn-theme-blue { width: 100%; padding: 10px; background: var(--brand-blue); color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+    .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: var(--sub-text); }
 
-    /* Story Player Viewer */
-    #storyViewerApp { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
+    /* ================= FULL WORKING SETTINGS & PRIVACY DRAWER ================= */
+    .settings-drawer { display: none; position: fixed; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 300; flex-direction: column; max-width: 480px; margin: 0 auto; overflow-y: auto; }
+    .settings-topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; background: var(--bg-color); z-index: 10; }
+    .settings-topbar h3 { font-size: 16px; font-weight: 600; }
+    .settings-topbar i { font-size: 18px; cursor: pointer; }
+    
+    .settings-section-title { font-size: 12px; font-weight: 600; color: var(--sub-text); text-transform: uppercase; padding: 16px 16px 8px; letter-spacing: 0.5px; }
+    .settings-group { border-bottom: 1px solid var(--border-color); }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; transition: background 0.15s ease; }
+    .settings-row:active { background: var(--hover-bg); }
+    .settings-row-left { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
+    .settings-row-left i { width: 22px; font-size: 18px; color: var(--text-color); text-align: center; }
+    .settings-row-right { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--sub-text); }
+
+    /* Modern Toggle Switch */
+    .switch-toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch-toggle input { opacity: 0; width: 0; height: 0; }
+    .switch-slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; transition: .3s; border-radius: 24px; }
+    .switch-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .switch-slider { background-color: var(--brand-blue); }
+    input:checked + .switch-slider:before { transform: translateX(20px); }
+
+    /* Story Player */
+    #storyViewerApp { display: none; position: fixed; inset: 0; background: #000; z-index: 350; flex-direction: column; justify-content: center; }
     .story-progress-wire { width: 100%; height: 3px; background: rgba(255,255,255,0.3); position: absolute; top: 8px; left: 0; }
     .story-progress-meter { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
-    .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 8px; z-index: 10; font-size: 13px; font-weight: 600; }
+    .story-author-tag { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 8px; z-index: 10; font-size: 13px; font-weight: 600; color: #fff; }
     .story-author-tag img { width: 34px; height: 34px; border-radius: 50%; }
     #storyViewerTargetImg { width: 100%; height: 100%; object-fit: contain; }
 
-    /* DM Messenger Drawer */
-    .dm-messenger-drawer { display: none; position: fixed; inset: 0; background: #000; z-index: 250; flex-direction: column; max-width: 480px; margin: 0 auto; }
-    .dm-top-panel { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1c1c1c; }
+    /* DM Drawer */
+    .dm-messenger-drawer { display: none; position: fixed; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 250; flex-direction: column; max-width: 480px; margin: 0 auto; }
+    .dm-top-panel { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid var(--border-color); }
     .dm-chat-scroll { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
     .chat-bubble { max-width: 75%; padding: 9px 14px; border-radius: 16px; font-size: 13px; line-height: 1.3; }
     .chat-bubble.me { align-self: flex-end; background: #3797f0; color: #fff; }
-    .chat-bubble.them { align-self: flex-start; background: #262626; color: #fff; }
-    .chat-input-deck { display: flex; padding: 10px; border-top: 1px solid #1c1c1c; gap: 10px; background: #000; }
-    .chat-input-deck input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
-    .chat-input-deck button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    .chat-bubble.them { align-self: flex-start; background: var(--hover-bg); color: var(--text-color); }
+    .chat-input-deck { display: flex; padding: 10px; border-top: 1px solid var(--border-color); gap: 10px; background: var(--bg-color); }
+    .chat-input-deck input { flex: 1; background: var(--input-bg); border: none; border-radius: 20px; padding: 8px 14px; color: var(--text-color); outline: none; font-size: 13px; }
+    .chat-input-deck button { background: none; border: none; color: var(--brand-blue); font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
@@ -222,12 +265,27 @@
 
   <!-- TAB 4: NOTIFICATIONS -->
   <section id="notifTab" class="tab-section">
-    <div class="notif-list-wall" id="notifListContainer"></div>
+    <div class="settings-topbar" style="border-bottom: 1px solid var(--border-color);">
+      <h3>Notifications</h3>
+      <i class="fa-solid fa-check-double" onclick="alert('All marked as read!')"></i>
+    </div>
+    <div id="notifListContainer"></div>
   </section>
 
-  <!-- TAB 5: PROFILE -->
+  <!-- TAB 5: PROFILE WITH SETTINGS GEAR -->
   <section id="profileTab" class="tab-section">
     <div class="profile-canvas">
+      <!-- Profile Header Action Bar -->
+      <div class="profile-top-header-row">
+        <div class="profile-username-tag">
+          <span id="profileTopUsername">Subbhubhai.official</span>
+          <i class="fa-solid fa-circle-check verified-tick"></i>
+          <i class="fa-solid fa-lock" id="privateAccountLockIcon" style="display:none; font-size:12px; margin-left:4px; color:var(--sub-text);"></i>
+        </div>
+        <!-- Settings Gear / Hamburger Icon -->
+        <i class="fa-solid fa-bars profile-settings-btn" onclick="openSettingsDrawer()" title="Settings and Privacy"></i>
+      </div>
+
       <div class="profile-bio-header">
         <div class="profile-hero-pic-wrap" onclick="quickChangeDP()">
           <img src="https://picsum.photos/200/200?random=1" class="profile-hero-pic" id="profileHeroPic" />
@@ -235,7 +293,7 @@
         </div>
         <div class="profile-metrics-deck">
           <div><strong id="profilePostCountNumber">0</strong><span>Posts</span></div>
-          <div><strong>500M</strong><span>Followers</span></div>
+          <div><strong id="profileFollowersNum">500M</strong><span>Followers</span></div>
           <div><strong>248</strong><span>Following</span></div>
         </div>
       </div>
@@ -246,12 +304,17 @@
         </div>
         <p id="profileHeroBio">Official Creator & Tech Explorer ⚡</p>
       </div>
-      <button class="profile-control-btn" onclick="openProfileEditSheet()">Edit Profile</button>
+      
+      <div class="profile-action-btns-row">
+        <button class="profile-control-btn" onclick="openProfileEditSheet()">Edit Profile</button>
+        <button class="profile-control-btn" onclick="shareProfileLink()">Share Profile</button>
+        <button class="profile-control-btn" style="flex:0.25;" onclick="openSettingsDrawer()"><i class="fa-solid fa-gear"></i></button>
+      </div>
     </div>
     <div class="profile-grid-wall" id="profileGridWall"></div>
   </section>
 
-  <!-- Bottom Navigation Dock -->
+  <!-- Bottom Dock -->
   <nav class="bottom-dock">
     <i class="fa-solid fa-house" onclick="switchView('feedTab')"></i>
     <i class="fa-solid fa-magnifying-glass" onclick="switchView('exploreTab')"></i>
@@ -262,6 +325,180 @@
 
   <!-- Hidden Quick DP Picker -->
   <input type="file" id="directDpFileInput" accept="image/*" style="display:none;" onchange="handleDirectDP(event)" />
+
+  <!-- ================= SETTINGS & PRIVACY DRAWER ================= -->
+  <div class="settings-drawer" id="settingsDrawer">
+    <div class="settings-topbar">
+      <i class="fa-solid fa-arrow-left" onclick="closeSettingsDrawer()"></i>
+      <h3>Settings and privacy</h3>
+      <div style="width: 18px;"></div>
+    </div>
+
+    <!-- Section 1: Appearance & Display -->
+    <div class="settings-section-title">Your app and media</div>
+    <div class="settings-group">
+      <div class="settings-row">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-moon"></i>
+          <span>Dark Mode</span>
+        </div>
+        <div class="settings-row-right">
+          <label class="switch-toggle">
+            <input type="checkbox" id="toggleDarkModeCheckbox" checked onchange="handleThemeToggle(this)" />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="settings-row" onclick="toggleDataSaver()">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-chart-pie"></i>
+          <span>Data Saver & Media Quality</span>
+        </div>
+        <div class="settings-row-right">
+          <span id="dataSaverStatusLabel">High Quality</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="switchView('exploreTab'); closeSettingsDrawer();">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-bookmark"></i>
+          <span>Saved & Bookmarks</span>
+        </div>
+        <div class="settings-row-right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Who can see your content -->
+    <div class="settings-section-title">Who can see your content</div>
+    <div class="settings-group">
+      <div class="settings-row">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-lock"></i>
+          <span>Account Privacy (Private)</span>
+        </div>
+        <div class="settings-row-right">
+          <label class="switch-toggle">
+            <input type="checkbox" id="togglePrivateAccountCheckbox" onchange="handlePrivateAccountToggle(this)" />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+      <div class="settings-row" onclick="alert('Close Friends list: 0 accounts')">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-star" style="color:#00ba63;"></i>
+          <span>Close Friends</span>
+        </div>
+        <div class="settings-row-right">
+          <span>0</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="alert('Blocked Accounts: No accounts blocked.')">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-ban"></i>
+          <span>Blocked Accounts</span>
+        </div>
+        <div class="settings-row-right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3: How others interact with you -->
+    <div class="settings-section-title">How others can interact with you</div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="openMessenger(); closeSettingsDrawer();">
+        <div class="settings-row-left">
+          <i class="fa-brands fa-facebook-messenger"></i>
+          <span>Messages & Story Replies</span>
+        </div>
+        <div class="settings-row-right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="alert('Tags and mentions are enabled for Everyone.')">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-at"></i>
+          <span>Tags and Mentions</span>
+        </div>
+        <div class="settings-row-right">
+          <span>Everyone</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="togglePushNotifications()">
+        <div class="settings-row-left">
+          <i class="fa-regular fa-bell"></i>
+          <span>Notifications</span>
+        </div>
+        <div class="settings-row-right">
+          <span id="notifStatusLabel">Active</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 4: Security & Cache -->
+    <div class="settings-section-title">Security & System</div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="showLoginActivity()">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-shield-halved"></i>
+          <span>Login Activity & Security</span>
+        </div>
+        <div class="settings-row-right">
+          <span style="color:#00ba63;">Active Now</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="clearAppTemporaryCache()">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-trash-can" style="color:#ed4956;"></i>
+          <span>Clear Cache</span>
+        </div>
+        <div class="settings-row-right">
+          <span id="cacheSizeText">1.4 MB</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="alert('PicFlow Master Pro V28.0 (Build 2026)\nCreated with Supabase & IndexedDB Cloud Engine.')">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-circle-info"></i>
+          <span>About PicFlow</span>
+        </div>
+        <div class="settings-row-right">
+          <span>v28.0</span>
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5: Logins -->
+    <div class="settings-section-title">Login</div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="openProfileEditSheet(); closeSettingsDrawer();">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-user-pen"></i>
+          <span>Switch or Edit Account</span>
+        </div>
+        <div class="settings-row-right">
+          <i class="fa-solid fa-chevron-right"></i>
+        </div>
+      </div>
+      <div class="settings-row" onclick="handleAppLogout()">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-arrow-right-from-bracket" style="color:#ed4956;"></i>
+          <span style="color:#ed4956;">Log out</span>
+        </div>
+      </div>
+    </div>
+    
+    <div style="text-align:center; padding:24px; color:var(--sub-text); font-size:12px;">
+      Meta Account Center • PicFlow
+    </div>
+  </div>
 
   <!-- Create Post Modal -->
   <div class="modal-overlay-backdrop" id="createPostModal">
@@ -289,11 +526,11 @@
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeProfileEditSheet()"></i>
       <h3>Edit Profile</h3>
-      <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Change DP / Profile Picture</label>
+      <label style="font-size: 12px; color: var(--sub-text); display: block; margin-bottom: 4px;">Change DP / Profile Picture</label>
       <input type="file" id="editProfilePicFile" accept="image/*" />
-      <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Username</label>
+      <label style="font-size: 12px; color: var(--sub-text); display: block; margin-bottom: 4px;">Username</label>
       <input type="text" id="editProfileDisplayName" placeholder="Display Name" />
-      <label style="font-size: 12px; color: #888; display: block; margin-bottom: 4px;">Bio Description</label>
+      <label style="font-size: 12px; color: var(--sub-text); display: block; margin-bottom: 4px;">Bio Description</label>
       <textarea id="editProfileBioDetails" placeholder="Bio description" rows="3"></textarea>
       <button class="btn-theme-blue" onclick="saveProfileDetails()">Save Profile Changes</button>
     </div>
@@ -318,8 +555,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Welcome to PicFlow Messenger ⚡</div>
-      <div class="chat-bubble them">All tabs & buttons are 100% active now!</div>
+      <div class="chat-bubble them">Hey Subbhu! Settings & Privacy suite is fully active ⚙️✨</div>
+      <div class="chat-bubble them">Theme change, privacy aur cache clear sab chal raha hai!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -331,7 +568,7 @@
 <script>
 // ==================== INDEXEDDB ENGINE ====================
 let db;
-const DB_NAME = "PicFlowMasterDB_v27";
+const DB_NAME = "PicFlowMasterDB_v28";
 const STORE_NAME = "posts_store";
 
 function initDB(callback) {
@@ -367,17 +604,20 @@ function getAllPostsFromDB(callback) {
   req.onerror = () => callback([]);
 }
 
-// ==================== PERMANENT STATE ====================
+// ==================== STATE MANAGEMENT ====================
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp") || "https://picsum.photos/200/200?random=1";
 const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhubhai.official";
 const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
+const SAVED_THEME = localStorage.getItem("pf_permanent_theme") || "dark";
+const SAVED_IS_PRIVATE = localStorage.getItem("pf_permanent_private") === "true";
 
 let userProfile = {
   name: SAVED_PERMANENT_USERNAME,
   bio: SAVED_PERMANENT_BIO,
   avatar: SAVED_PERMANENT_DP,
   followers: "500M",
-  isVerified: true
+  isVerified: true,
+  isPrivate: SAVED_IS_PRIVATE
 };
 
 const SEED_DEFAULT_POST = {
@@ -389,7 +629,7 @@ const SEED_DEFAULT_POST = {
   likes: 1284,
   liked: false,
   saved: false,
-  comments: ["Congrats on 500M! 💙", "Awesome post bro 🔥"]
+  comments: ["Congratulations for Blue Badge & 500M! 💙", "Awesome update bro 🔥"]
 };
 
 let globalPosts = [];
@@ -510,7 +750,7 @@ function renderFeed() {
             </div>
           </div>
         </div>
-        <i class="fa-solid fa-ellipsis" style="color: #888; cursor: pointer;" onclick="deletePost(${p.id})"></i>
+        <i class="fa-solid fa-ellipsis" style="color: var(--sub-text); cursor: pointer;" onclick="deletePost(${p.id})"></i>
       </div>
 
       <div class="post-stage" ondblclick="fireDoubleTapHeart(${p.id})">
@@ -723,7 +963,8 @@ let isReelMuted = false;
 const reelVideoEl = document.getElementById("reelActiveVideo");
 
 function mountReel(index) {
-  const data = REEL_DATABASE[index];
+  if (!globalReels || globalReels.length === 0) return;
+  const data = globalReels[index];
   reelVideoEl.src = data.video;
   reelVideoEl.muted = isReelMuted;
   
@@ -795,12 +1036,12 @@ function renderNotifications() {
   const list = document.getElementById("notifListContainer");
   if (!list) return;
   list.innerHTML = NOTIFICATIONS.map(n => `
-    <div class="notif-item">
-      <div class="notif-user-flex">
-        <img src="${n.avatar}" class="notif-pfp" />
-        <div><strong>${n.user}</strong> ${n.text} <span style="color:#777;">${n.time}</span></div>
+    <div class="notif-item" style="display:flex; align-items:center; justify-content:space-between; padding:14px 16px; border-bottom:1px solid var(--border-color); font-size:13px;">
+      <div class="notif-user-flex" style="display:flex; align-items:center; gap:12px;">
+        <img src="${n.avatar}" class="notif-pfp" style="width:42px; height:42px; border-radius:50%; object-fit:cover;" />
+        <div><strong>${n.user}</strong> ${n.text} <span style="color:var(--sub-text); font-size:11px;">${n.time}</span></div>
       </div>
-      ${n.isFollow ? `<button class="notif-follow-btn" onclick="this.innerText='Following'">Follow</button>` : `<i class="fa-solid fa-heart" style="color: #ed4956;"></i>`}
+      ${n.isFollow ? `<button class="notif-follow-btn" onclick="this.innerText='Following'; this.style.background='var(--hover-bg)'; this.style.color='var(--text-color)';">Follow</button>` : `<i class="fa-solid fa-heart" style="color: #ed4956;"></i>`}
     </div>
   `).join("");
 }
@@ -828,10 +1069,15 @@ function dispatchDirectMessage() {
 // Profile Section
 function renderProfileSection() {
   document.getElementById("profileHeroName").innerText = userProfile.name;
+  document.getElementById("profileTopUsername").innerText = userProfile.name;
   document.getElementById("profileHeroBio").innerText = userProfile.bio;
   document.getElementById("profileHeroPic").src = userProfile.avatar;
   document.getElementById("profileDockAvatar").src = userProfile.avatar;
   document.getElementById("mindBarAvatar").src = userProfile.avatar;
+
+  // Private Lock Indicator
+  const lockIcon = document.getElementById("privateAccountLockIcon");
+  if (lockIcon) lockIcon.style.display = userProfile.isPrivate ? "inline-block" : "none";
 
   const displayList = globalPosts.length ? globalPosts : [SEED_DEFAULT_POST];
   document.getElementById("profilePostCountNumber").innerText = displayList.length;
@@ -898,8 +1144,86 @@ function handleDirectDP(event) {
   reader.readAsDataURL(file);
 }
 
-// Initial Bootup
+function shareProfileLink() {
+  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
+  alert("Profile URL copied to clipboard! 🔗");
+}
+
+// ==================== SETTINGS & PRIVACY CONTROLLERS ====================
+function openSettingsDrawer() {
+  document.getElementById("settingsDrawer").style.display = "flex";
+}
+
+function closeSettingsDrawer() {
+  document.getElementById("settingsDrawer").style.display = "none";
+}
+
+// Dark / Light Theme Controller
+function applyAppTheme(theme) {
+  if (theme === "light") {
+    document.body.classList.add("light-theme");
+    document.getElementById("toggleDarkModeCheckbox").checked = false;
+  } else {
+    document.body.classList.remove("light-theme");
+    document.getElementById("toggleDarkModeCheckbox").checked = true;
+  }
+}
+
+function handleThemeToggle(checkbox) {
+  const newTheme = checkbox.checked ? "dark" : "light";
+  localStorage.setItem("pf_permanent_theme", newTheme);
+  applyAppTheme(newTheme);
+}
+
+// Private Account Toggle
+function handlePrivateAccountToggle(checkbox) {
+  userProfile.isPrivate = checkbox.checked;
+  localStorage.setItem("pf_permanent_private", userProfile.isPrivate ? "true" : "false");
+  renderProfileSection();
+  alert(userProfile.isPrivate ? "🔒 Account is now Private" : "🌍 Account is now Public");
+}
+
+// Data Saver Mode
+let isDataSaver = false;
+function toggleDataSaver() {
+  isDataSaver = !isDataSaver;
+  document.getElementById("dataSaverStatusLabel").innerText = isDataSaver ? "Data Saver On" : "High Quality";
+  alert(isDataSaver ? "Data saver enabled (Lower data usage)" : "High quality media uploads enabled");
+}
+
+// Push Notifications
+let notifActive = true;
+function togglePushNotifications() {
+  notifActive = !notifActive;
+  document.getElementById("notifStatusLabel").innerText = notifActive ? "Active" : "Paused";
+  alert(notifActive ? "Notifications Active" : "Notifications Paused");
+}
+
+// Login Activity
+function showLoginActivity() {
+  alert("🔐 Login Activity\n\n• Mumbai, Maharashtra, India\n• Current Active Session (Device: Mobile / Android)\n• Status: Protected with 2-Factor Auth");
+}
+
+// Clear Cache Safe Tool
+function clearAppTemporaryCache() {
+  document.getElementById("cacheSizeText").innerText = "0 KB";
+  alert("🧹 Cache Cleared Successfully!\nYour posts, followers and DP are completely safe.");
+}
+
+// Logout Handlers
+function handleAppLogout() {
+  if (confirm("Are you sure you want to log out of PicFlow?")) {
+    alert("Logged out. Reloading app session...");
+    window.location.reload();
+  }
+}
+
+// ==================== INITIAL BOOTUP ====================
 window.addEventListener("DOMContentLoaded", () => {
+  // Apply saved theme & private status
+  applyAppTheme(SAVED_THEME);
+  document.getElementById("togglePrivateAccountCheckbox").checked = SAVED_IS_PRIVATE;
+
   renderProfileSection();
   renderStories();
   initDB(function() {
