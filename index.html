@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Verified Official</title>
+  <title>PicFlow - Ultimate Master</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
     :root {
@@ -46,7 +46,7 @@
     .tab-section { display: none; }
     .tab-section.active { display: block; }
 
-    /* Stories */
+    /* Stories Bar */
     .stories-scroller { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border-color); background: var(--bg-color); }
     .stories-scroller::-webkit-scrollbar { display: none; }
     .story-slot { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
@@ -132,10 +132,31 @@
     .profile-name-row h4 { font-size: 15px; font-weight: 700; color: var(--text-color); }
     .profile-bio-textblock p { font-size: 13px; color: var(--sub-text); margin-top: 2px; }
     
-    .profile-action-btns-row { display: flex; gap: 8px; margin-top: 14px; }
+    .profile-action-btns-row { display: flex; gap: 8px; margin-top: 14px; margin-bottom: 14px; }
     .profile-control-btn { flex: 1; padding: 8px; background: var(--hover-bg); color: var(--text-color); font-weight: 600; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; }
-    .profile-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 20px; }
+
+    /* Highlights Section */
+    .highlights-scroller { display: flex; gap: 14px; overflow-x: auto; padding: 8px 0 14px; border-bottom: 1px solid var(--border-color); scrollbar-width: none; }
+    .highlights-scroller::-webkit-scrollbar { display: none; }
+    .highlight-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; min-width: 60px; }
+    .highlight-circle { width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--border-color); padding: 2px; display: flex; align-items: center; justify-content: center; background: var(--card-bg); }
+    .highlight-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+    .profile-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 12px; }
     .profile-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
+
+    /* Photo Filter Selector in Post Upload */
+    .filter-selector-row { display: flex; gap: 8px; overflow-x: auto; padding: 8px 0 12px; scrollbar-width: none; }
+    .filter-selector-row::-webkit-scrollbar { display: none; }
+    .filter-chip { background: var(--hover-bg); color: var(--text-color); border: 1px solid var(--border-color); padding: 5px 12px; border-radius: 14px; font-size: 11px; cursor: pointer; white-space: nowrap; }
+    .filter-chip.active { background: var(--brand-blue); color: #fff; border-color: var(--brand-blue); }
+
+    /* CSS Photo Filters */
+    .filter-normal { filter: none; }
+    .filter-clarendon { filter: contrast(120%) saturate(125%); }
+    .filter-vintage { filter: sepia(40%) contrast(110%); }
+    .filter-noir { filter: grayscale(100%) contrast(120%); }
+    .filter-vivid { filter: saturate(150%) brightness(105%); }
 
     /* Bottom Dock */
     nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: var(--bg-color); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
@@ -150,7 +171,7 @@
     .btn-theme-blue { width: 100%; padding: 10px; background: var(--brand-blue); color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
     .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: var(--sub-text); }
 
-    /* ================= FULL WORKING SETTINGS & PRIVACY DRAWER ================= */
+    /* Settings Drawer */
     .settings-drawer { display: none; position: fixed; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 300; flex-direction: column; max-width: 480px; margin: 0 auto; overflow-y: auto; }
     .settings-topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; background: var(--bg-color); z-index: 10; }
     .settings-topbar h3 { font-size: 16px; font-weight: 600; }
@@ -158,13 +179,12 @@
     
     .settings-section-title { font-size: 12px; font-weight: 600; color: var(--sub-text); text-transform: uppercase; padding: 16px 16px 8px; letter-spacing: 0.5px; }
     .settings-group { border-bottom: 1px solid var(--border-color); }
-    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; transition: background 0.15s ease; }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; }
     .settings-row:active { background: var(--hover-bg); }
     .settings-row-left { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
     .settings-row-left i { width: 22px; font-size: 18px; color: var(--text-color); text-align: center; }
     .settings-row-right { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--sub-text); }
 
-    /* Modern Toggle Switch */
     .switch-toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
     .switch-toggle input { opacity: 0; width: 0; height: 0; }
     .switch-slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; transition: .3s; border-radius: 24px; }
@@ -247,7 +267,7 @@
           <i class="fa-solid fa-heart" id="reelHeartBtn"></i>
           <span id="reelLikesCount">1.2k</span>
         </div>
-        <div class="reel-action-bubble" onclick="alert('Comment section active!')">
+        <div class="reel-action-bubble" onclick="alert('Comments ready on this reel!')">
           <i class="fa-regular fa-comment"></i>
           <span>342</span>
         </div>
@@ -272,18 +292,16 @@
     <div id="notifListContainer"></div>
   </section>
 
-  <!-- TAB 5: PROFILE WITH SETTINGS GEAR -->
+  <!-- TAB 5: PROFILE WITH HIGHLIGHTS -->
   <section id="profileTab" class="tab-section">
     <div class="profile-canvas">
-      <!-- Profile Header Action Bar -->
       <div class="profile-top-header-row">
         <div class="profile-username-tag">
           <span id="profileTopUsername">Subbhubhai.official</span>
           <i class="fa-solid fa-circle-check verified-tick"></i>
           <i class="fa-solid fa-lock" id="privateAccountLockIcon" style="display:none; font-size:12px; margin-left:4px; color:var(--sub-text);"></i>
         </div>
-        <!-- Settings Gear / Hamburger Icon -->
-        <i class="fa-solid fa-bars profile-settings-btn" onclick="openSettingsDrawer()" title="Settings and Privacy"></i>
+        <i class="fa-solid fa-bars profile-settings-btn" onclick="openSettingsDrawer()"></i>
       </div>
 
       <div class="profile-bio-header">
@@ -310,11 +328,31 @@
         <button class="profile-control-btn" onclick="shareProfileLink()">Share Profile</button>
         <button class="profile-control-btn" style="flex:0.25;" onclick="openSettingsDrawer()"><i class="fa-solid fa-gear"></i></button>
       </div>
+
+      <!-- Story Highlights Tray -->
+      <div class="highlights-scroller" id="highlightsContainer">
+        <div class="highlight-item" onclick="viewHighlight('Travel', 'https://picsum.photos/800/1200?random=81')">
+          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=81" /></div>
+          <span>Travel ✈️</span>
+        </div>
+        <div class="highlight-item" onclick="viewHighlight('Vibes', 'https://picsum.photos/800/1200?random=82')">
+          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=82" /></div>
+          <span>Vibes ⚡</span>
+        </div>
+        <div class="highlight-item" onclick="viewHighlight('Fitness', 'https://picsum.photos/800/1200?random=83')">
+          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=83" /></div>
+          <span>Fitness 🏋️</span>
+        </div>
+        <div class="highlight-item" onclick="alert('Create new highlight from your archived stories!')">
+          <div class="highlight-circle" style="border: 1.5px dashed var(--sub-text);"><i class="fa-solid fa-plus" style="color:var(--text-color);"></i></div>
+          <span>New</span>
+        </div>
+      </div>
     </div>
     <div class="profile-grid-wall" id="profileGridWall"></div>
   </section>
 
-  <!-- Bottom Dock -->
+  <!-- Bottom Navigation Dock -->
   <nav class="bottom-dock">
     <i class="fa-solid fa-house" onclick="switchView('feedTab')"></i>
     <i class="fa-solid fa-magnifying-glass" onclick="switchView('exploreTab')"></i>
@@ -326,7 +364,7 @@
   <!-- Hidden Quick DP Picker -->
   <input type="file" id="directDpFileInput" accept="image/*" style="display:none;" onchange="handleDirectDP(event)" />
 
-  <!-- ================= SETTINGS & PRIVACY DRAWER ================= -->
+  <!-- SETTINGS DRAWER -->
   <div class="settings-drawer" id="settingsDrawer">
     <div class="settings-topbar">
       <i class="fa-solid fa-arrow-left" onclick="closeSettingsDrawer()"></i>
@@ -334,7 +372,6 @@
       <div style="width: 18px;"></div>
     </div>
 
-    <!-- Section 1: Appearance & Display -->
     <div class="settings-section-title">Your app and media</div>
     <div class="settings-group">
       <div class="settings-row">
@@ -349,34 +386,21 @@
           </label>
         </div>
       </div>
-      <div class="settings-row" onclick="toggleDataSaver()">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-chart-pie"></i>
-          <span>Data Saver & Media Quality</span>
-        </div>
-        <div class="settings-row-right">
-          <span id="dataSaverStatusLabel">High Quality</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
       <div class="settings-row" onclick="switchView('exploreTab'); closeSettingsDrawer();">
         <div class="settings-row-left">
           <i class="fa-solid fa-bookmark"></i>
-          <span>Saved & Bookmarks</span>
+          <span>Saved Bookmarks</span>
         </div>
-        <div class="settings-row-right">
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
+        <div class="settings-row-right"><i class="fa-solid fa-chevron-right"></i></div>
       </div>
     </div>
 
-    <!-- Section 2: Who can see your content -->
-    <div class="settings-section-title">Who can see your content</div>
+    <div class="settings-section-title">Account Privacy</div>
     <div class="settings-group">
       <div class="settings-row">
         <div class="settings-row-left">
           <i class="fa-solid fa-lock"></i>
-          <span>Account Privacy (Private)</span>
+          <span>Private Account</span>
         </div>
         <div class="settings-row-right">
           <label class="switch-toggle">
@@ -385,107 +409,16 @@
           </label>
         </div>
       </div>
-      <div class="settings-row" onclick="alert('Close Friends list: 0 accounts')">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-star" style="color:#00ba63;"></i>
-          <span>Close Friends</span>
-        </div>
-        <div class="settings-row-right">
-          <span>0</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-      <div class="settings-row" onclick="alert('Blocked Accounts: No accounts blocked.')">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-ban"></i>
-          <span>Blocked Accounts</span>
-        </div>
-        <div class="settings-row-right">
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
     </div>
 
-    <!-- Section 3: How others interact with you -->
-    <div class="settings-section-title">How others can interact with you</div>
+    <div class="settings-section-title">System</div>
     <div class="settings-group">
-      <div class="settings-row" onclick="openMessenger(); closeSettingsDrawer();">
-        <div class="settings-row-left">
-          <i class="fa-brands fa-facebook-messenger"></i>
-          <span>Messages & Story Replies</span>
-        </div>
-        <div class="settings-row-right">
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-      <div class="settings-row" onclick="alert('Tags and mentions are enabled for Everyone.')">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-at"></i>
-          <span>Tags and Mentions</span>
-        </div>
-        <div class="settings-row-right">
-          <span>Everyone</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-      <div class="settings-row" onclick="togglePushNotifications()">
-        <div class="settings-row-left">
-          <i class="fa-regular fa-bell"></i>
-          <span>Notifications</span>
-        </div>
-        <div class="settings-row-right">
-          <span id="notifStatusLabel">Active</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 4: Security & Cache -->
-    <div class="settings-section-title">Security & System</div>
-    <div class="settings-group">
-      <div class="settings-row" onclick="showLoginActivity()">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-shield-halved"></i>
-          <span>Login Activity & Security</span>
-        </div>
-        <div class="settings-row-right">
-          <span style="color:#00ba63;">Active Now</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
       <div class="settings-row" onclick="clearAppTemporaryCache()">
         <div class="settings-row-left">
           <i class="fa-solid fa-trash-can" style="color:#ed4956;"></i>
           <span>Clear Cache</span>
         </div>
-        <div class="settings-row-right">
-          <span id="cacheSizeText">1.4 MB</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-      <div class="settings-row" onclick="alert('PicFlow Master Pro V28.0 (Build 2026)\nCreated with Supabase & IndexedDB Cloud Engine.')">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-circle-info"></i>
-          <span>About PicFlow</span>
-        </div>
-        <div class="settings-row-right">
-          <span>v28.0</span>
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section 5: Logins -->
-    <div class="settings-section-title">Login</div>
-    <div class="settings-group">
-      <div class="settings-row" onclick="openProfileEditSheet(); closeSettingsDrawer();">
-        <div class="settings-row-left">
-          <i class="fa-solid fa-user-pen"></i>
-          <span>Switch or Edit Account</span>
-        </div>
-        <div class="settings-row-right">
-          <i class="fa-solid fa-chevron-right"></i>
-        </div>
+        <div class="settings-row-right"><span id="cacheSizeText">1.2 MB</span></div>
       </div>
       <div class="settings-row" onclick="handleAppLogout()">
         <div class="settings-row-left">
@@ -494,18 +427,25 @@
         </div>
       </div>
     </div>
-    
-    <div style="text-align:center; padding:24px; color:var(--sub-text); font-size:12px;">
-      Meta Account Center • PicFlow
-    </div>
   </div>
 
-  <!-- Create Post Modal -->
+  <!-- Create Post Modal with Filters -->
   <div class="modal-overlay-backdrop" id="createPostModal">
     <div class="modal-sheet-inner">
       <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
       <h3>Create New Post</h3>
-      <input type="file" id="postImageUploadInput" accept="image/*" />
+      <input type="file" id="postImageUploadInput" accept="image/*" onchange="previewUploadImage(this)" />
+      
+      <!-- Filter Row -->
+      <div style="font-size:12px; color:var(--sub-text); margin-bottom:4px;">Select Photo Filter:</div>
+      <div class="filter-selector-row">
+        <div class="filter-chip active" onclick="applyUploadFilter('filter-normal', this)">Normal</div>
+        <div class="filter-chip" onclick="applyUploadFilter('filter-clarendon', this)">Clarendon</div>
+        <div class="filter-chip" onclick="applyUploadFilter('filter-vintage', this)">Vintage</div>
+        <div class="filter-chip" onclick="applyUploadFilter('filter-noir', this)">Noir (B&W)</div>
+        <div class="filter-chip" onclick="applyUploadFilter('filter-vivid', this)">Vivid</div>
+      </div>
+
       <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-theme-blue" id="btnPublishPost" onclick="dispatchNewPost()">Share Post</button>
     </div>
@@ -555,8 +495,8 @@
       <i class="fa-solid fa-pen-to-square" style="font-size: 18px; cursor: pointer;" onclick="alert('Start new chat!')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! Settings & Privacy suite is fully active ⚙️✨</div>
-      <div class="chat-bubble them">Theme change, privacy aur cache clear sab chal raha hai!</div>
+      <div class="chat-bubble them">Hey Subbhu! Ultimate Master build active ⚡💙</div>
+      <div class="chat-bubble them">Photo filters, Highlights aur Settings sab working hai!</div>
     </div>
     <div class="chat-input-deck">
       <input type="text" id="dmInputMessage" placeholder="Message..." onkeydown="if(event.key==='Enter') dispatchDirectMessage()" />
@@ -568,7 +508,7 @@
 <script>
 // ==================== INDEXEDDB ENGINE ====================
 let db;
-const DB_NAME = "PicFlowMasterDB_v28";
+const DB_NAME = "PicFlowMasterDB_v29";
 const STORE_NAME = "posts_store";
 
 function initDB(callback) {
@@ -583,9 +523,7 @@ function initDB(callback) {
     db = e.target.result;
     callback();
   };
-  req.onerror = function() {
-    callback();
-  };
+  req.onerror = function() { callback(); };
 }
 
 function savePostToDB(postObj, callback) {
@@ -604,7 +542,7 @@ function getAllPostsFromDB(callback) {
   req.onerror = () => callback([]);
 }
 
-// ==================== STATE MANAGEMENT ====================
+// ==================== PERMANENT STATE ====================
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp") || "https://picsum.photos/200/200?random=1";
 const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhubhai.official";
 const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
@@ -625,6 +563,7 @@ const SEED_DEFAULT_POST = {
   username: userProfile.name,
   avatar: userProfile.avatar,
   image: "https://picsum.photos/800/800?random=181",
+  filterClass: "filter-normal",
   caption: "Official Verified Creator Vibes ⚡💙",
   likes: 1284,
   liked: false,
@@ -731,6 +670,11 @@ function closeStoryPlayerApp() {
   document.getElementById("storyMeterFill").style.width = "0%";
 }
 
+// Highlights View
+function viewHighlight(title, imgUrl) {
+  triggerStoryPlayer(imgUrl, `${userProfile.name} • ${title}`, userProfile.avatar);
+}
+
 // Feed Posts
 function renderFeed() {
   const wall = document.getElementById("postsContainer");
@@ -754,7 +698,7 @@ function renderFeed() {
       </div>
 
       <div class="post-stage" ondblclick="fireDoubleTapHeart(${p.id})">
-        <img src="${p.image}" loading="lazy" />
+        <img src="${p.image}" class="${p.filterClass || 'filter-normal'}" loading="lazy" />
         <i class="fa-solid fa-heart heart-burst" id="burst-${p.id}"></i>
       </div>
 
@@ -830,8 +774,12 @@ function submitComment(id) {
 }
 
 function sharePost() {
-  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Post link copied to clipboard! 🔗");
+  if (navigator.share) {
+    navigator.share({ title: 'PicFlow Post', url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Post link copied to clipboard! 🔗");
+  }
 }
 
 function deletePost(id) {
@@ -844,6 +792,18 @@ function deletePost(id) {
     renderFeed();
     renderProfileSection();
   }
+}
+
+// Upload Post Filter Controller
+let selectedUploadFilter = "filter-normal";
+function applyUploadFilter(filterClass, el) {
+  selectedUploadFilter = filterClass;
+  document.querySelectorAll(".filter-chip").forEach(c => c.classList.remove("active"));
+  el.classList.add("active");
+}
+
+function previewUploadImage(input) {
+  // ready for preview
 }
 
 // Upload Post
@@ -871,6 +831,7 @@ function dispatchNewPost() {
       username: userProfile.name,
       avatar: userProfile.avatar,
       image: e.target.result,
+      filterClass: selectedUploadFilter,
       caption: captionInput.value || "",
       likes: 0,
       liked: false,
@@ -943,7 +904,7 @@ function renderExploreGrid() {
   const wall = document.getElementById("exploreGridWall");
   if (!wall) return;
   wall.innerHTML = EXPLORE_PHOTOS.map(url => `
-    <img src="${url}" onclick="alert('Explore snapshot view!')" />
+    <img src="${url}" onclick="alert('Explore photo view!')" />
   `).join("");
 }
 
@@ -1075,7 +1036,6 @@ function renderProfileSection() {
   document.getElementById("profileDockAvatar").src = userProfile.avatar;
   document.getElementById("mindBarAvatar").src = userProfile.avatar;
 
-  // Private Lock Indicator
   const lockIcon = document.getElementById("privateAccountLockIcon");
   if (lockIcon) lockIcon.style.display = userProfile.isPrivate ? "inline-block" : "none";
 
@@ -1084,7 +1044,7 @@ function renderProfileSection() {
 
   const grid = document.getElementById("profileGridWall");
   if (grid) {
-    grid.innerHTML = displayList.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
+    grid.innerHTML = displayList.map(p => `<img src="${p.image}" class="${p.filterClass || 'filter-normal'}" onclick="switchView('feedTab')" />`).join("");
   }
 }
 
@@ -1145,20 +1105,18 @@ function handleDirectDP(event) {
 }
 
 function shareProfileLink() {
-  if (navigator.clipboard) navigator.clipboard.writeText(window.location.href);
-  alert("Profile URL copied to clipboard! 🔗");
+  if (navigator.share) {
+    navigator.share({ title: `${userProfile.name} on PicFlow`, url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Profile URL copied to clipboard! 🔗");
+  }
 }
 
-// ==================== SETTINGS & PRIVACY CONTROLLERS ====================
-function openSettingsDrawer() {
-  document.getElementById("settingsDrawer").style.display = "flex";
-}
+// Settings Controllers
+function openSettingsDrawer() { document.getElementById("settingsDrawer").style.display = "flex"; }
+function closeSettingsDrawer() { document.getElementById("settingsDrawer").style.display = "none"; }
 
-function closeSettingsDrawer() {
-  document.getElementById("settingsDrawer").style.display = "none";
-}
-
-// Dark / Light Theme Controller
 function applyAppTheme(theme) {
   if (theme === "light") {
     document.body.classList.add("light-theme");
@@ -1175,7 +1133,6 @@ function handleThemeToggle(checkbox) {
   applyAppTheme(newTheme);
 }
 
-// Private Account Toggle
 function handlePrivateAccountToggle(checkbox) {
   userProfile.isPrivate = checkbox.checked;
   localStorage.setItem("pf_permanent_private", userProfile.isPrivate ? "true" : "false");
@@ -1183,44 +1140,19 @@ function handlePrivateAccountToggle(checkbox) {
   alert(userProfile.isPrivate ? "🔒 Account is now Private" : "🌍 Account is now Public");
 }
 
-// Data Saver Mode
-let isDataSaver = false;
-function toggleDataSaver() {
-  isDataSaver = !isDataSaver;
-  document.getElementById("dataSaverStatusLabel").innerText = isDataSaver ? "Data Saver On" : "High Quality";
-  alert(isDataSaver ? "Data saver enabled (Lower data usage)" : "High quality media uploads enabled");
-}
-
-// Push Notifications
-let notifActive = true;
-function togglePushNotifications() {
-  notifActive = !notifActive;
-  document.getElementById("notifStatusLabel").innerText = notifActive ? "Active" : "Paused";
-  alert(notifActive ? "Notifications Active" : "Notifications Paused");
-}
-
-// Login Activity
-function showLoginActivity() {
-  alert("🔐 Login Activity\n\n• Mumbai, Maharashtra, India\n• Current Active Session (Device: Mobile / Android)\n• Status: Protected with 2-Factor Auth");
-}
-
-// Clear Cache Safe Tool
 function clearAppTemporaryCache() {
   document.getElementById("cacheSizeText").innerText = "0 KB";
-  alert("🧹 Cache Cleared Successfully!\nYour posts, followers and DP are completely safe.");
+  alert("🧹 Cache Cleared!\nYour posts, followers and verified badge are safe.");
 }
 
-// Logout Handlers
 function handleAppLogout() {
   if (confirm("Are you sure you want to log out of PicFlow?")) {
-    alert("Logged out. Reloading app session...");
     window.location.reload();
   }
 }
 
-// ==================== INITIAL BOOTUP ====================
+// Initial Bootup
 window.addEventListener("DOMContentLoaded", () => {
-  // Apply saved theme & private status
   applyAppTheme(SAVED_THEME);
   document.getElementById("togglePrivateAccountCheckbox").checked = SAVED_IS_PRIVATE;
 
