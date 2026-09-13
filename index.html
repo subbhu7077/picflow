@@ -274,122 +274,7 @@
     </div>
 
     <!-- Feed Cards Wall -->
-    <div class="feed-container" id="feedContainer">
-      <!-- POST 1: faizan_playz1 -->
-      <article class="feed-card" id="post-1">
-        <div class="post-header">
-          <div class="post-header-left" onclick="switchNav('viewProfile')">
-            <div class="post-avatar-wrap">
-              <img src="https://picsum.photos/100/100?random=5" class="post-avatar" />
-            </div>
-            <div class="post-user-meta">
-              <span class="post-username">faizan_playz1</span>
-              <div class="post-subtitle-ai"><i class="fa-regular fa-comment-dots"></i> Translate with AI</div>
-            </div>
-          </div>
-          <div class="post-header-right">
-            <button class="post-follow-pill" onclick="toggleFollowBtn(this)">Follow</button>
-            <i class="fa-solid fa-bars post-menu-bars" onclick="openOptionsSheet('faizan_playz1')"></i>
-          </div>
-        </div>
-
-        <div class="post-media-stage" ondblclick="fireBurstDoubleTap('like-ic-1', 'burst-1', 'like-cnt-1')">
-          <img src="https://picsum.photos/800/500?random=81" loading="lazy" />
-          <i class="fa-solid fa-heart heart-burst" id="burst-1"></i>
-          <div class="media-sound-btn" onclick="toggleAudioState(this)">
-            <i class="fa-solid fa-volume-xmark"></i>
-          </div>
-        </div>
-
-        <div class="post-action-row">
-          <div class="post-action-left">
-            <div class="action-counter-item" onclick="toggleLikeBtn('like-ic-1', 'like-cnt-1')">
-              <i class="fa-regular fa-heart" id="like-ic-1"></i>
-              <span id="like-cnt-1">32.7K</span>
-            </div>
-            <div class="action-counter-item" onclick="openCommentsSheet(1, 'faizan_playz1')">
-              <i class="fa-regular fa-comment"></i>
-              <span id="comm-cnt-1">211</span>
-            </div>
-            <div class="action-counter-item" onclick="toggleRepost('rep-ic-1', 'rep-cnt-1')">
-              <i class="fa-solid fa-retweet" id="rep-ic-1"></i>
-              <span id="rep-cnt-1">1,652</span>
-            </div>
-            <div class="action-counter-item" onclick="executePostShare('Where Winds Meet by faizan_playz1')">
-              <i class="fa-regular fa-paper-plane"></i>
-              <span>12.8K</span>
-            </div>
-          </div>
-          <div class="action-counter-item" onclick="toggleSaveBtn(this)">
-            <i class="fa-regular fa-bookmark"></i>
-          </div>
-        </div>
-
-        <div class="post-caption-box">
-          <span class="author">faizan_playz1</span>Where Winds Meet Is Built Different. 🔥 <span class="more-link" onclick="expandPostCaption(this)">... more</span>
-          <div class="post-date-tag">August 7 • See translation</div>
-        </div>
-      </article>
-
-      <!-- POST 2: techplusgadgets -->
-      <article class="feed-card" id="post-2">
-        <div class="post-header">
-          <div class="post-header-left" onclick="switchNav('viewProfile')">
-            <div class="post-avatar-wrap" style="padding:1.5px; background:#ff2d55; border-radius:50%;">
-              <img src="https://picsum.photos/100/100?random=6" class="post-avatar" style="border:1.5px solid #000;" />
-            </div>
-            <div class="post-user-meta">
-              <div class="post-username-row">
-                <span class="post-username">techplusgadgets</span>
-                <i class="fa-solid fa-circle-check verified-blue"></i>
-              </div>
-              <div class="post-subtitle-ai"><i class="fa-regular fa-square"></i> Made with Edits</div>
-            </div>
-          </div>
-          <div class="post-header-right">
-            <button class="post-follow-pill" onclick="toggleFollowBtn(this)">Follow</button>
-            <i class="fa-solid fa-bars post-menu-bars" onclick="openOptionsSheet('techplusgadgets')"></i>
-          </div>
-        </div>
-
-        <div class="post-media-stage" ondblclick="fireBurstDoubleTap('like-ic-2', 'burst-2', 'like-cnt-2')">
-          <img src="https://picsum.photos/800/500?random=82" loading="lazy" />
-          <i class="fa-solid fa-heart heart-burst" id="burst-2"></i>
-          <div class="media-sound-btn" onclick="toggleAudioState(this)">
-            <i class="fa-solid fa-volume-xmark"></i>
-          </div>
-        </div>
-
-        <div class="post-action-row">
-          <div class="post-action-left">
-            <div class="action-counter-item" onclick="toggleLikeBtn('like-ic-2', 'like-cnt-2')">
-              <i class="fa-solid fa-heart liked-red" id="like-ic-2"></i>
-              <span id="like-cnt-2">48.2K</span>
-            </div>
-            <div class="action-counter-item" onclick="openCommentsSheet(2, 'techplusgadgets')">
-              <i class="fa-regular fa-comment"></i>
-              <span id="comm-cnt-2">540</span>
-            </div>
-            <div class="action-counter-item" onclick="toggleRepost('rep-ic-2', 'rep-cnt-2')">
-              <i class="fa-solid fa-retweet" id="rep-ic-2"></i>
-              <span id="rep-cnt-2">2,140</span>
-            </div>
-            <div class="action-counter-item" onclick="executePostShare('Laptop boost solution by techplusgadgets')">
-              <i class="fa-regular fa-paper-plane"></i>
-              <span>18.4K</span>
-            </div>
-          </div>
-          <div class="action-counter-item" onclick="toggleSaveBtn(this)">
-            <i class="fa-regular fa-bookmark"></i>
-          </div>
-        </div>
-
-        <div class="post-caption-box">
-          <span class="author">techplusgadgets</span>Slow Laptop ❌ Solution ✅ Boost your speed easily! <span class="more-link" onclick="expandPostCaption(this)">... more</span>
-          <div class="post-date-tag">JUST NOW • See translation</div>
-        </div>
-      </article>
-    </div>
+    <div class="feed-container" id="feedContainer"></div>
   </main>
 
   <!-- TAB 2: REELS SCREEN -->
@@ -1112,11 +997,27 @@ function dispatchUserPost() {
   reader.readAsDataURL(file);
 }
 
+
+// ==================== DYNAMIC FEED DATA ====================
+const POSTS_STORAGE_KEY="pf_posts_v1";
+const INITIAL_POSTS=[
+{id:"1",username:"faizan_playz1",avatar:"https://picsum.photos/100/100?random=5",image:"https://picsum.photos/800/500?random=81",subtitle:"Translate with AI",subtitleIcon:"fa-comment-dots",likes:32700,commentsCount:211,reposts:1652,shares:12800,caption:"Where Winds Meet Is Built Different. 🔥",date:"August 7 • See translation",comments:[{user:"alex_gamer",text:"Visuals are insane 🔥"},{user:"dev_pro",text:"Game looks next gen"}],showOnProfile:true},
+{id:"2",username:"techplusgadgets",avatar:"https://picsum.photos/100/100?random=6",image:"https://picsum.photos/800/500?random=82",subtitle:"Made with Edits",subtitleIcon:"fa-square",verified:true,avatarAccent:true,liked:true,likes:48200,commentsCount:540,reposts:2140,shares:18400,caption:"Slow Laptop ❌ Solution ✅ Boost your speed easily!",date:"JUST NOW • See translation",comments:[{user:"rohit_sharma",text:"Super helpful trick, worked on my PC!"}],showOnProfile:true}];
+function ownPost(id,image,caption){return{id:String(id),username:userProfile.name,avatar:userProfile.avatar,image,subtitle:"Translate with AI",subtitleIcon:"fa-comment-dots",verified:true,following:true,likes:1,commentsCount:0,reposts:0,shares:0,caption:caption||"",date:"JUST NOW • See translation",comments:[],showOnProfile:true,isOwn:true};}
+function loadPosts(){try{const stored=JSON.parse(localStorage.getItem(POSTS_STORAGE_KEY));if(Array.isArray(stored))return stored;const legacy=JSON.parse(localStorage.getItem("pf_user_posts")||"[]").map(p=>ownPost(p.id,p.image,p.caption));const all=legacy.concat(INITIAL_POSTS);localStorage.setItem(POSTS_STORAGE_KEY,JSON.stringify(all));return all;}catch(_){return INITIAL_POSTS.map(p=>Object.assign({},p));}}
+let posts=loadPosts(); function savePosts(){try{localStorage.setItem(POSTS_STORAGE_KEY,JSON.stringify(posts));}catch(_){showToast("Post changes could not be saved on this device.");}} function postById(id){return posts.find(p=>p.id===String(id));} function safe(v){return String(v).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"})[c]);} function count(n){return n>=1000?(n/1000).toFixed(n>=10000?1:0).replace(".0","")+"K":String(n);}
+function renderFeed(){const f=document.getElementById("feedContainer");f.innerHTML=posts.map(p=>'<article class="feed-card" id="post-'+p.id+'"><div class="post-header"><div class="post-header-left" onclick="switchNav(\'viewProfile\')"><div class="post-avatar-wrap"'+(p.avatarAccent?' style="padding:1.5px; background:#ff2d55; border-radius:50%;"':'')+'><img src="'+safe(p.avatar)+'" class="post-avatar" /></div><div class="post-user-meta"><div class="post-username-row"><span class="post-username">'+safe(p.username)+'</span>'+(p.verified?'<i class="fa-solid fa-circle-check verified-blue"></i>':'')+'</div><div class="post-subtitle-ai"><i class="fa-regular '+p.subtitleIcon+'"></i> '+safe(p.subtitle)+'</div></div></div><div class="post-header-right"><button class="post-follow-pill'+(p.following?' active':'')+'" onclick="toggleFollowBtn(\''+p.id+'\')">'+(p.following?'Following':'Follow')+'</button><i class="fa-solid fa-bars post-menu-bars" data-post-username="'+safe(p.username)+'"></i></div></div><div class="post-media-stage" ondblclick="fireBurstDoubleTap(\''+p.id+'\')"><img src="'+safe(p.image)+'" loading="lazy" /><i class="fa-solid fa-heart heart-burst" id="burst-'+p.id+'"></i><div class="media-sound-btn" onclick="toggleAudioState(this)"><i class="fa-solid fa-volume-xmark"></i></div></div><div class="post-action-row"><div class="post-action-left"><div class="action-counter-item" onclick="toggleLikeBtn(\''+p.id+'\')"><i class="'+(p.liked?'fa-solid fa-heart liked-red':'fa-regular fa-heart')+'"></i><span>'+count(p.likes)+'</span></div><div class="action-counter-item" onclick="openCommentsSheet(\''+p.id+'\')"><i class="fa-regular fa-comment"></i><span>'+count(p.commentsCount)+'</span></div><div class="action-counter-item" onclick="toggleRepost(\''+p.id+'\')"><i class="fa-solid fa-retweet'+(p.reposted?' reposted-green':'')+'"></i><span>'+count(p.reposts)+'</span></div><div class="action-counter-item" onclick="executePostShareById(\''+p.id+'\')"><i class="fa-regular fa-paper-plane"></i><span>'+count(p.shares)+'</span></div></div><div class="action-counter-item" onclick="toggleSaveBtn(\''+p.id+'\')"><i class="'+(p.saved?'fa-solid saved-white':'fa-regular')+' fa-bookmark"></i></div></div><div class="post-caption-box"><span class="author">'+safe(p.username)+'</span>'+safe(p.caption)+(p.captionExpanded?'<br><span style="color:var(--sub-text); font-size:12px;">Explore ancient open-world mechanics with intense combat, immersive weather cycles, and tactical gameplay.</span>':' <span class="more-link" onclick="expandPostCaption(\''+p.id+'\')">... more</span>')+'<div class="post-date-tag">'+safe(p.date)+'</div></div></article>').join("");}
+document.getElementById("feedContainer").addEventListener("click", event=>{const options=event.target.closest(".post-menu-bars[data-post-username]");if(options)openOptionsSheet(options.dataset.postUsername);});
+function toggleFollowBtn(id){const p=postById(id);p.following=!p.following;savePosts();renderFeed();showToast(p.following?"Added to following":"Unfollowed");} function toggleLikeBtn(id){const p=postById(id);p.liked=!p.liked;p.likes+=p.liked?1:-1;savePosts();renderFeed();showToast(p.liked?"Liked!":"Like removed");} function fireBurstDoubleTap(id){const p=postById(id),b=document.getElementById("burst-"+id);if(b){b.classList.add("pop");setTimeout(()=>b.classList.remove("pop"),500);}if(!p.liked){p.liked=true;p.likes++;savePosts();setTimeout(renderFeed,300);}} function toggleRepost(id){const p=postById(id);p.reposted=!p.reposted;savePosts();renderFeed();showToast(p.reposted?"🔁 Reposted to your feed!":"Repost removed");} function toggleSaveBtn(id){const p=postById(id);p.saved=!p.saved;savePosts();renderFeed();showToast(p.saved?"Saved to bookmarks":"Removed from bookmarks");} function expandPostCaption(id){const p=postById(id);p.captionExpanded=true;savePosts();renderFeed();} function executePostShareById(id){const p=postById(id);executePostShare(p.caption+" by "+p.username);}
+function openCommentsSheet(id){const p=postById(id);activeCommentPostId=p.id;document.getElementById("commentsList").innerHTML=p.comments.map(c=>'<div class="comment-item"><strong>'+safe(c.user)+'</strong> <span>'+safe(c.text)+'</span></div>').join("");document.getElementById("commentsSheet").style.display="flex";} function postUserComment(){const i=document.getElementById("commentInputField"),text=i.value.trim(),p=postById(activeCommentPostId);if(!text)return;p.comments.push({user:userProfile.name,text});p.commentsCount++;savePosts();i.value="";renderFeed();openCommentsSheet(p.id);showToast("Comment posted!");}
+function renderProfileGrid(){const g=document.getElementById("profileGrid"),items=posts.filter(p=>p.showOnProfile);g.innerHTML=items.map(p=>'<img src="'+safe(p.image)+'" onclick="switchNav(\'viewFeed\')" />').join("");document.getElementById("profilePostCountDisplay").innerText=items.length;} function dispatchUserPost(){const file=document.getElementById("postFileInput").files[0],caption=document.getElementById("postCaptionInput").value;if(!file){alert("Please select a photo!");return;}const reader=new FileReader();reader.onload=e=>{posts.unshift(ownPost(Date.now(),e.target.result,caption));savePosts();renderFeed();renderProfileGrid();closeCreateModal();document.getElementById("postFileInput").value="";document.getElementById("postCaptionInput").value="";showToast("Post shared to your feed!");switchNav("viewFeed");};reader.readAsDataURL(file);}
+
 // Initial Boot
 window.addEventListener("DOMContentLoaded", () => {
   applyTheme(SAVED_THEME);
   document.getElementById("togglePrivateAccountCheckbox").checked = SAVED_IS_PRIVATE;
   document.getElementById("privateAccountLockIcon").style.display = SAVED_IS_PRIVATE ? "inline-block" : "none";
+  renderFeed();
   renderProfileGrid();
   renderExploreGrid();
 });
