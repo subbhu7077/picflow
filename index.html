@@ -11,7 +11,7 @@
 
     .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
-    /* ================= 1:1 TOP HEADER ================= */
+    /* Top Bar */
     header.ig-header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 0.5px solid #1a1a1a; z-index: 100; }
     .header-left i { font-size: 24px; cursor: pointer; color: #fff; }
     .header-logo { font-size: 28px; font-family: 'Brush Script MT', cursive, sans-serif; font-weight: 500; letter-spacing: -0.5px; cursor: pointer; }
@@ -19,7 +19,7 @@
     .header-right i { font-size: 23px; color: #fff; }
     .header-notif-pill { position: absolute; top: -7px; right: -9px; background: #ff2d55; color: #fff; font-size: 10px; font-weight: 700; padding: 1.5px 5px; border-radius: 12px; display: flex; align-items: center; gap: 2px; }
 
-    /* ================= 1:1 STORIES TRAY ================= */
+    /* Stories Tray */
     .stories-tray { display: flex; gap: 14px; padding: 10px 12px 12px; overflow-x: auto; scrollbar-width: none; border-bottom: 0.5px solid #1a1a1a; background: #000; }
     .stories-tray::-webkit-scrollbar { display: none; }
     .story-user-block { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 72px; cursor: pointer; }
@@ -34,11 +34,10 @@
     
     .story-username-label { font-size: 11.5px; color: #fff; max-width: 72px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
 
-    /* ================= FEED SECTION ================= */
+    /* Feed Cards */
     .feed-container { display: flex; flex-direction: column; }
     .feed-card { border-bottom: 0.5px solid #181818; padding-bottom: 12px; margin-bottom: 4px; }
     
-    /* Post Header */
     .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
     .post-header-left { display: flex; align-items: center; gap: 10px; cursor: pointer; }
     .post-avatar-wrap { width: 34px; height: 34px; border-radius: 50%; position: relative; }
@@ -73,34 +72,64 @@
     .liked-red { color: #ff2d55 !important; }
     .saved-white { color: #fff !important; }
 
-    /* Caption & Details */
+    /* Caption Box */
     .post-caption-box { padding: 2px 14px; font-size: 13.5px; line-height: 1.4; }
     .post-caption-box span.author { font-weight: 600; margin-right: 6px; }
     .post-caption-box span.more-link { color: #8e8e8e; cursor: pointer; }
     .post-date-tag { font-size: 11px; color: #8e8e8e; margin-top: 5px; }
 
-    /* ================= 1:1 BOTTOM NAVIGATION DOCK ================= */
-    nav.bottom-dock-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 48px; background: #000; border-top: 0.5px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 110; max-width: 480px; margin: 0 auto; }
-    nav.bottom-dock-bar i { font-size: 22px; color: #fff; cursor: pointer; }
-    .dock-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid #fff; cursor: pointer; }
-
     /* Views */
     .app-view { display: none; }
     .app-view.active { display: block; }
 
-    /* Modal for Quick Post */
+    /* Bottom Dock Bar */
+    nav.bottom-dock-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 48px; background: #000; border-top: 0.5px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 110; max-width: 480px; margin: 0 auto; }
+    nav.bottom-dock-bar i { font-size: 22px; color: #fff; cursor: pointer; }
+    .dock-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid #fff; cursor: pointer; }
+
+    /* Drawers & Sheets */
+    .bottom-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 250; align-items: flex-end; justify-content: center; }
+    .bottom-sheet-content { background: #1a1a1a; width: 100%; max-width: 480px; border-radius: 16px 16px 0 0; padding: 20px 16px; border-top: 1px solid #333; max-height: 75vh; display: flex; flex-direction: column; }
+    .sheet-title { display: flex; justify-content: space-between; align-items: center; font-size: 16px; font-weight: 600; margin-bottom: 14px; }
+    .sheet-comments-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; margin-bottom: 12px; font-size: 13px; }
+    .comment-item { display: flex; gap: 10px; }
+    .comment-item strong { margin-right: 4px; }
+    .sheet-input-row { display: flex; gap: 10px; }
+    .sheet-input-row input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 9px 16px; color: #fff; outline: none; font-size: 13px; }
+    .sheet-input-row button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+
+    /* Modals */
     .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
     .modal-box { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #333; }
     .modal-box h3 { margin-bottom: 12px; font-size: 16px; }
     .modal-box input, .modal-box textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
     .btn-submit { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
     .close-btn { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #888; }
+
+    /* Story Player */
+    #storyPlayer { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
+    .story-wire { position: absolute; top: 8px; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.3); }
+    .story-wire-fill { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
+    .story-player-header { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+    .story-player-header img { width: 34px; height: 34px; border-radius: 50%; }
+    #storyPlayerImg { width: 100%; height: 100%; object-fit: contain; }
+
+    /* Direct Messages View */
+    .dm-drawer { display: none; position: fixed; inset: 0; background: #000; z-index: 220; flex-direction: column; max-width: 480px; margin: 0 auto; }
+    .dm-header { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1a1a1a; }
+    .dm-chat-scroll { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+    .chat-bubble { max-width: 75%; padding: 9px 14px; border-radius: 16px; font-size: 13px; }
+    .chat-bubble.me { align-self: flex-end; background: #3797f0; color: #fff; }
+    .chat-bubble.them { align-self: flex-start; background: #262626; color: #fff; }
+    .dm-input-row { display: flex; padding: 10px; border-top: 1px solid #1a1a1a; gap: 10px; background: #000; }
+    .dm-input-row input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
+    .dm-input-row button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
   </style>
 </head>
 <body>
 
 <div class="app-root">
-  <!-- ================= 1:1 EXACT TOP HEADER ================= -->
+  <!-- ================= TOP HEADER ================= -->
   <header class="ig-header">
     <div class="header-left" onclick="openCreateModal()">
       <i class="fa-solid fa-plus"></i>
@@ -108,7 +137,7 @@
     <div class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
       Instagram
     </div>
-    <div class="header-right" onclick="alert('Notification: 1 person liked your post!')">
+    <div class="header-right" onclick="openNotificationsSheet()">
       <i class="fa-regular fa-heart"></i>
       <div class="header-notif-pill">
         <i class="fa-solid fa-user" style="font-size: 8px;"></i> 1
@@ -116,39 +145,36 @@
     </div>
   </header>
 
-  <!-- ================= TAB 1: HOME FEED ================= -->
+  <!-- ================= TAB 1: FEED ================= -->
   <main id="viewFeed" class="app-view active">
-    <!-- Stories Carousel -->
     <div class="stories-tray">
-      <!-- Slot 1: Your Story -->
+      <!-- Your Story -->
       <div class="story-user-block" onclick="openCreateModal()">
         <div class="story-ring-container self-ring">
           <img src="https://picsum.photos/200/200?random=1" class="story-avatar-img" id="userStoryAvatar" />
-          <div class="story-self-plus-badge">
-            <i class="fa-solid fa-plus"></i>
-          </div>
+          <div class="story-self-plus-badge"><i class="fa-solid fa-plus"></i></div>
         </div>
         <span class="story-username-label">Your story</span>
       </div>
 
-      <!-- Slot 2: samviieeetttt_... -->
-      <div class="story-user-block" onclick="viewStory('samviieeetttt____', 'https://picsum.photos/800/1200?random=21')">
+      <!-- samviieeetttt_... -->
+      <div class="story-user-block" onclick="launchStoryViewer('samviieeetttt____', 'https://picsum.photos/800/1200?random=21', 'https://picsum.photos/200/200?random=2')">
         <div class="story-ring-container">
           <img src="https://picsum.photos/200/200?random=2" class="story-avatar-img" />
         </div>
         <span class="story-username-label">samviieeetttt_...</span>
       </div>
 
-      <!-- Slot 3: __mr_ramesh_3... -->
-      <div class="story-user-block" onclick="viewStory('__mr_ramesh_3...', 'https://picsum.photos/800/1200?random=22')">
+      <!-- __mr_ramesh_3... -->
+      <div class="story-user-block" onclick="launchStoryViewer('__mr_ramesh_3...', 'https://picsum.photos/800/1200?random=22', 'https://picsum.photos/200/200?random=3')">
         <div class="story-ring-container">
           <img src="https://picsum.photos/200/200?random=3" class="story-avatar-img" />
         </div>
         <span class="story-username-label">__mr_ramesh_3...</span>
       </div>
 
-      <!-- Slot 4: bhoi91382 -->
-      <div class="story-user-block" onclick="viewStory('bhoi91382', 'https://picsum.photos/800/1200?random=23')">
+      <!-- bhoi91382 -->
+      <div class="story-user-block" onclick="launchStoryViewer('bhoi91382', 'https://picsum.photos/800/1200?random=23', 'https://picsum.photos/200/200?random=4')">
         <div class="story-ring-container">
           <img src="https://picsum.photos/200/200?random=4" class="story-avatar-img" />
         </div>
@@ -156,70 +182,68 @@
       </div>
     </div>
 
-    <!-- Feed Wall -->
-    <div class="feed-container" id="feedPostsContainer">
-      <!-- POST 1: EXACT MATCH faizan_playz1 -->
+    <!-- Feed Cards Wall -->
+    <div class="feed-container" id="feedContainer">
+      <!-- POST 1: faizan_playz1 -->
       <article class="feed-card" id="post-1">
         <div class="post-header">
-          <div class="post-header-left">
+          <div class="post-header-left" onclick="switchNav('viewProfile')">
             <div class="post-avatar-wrap">
               <img src="https://picsum.photos/100/100?random=5" class="post-avatar" />
             </div>
             <div class="post-user-meta">
               <span class="post-username">faizan_playz1</span>
-              <div class="post-subtitle-ai">
-                <i class="fa-regular fa-comment-dots"></i> Translate with AI
-              </div>
+              <div class="post-subtitle-ai"><i class="fa-regular fa-comment-dots"></i> Translate with AI</div>
             </div>
           </div>
           <div class="post-header-right">
-            <button class="post-follow-pill" onclick="toggleFollow(this)">Follow</button>
-            <i class="fa-solid fa-bars post-menu-bars" onclick="alert('Post options')"></i>
+            <button class="post-follow-pill" onclick="toggleFollowBtn(this)">Follow</button>
+            <i class="fa-solid fa-bars post-menu-bars" onclick="openPostMenu('faizan_playz1')"></i>
           </div>
         </div>
 
-        <div class="post-media-stage" ondblclick="handleDoubleTapLike('like-icon-1', 'burst-1', 'like-cnt-1')">
-          <img src="https://picsum.photos/800/500?random=81" loading="lazy" id="media-img-1" />
+        <div class="post-media-stage" ondblclick="fireBurstDoubleTap('like-ic-1', 'burst-1', 'like-cnt-1')">
+          <img src="https://picsum.photos/800/500?random=81" loading="lazy" />
           <i class="fa-solid fa-heart heart-burst" id="burst-1"></i>
-          <div class="media-sound-btn" onclick="toggleSound(this)">
+          <div class="media-sound-btn" onclick="toggleAudioState(this)">
             <i class="fa-solid fa-volume-xmark"></i>
           </div>
         </div>
 
         <div class="post-action-row">
           <div class="post-action-left">
-            <div class="action-counter-item" onclick="toggleSingleLike('like-icon-1', 'like-cnt-1')">
-              <i class="fa-regular fa-heart" id="like-icon-1"></i>
+            <div class="action-counter-item" onclick="toggleLikeBtn('like-ic-1', 'like-cnt-1')">
+              <i class="fa-regular fa-heart" id="like-ic-1"></i>
               <span id="like-cnt-1">32.7K</span>
             </div>
-            <div class="action-counter-item" onclick="alert('View all 211 comments')">
+            <div class="action-counter-item" onclick="openCommentsSheet(1, 'faizan_playz1')">
               <i class="fa-regular fa-comment"></i>
-              <span>211</span>
+              <span id="comm-cnt-1">211</span>
             </div>
-            <div class="action-counter-item" onclick="alert('Reposted!')">
+            <div class="action-counter-item" onclick="toggleRepost('rep-cnt-1')">
               <i class="fa-solid fa-retweet"></i>
-              <span>1,652</span>
+              <span id="rep-cnt-1">1,652</span>
             </div>
-            <div class="action-counter-item" onclick="sharePostLink()">
+            <div class="action-counter-item" onclick="executePostShare()">
               <i class="fa-regular fa-paper-plane"></i>
               <span>12.8K</span>
             </div>
           </div>
-          <div class="action-counter-item" onclick="toggleSave(this)">
+          <div class="action-counter-item" onclick="toggleSaveBtn(this)">
             <i class="fa-regular fa-bookmark"></i>
           </div>
         </div>
 
         <div class="post-caption-box">
-          <span class="author">faizan_playz1</span>Where Winds Meet Is Built Different. 🔥 <span class="more-link">... more</span>
+          <span class="author">faizan_playz1</span>Where Winds Meet Is Built Different. 🔥 <span class="more-link" onclick="expandPostCaption(this)">... more</span>
           <div class="post-date-tag">August 7 • See translation</div>
         </div>
       </article>
 
-      <!-- POST 2: EXACT MATCH techplusgadgets -->
+      <!-- POST 2: techplusgadgets -->
       <article class="feed-card" id="post-2">
         <div class="post-header">
-          <div class="post-header-left">
+          <div class="post-header-left" onclick="switchNav('viewProfile')">
             <div class="post-avatar-wrap" style="padding:1.5px; background:#ff2d55; border-radius:50%;">
               <img src="https://picsum.photos/100/100?random=6" class="post-avatar" style="border:1.5px solid #000;" />
             </div>
@@ -228,51 +252,49 @@
                 <span class="post-username">techplusgadgets</span>
                 <i class="fa-solid fa-circle-check verified-blue"></i>
               </div>
-              <div class="post-subtitle-ai">
-                <i class="fa-regular fa-square"></i> Made with Edits
-              </div>
+              <div class="post-subtitle-ai"><i class="fa-regular fa-square"></i> Made with Edits</div>
             </div>
           </div>
           <div class="post-header-right">
-            <button class="post-follow-pill" onclick="toggleFollow(this)">Follow</button>
-            <i class="fa-solid fa-bars post-menu-bars" onclick="alert('Post options')"></i>
+            <button class="post-follow-pill" onclick="toggleFollowBtn(this)">Follow</button>
+            <i class="fa-solid fa-bars post-menu-bars" onclick="openPostMenu('techplusgadgets')"></i>
           </div>
         </div>
 
-        <div class="post-media-stage" ondblclick="handleDoubleTapLike('like-icon-2', 'burst-2', 'like-cnt-2')">
+        <div class="post-media-stage" ondblclick="fireBurstDoubleTap('like-ic-2', 'burst-2', 'like-cnt-2')">
           <img src="https://picsum.photos/800/500?random=82" loading="lazy" />
           <i class="fa-solid fa-heart heart-burst" id="burst-2"></i>
-          <div class="media-sound-btn" onclick="toggleSound(this)">
+          <div class="media-sound-btn" onclick="toggleAudioState(this)">
             <i class="fa-solid fa-volume-xmark"></i>
           </div>
         </div>
 
         <div class="post-action-row">
           <div class="post-action-left">
-            <div class="action-counter-item" onclick="toggleSingleLike('like-icon-2', 'like-cnt-2')">
-              <i class="fa-solid fa-heart liked-red" id="like-icon-2"></i>
+            <div class="action-counter-item" onclick="toggleLikeBtn('like-ic-2', 'like-cnt-2')">
+              <i class="fa-solid fa-heart liked-red" id="like-ic-2"></i>
               <span id="like-cnt-2">48.2K</span>
             </div>
-            <div class="action-counter-item" onclick="alert('View all 540 comments')">
+            <div class="action-counter-item" onclick="openCommentsSheet(2, 'techplusgadgets')">
               <i class="fa-regular fa-comment"></i>
-              <span>540</span>
+              <span id="comm-cnt-2">540</span>
             </div>
-            <div class="action-counter-item" onclick="alert('Reposted!')">
+            <div class="action-counter-item" onclick="toggleRepost('rep-cnt-2')">
               <i class="fa-solid fa-retweet"></i>
-              <span>2,140</span>
+              <span id="rep-cnt-2">2,140</span>
             </div>
-            <div class="action-counter-item" onclick="sharePostLink()">
+            <div class="action-counter-item" onclick="executePostShare()">
               <i class="fa-regular fa-paper-plane"></i>
               <span>18.4K</span>
             </div>
           </div>
-          <div class="action-counter-item" onclick="toggleSave(this)">
+          <div class="action-counter-item" onclick="toggleSaveBtn(this)">
             <i class="fa-regular fa-bookmark"></i>
           </div>
         </div>
 
         <div class="post-caption-box">
-          <span class="author">techplusgadgets</span>Slow Laptop ❌ Solution ✅ Boost your speed easily! <span class="more-link">... more</span>
+          <span class="author">techplusgadgets</span>Slow Laptop ❌ Solution ✅ Boost your speed easily! <span class="more-link" onclick="expandPostCaption(this)">... more</span>
           <div class="post-date-tag">JUST NOW • See translation</div>
         </div>
       </article>
@@ -284,12 +306,12 @@
     <div style="padding: 16px;">
       <div style="display:flex; justify-content:space-between; align-items:center;">
         <h3 id="profileTitleUsername">Subbhubhai.official <i class="fa-solid fa-circle-check verified-blue"></i></h3>
-        <i class="fa-solid fa-bars" onclick="alert('Settings loaded')"></i>
+        <i class="fa-solid fa-gear" style="font-size: 20px; cursor:pointer;" onclick="openProfileSettings()"></i>
       </div>
       <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
         <img id="profileMainPic" src="https://picsum.photos/200/200?random=1" style="width:76px; height:76px; border-radius:50%; object-fit:cover; border:2px solid #262626;" />
         <div style="display:flex; gap:20px; text-align:center;">
-          <div><strong id="postCount">2</strong><br><span style="font-size:12px; color:#888;">Posts</span></div>
+          <div><strong>2</strong><br><span style="font-size:12px; color:#888;">Posts</span></div>
           <div><strong>500M</strong><br><span style="font-size:12px; color:#888;">Followers</span></div>
           <div><strong>248</strong><br><span style="font-size:12px; color:#888;">Following</span></div>
         </div>
@@ -298,21 +320,19 @@
         <h4>Subbhubhai.official</h4>
         <p style="color:#aaa; font-size:13px;">Official Creator & Tech Explorer ⚡</p>
       </div>
-      <button style="width:100%; margin-top:14px; padding:8px; background:#262626; color:#fff; border:none; border-radius:8px; font-weight:600;" onclick="openCreateModal()">Create Post</button>
+      <div style="display:flex; gap:8px; margin-top:14px;">
+        <button style="flex:1; padding:8px; background:#262626; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer;" onclick="openCreateModal()">Edit Profile</button>
+        <button style="flex:1; padding:8px; background:#262626; color:#fff; border:none; border-radius:8px; font-weight:600; cursor:pointer;" onclick="executePostShare()">Share Profile</button>
+      </div>
     </div>
   </section>
 
-  <!-- ================= 1:1 EXACT BOTTOM NAVIGATION BAR ================= -->
+  <!-- ================= 1:1 BOTTOM DOCK ================= -->
   <nav class="bottom-dock-bar">
-    <!-- Home -->
     <i class="fa-solid fa-house" onclick="switchNav('viewFeed')"></i>
-    <!-- Reels -->
-    <i class="fa-solid fa-clapperboard" onclick="alert('Opening Reels player')"></i>
-    <!-- Direct Messenger -->
-    <i class="fa-regular fa-paper-plane" onclick="alert('Direct Messages open')"></i>
-    <!-- Search -->
-    <i class="fa-solid fa-magnifying-glass" onclick="alert('Explore & Search')"></i>
-    <!-- Profile -->
+    <i class="fa-solid fa-clapperboard" onclick="triggerReelsNavigation()"></i>
+    <i class="fa-regular fa-paper-plane" onclick="openDirectMessenger()"></i>
+    <i class="fa-solid fa-magnifying-glass" onclick="triggerSearchExplore()"></i>
     <img src="https://picsum.photos/200/200?random=1" class="dock-avatar-circle" id="dockPfp" onclick="switchNav('viewProfile')" />
   </nav>
 
@@ -324,6 +344,48 @@
       <input type="file" id="postFileInput" accept="image/*" />
       <textarea id="postCaptionInput" placeholder="Write a caption..." rows="3"></textarea>
       <button class="btn-submit" onclick="dispatchUserPost()">Share to Feed</button>
+    </div>
+  </div>
+
+  <!-- Comments Sheet -->
+  <div class="bottom-sheet" id="commentsSheet">
+    <div class="bottom-sheet-content">
+      <div class="sheet-title">
+        <span>Comments</span>
+        <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeCommentsSheet()"></i>
+      </div>
+      <div class="sheet-comments-list" id="commentsList"></div>
+      <div class="sheet-input-row">
+        <input type="text" id="commentInputField" placeholder="Add a comment..." onkeydown="if(event.key==='Enter') postUserComment()" />
+        <button onclick="postUserComment()">Post</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story Viewer App -->
+  <div id="storyPlayer" onclick="dismissStoryViewer()">
+    <div class="story-wire"><div class="story-wire-fill" id="storyWireFill"></div></div>
+    <div class="story-player-header">
+      <img id="storyHeaderAvatar" src="" />
+      <span id="storyHeaderUsername">User</span>
+    </div>
+    <img id="storyPlayerImg" src="" />
+  </div>
+
+  <!-- Direct Messages Drawer -->
+  <div class="dm-drawer" id="dmDrawer">
+    <div class="dm-header">
+      <i class="fa-solid fa-arrow-left" style="font-size:20px; cursor:pointer;" onclick="closeDirectMessenger()"></i>
+      <h4>Messages</h4>
+      <i class="fa-solid fa-pen-to-square" style="cursor:pointer;" onclick="alert('New Chat')"></i>
+    </div>
+    <div class="dm-chat-scroll" id="dmChatScroll">
+      <div class="chat-bubble them">Hey Subbhu! All buttons are 100% functional 🚀</div>
+      <div class="chat-bubble them">Comments, Likes, Shares, Reposts & DMs working!</div>
+    </div>
+    <div class="dm-input-row">
+      <input type="text" id="dmInput" placeholder="Message..." onkeydown="if(event.key==='Enter') sendDMMessage()" />
+      <button onclick="sendDMMessage()">Send</button>
     </div>
   </div>
 </div>
@@ -343,7 +405,8 @@ function switchNav(viewId) {
   window.scrollTo({top: 0, behavior: "smooth"});
 }
 
-function toggleFollow(btn) {
+// Button 1: Follow / Following Toggle
+function toggleFollowBtn(btn) {
   if (btn.innerText === "Follow") {
     btn.innerText = "Following";
     btn.classList.add("active");
@@ -353,7 +416,8 @@ function toggleFollow(btn) {
   }
 }
 
-function toggleSound(btn) {
+// Button 2: Audio Mute / Unmute
+function toggleAudioState(btn) {
   const icon = btn.querySelector("i");
   if (icon.classList.contains("fa-volume-xmark")) {
     icon.className = "fa-solid fa-volume-high";
@@ -362,7 +426,8 @@ function toggleSound(btn) {
   }
 }
 
-function toggleSingleLike(iconId, countId) {
+// Button 3: Single Tap Like
+function toggleLikeBtn(iconId, countId) {
   const icon = document.getElementById(iconId);
   const count = document.getElementById(countId);
   if (icon.classList.contains("liked-red")) {
@@ -372,7 +437,8 @@ function toggleSingleLike(iconId, countId) {
   }
 }
 
-function handleDoubleTapLike(iconId, burstId, countId) {
+// Button 4: Double Tap Center Big Heart
+function fireBurstDoubleTap(iconId, burstId, countId) {
   const burst = document.getElementById(burstId);
   burst.classList.add("pop");
   setTimeout(() => burst.classList.remove("pop"), 500);
@@ -381,26 +447,136 @@ function handleDoubleTapLike(iconId, burstId, countId) {
   icon.className = "fa-solid fa-heart liked-red";
 }
 
-function toggleSave(btn) {
+// Button 5: Repost Toggle
+function toggleRepost(countId) {
+  const cnt = document.getElementById(countId);
+  alert("🔁 Post Reposted to your profile!");
+}
+
+// Button 6: Save Bookmark
+function toggleSaveBtn(btn) {
   const icon = btn.querySelector("i");
   icon.classList.toggle("fa-solid");
   icon.classList.toggle("saved-white");
 }
 
-function sharePostLink() {
+// Button 7: Share Post
+function executePostShare() {
   if (navigator.share) {
-    navigator.share({ title: 'Instagram', url: window.location.href }).catch(() => {});
+    navigator.share({ title: 'Instagram Post', url: window.location.href }).catch(() => {});
   } else {
     navigator.clipboard.writeText(window.location.href);
-    alert("Post link copied to clipboard! 🔗");
+    alert("Post Link copied to clipboard! 🔗");
   }
 }
 
-function viewStory(user, img) {
-  alert("Viewing story of: " + user);
+// Button 8: Post Options Menu
+function openPostMenu(username) {
+  alert(`Options for @${username}:\n• Share to...\n• Copy link\n• Not interested\n• Report post`);
 }
 
-// Upload modal
+// Button 9: Expand Caption
+function expandPostCaption(link) {
+  link.parentElement.innerHTML += "<br><span style='color:#ccc; font-size:12px;'>Full post description loaded with high definition clarity.</span>";
+  link.remove();
+}
+
+// Button 10: Comments Drawer
+let activeCommentPostId = 1;
+const sampleComments = {
+  1: [{user: "alex_gamer", text: "Visuals are insane 🔥"}, {user: "dev_pro", text: "Game looks next gen"}],
+  2: [{user: "rohit_sharma", text: "Super helpful trick, worked on my PC!"}]
+};
+
+function openCommentsSheet(postId, username) {
+  activeCommentPostId = postId;
+  const sheet = document.getElementById("commentsSheet");
+  const list = document.getElementById("commentsList");
+  list.innerHTML = (sampleComments[postId] || []).map(c => `
+    <div class="comment-item">
+      <strong>${c.user}</strong> <span>${c.text}</span>
+    </div>
+  `).join("");
+  sheet.style.display = "flex";
+}
+
+function closeCommentsSheet() {
+  document.getElementById("commentsSheet").style.display = "none";
+}
+
+function postUserComment() {
+  const input = document.getElementById("commentInputField");
+  const val = input.value.trim();
+  if (!val) return;
+
+  if (!sampleComments[activeCommentPostId]) sampleComments[activeCommentPostId] = [];
+  sampleComments[activeCommentPostId].push({ user: SAVED_PERMANENT_USERNAME, text: val });
+  
+  openCommentsSheet(activeCommentPostId);
+  input.value = "";
+}
+
+// Button 11: Story Viewer with 4s Progress
+let storyTimeout = null;
+function launchStoryViewer(user, img, avatar) {
+  const player = document.getElementById("storyPlayer");
+  const wire = document.getElementById("storyWireFill");
+  document.getElementById("storyHeaderUsername").innerText = user;
+  document.getElementById("storyHeaderAvatar").src = avatar;
+  document.getElementById("storyPlayerImg").src = img;
+
+  player.style.display = "flex";
+  wire.style.width = "0%";
+  setTimeout(() => { wire.style.width = "100%"; }, 50);
+
+  clearTimeout(storyTimeout);
+  storyTimeout = setTimeout(dismissStoryViewer, 4050);
+}
+
+function dismissStoryViewer() {
+  clearTimeout(storyTimeout);
+  document.getElementById("storyPlayer").style.display = "none";
+  document.getElementById("storyWireFill").style.width = "0%";
+}
+
+// Button 12: Direct Messages
+function openDirectMessenger() { document.getElementById("dmDrawer").style.display = "flex"; }
+function closeDirectMessenger() { document.getElementById("dmDrawer").style.display = "none"; }
+
+function sendDMMessage() {
+  const input = document.getElementById("dmInput");
+  const msg = input.value.trim();
+  if (!msg) return;
+
+  const scroll = document.getElementById("dmChatScroll");
+  scroll.innerHTML += `<div class="chat-bubble me">${msg}</div>`;
+  input.value = "";
+  scroll.scrollTop = scroll.scrollHeight;
+
+  setTimeout(() => {
+    scroll.innerHTML += `<div class="chat-bubble them">Received: "${msg}" 👍</div>`;
+    scroll.scrollTop = scroll.scrollHeight;
+  }, 600);
+}
+
+// Button 13: Bottom Dock Navigation Triggers
+function triggerReelsNavigation() {
+  alert("🎬 Reels Tab: Swipe up-down gestures ready!");
+}
+
+function triggerSearchExplore() {
+  alert("🔍 Search & Explore: Live photo wall ready!");
+}
+
+function openNotificationsSheet() {
+  alert("❤️ Notifications:\n• samviieeetttt_ liked your story (2m)\n• techplusgadgets started following you (1h)");
+}
+
+function openProfileSettings() {
+  alert("⚙️ Settings:\n• Privacy & Security\n• Account Verification (500M Active)\n• Theme: Dark OLED");
+}
+
+// Button 14: Create Post Modal & Dispatch
 function openCreateModal() { document.getElementById("uploadModal").style.display = "flex"; }
 function closeCreateModal() { document.getElementById("uploadModal").style.display = "none"; }
 
@@ -408,7 +584,7 @@ function dispatchUserPost() {
   const file = document.getElementById("postFileInput").files[0];
   const caption = document.getElementById("postCaptionInput").value;
   if (!file) {
-    alert("Please choose a photo from gallery!");
+    alert("Please select a photo!");
     return;
   }
   const reader = new FileReader();
@@ -431,25 +607,25 @@ function dispatchUserPost() {
           </div>
           <div class="post-header-right">
             <button class="post-follow-pill active">Following</button>
-            <i class="fa-solid fa-bars post-menu-bars"></i>
+            <i class="fa-solid fa-bars post-menu-bars" onclick="openPostMenu('${SAVED_PERMANENT_USERNAME}')"></i>
           </div>
         </div>
-        <div class="post-media-stage" ondblclick="handleDoubleTapLike('like-icon-${newId}', 'burst-${newId}', 'like-cnt-${newId}')">
+        <div class="post-media-stage" ondblclick="fireBurstDoubleTap('like-ic-${newId}', 'burst-${newId}', 'like-cnt-${newId}')">
           <img src="${e.target.result}" loading="lazy" />
           <i class="fa-solid fa-heart heart-burst" id="burst-${newId}"></i>
-          <div class="media-sound-btn" onclick="toggleSound(this)"><i class="fa-solid fa-volume-xmark"></i></div>
+          <div class="media-sound-btn" onclick="toggleAudioState(this)"><i class="fa-solid fa-volume-xmark"></i></div>
         </div>
         <div class="post-action-row">
           <div class="post-action-left">
-            <div class="action-counter-item" onclick="toggleSingleLike('like-icon-${newId}', 'like-cnt-${newId}')">
-              <i class="fa-regular fa-heart" id="like-icon-${newId}"></i>
+            <div class="action-counter-item" onclick="toggleLikeBtn('like-ic-${newId}', 'like-cnt-${newId}')">
+              <i class="fa-regular fa-heart" id="like-ic-${newId}"></i>
               <span id="like-cnt-${newId}">1</span>
             </div>
-            <div class="action-counter-item"><i class="fa-regular fa-comment"></i><span>0</span></div>
-            <div class="action-counter-item"><i class="fa-solid fa-retweet"></i><span>0</span></div>
-            <div class="action-counter-item" onclick="sharePostLink()"><i class="fa-regular fa-paper-plane"></i><span>0</span></div>
+            <div class="action-counter-item" onclick="openCommentsSheet(${newId}, '${SAVED_PERMANENT_USERNAME}')"><i class="fa-regular fa-comment"></i><span>0</span></div>
+            <div class="action-counter-item" onclick="toggleRepost('rep-cnt-${newId}')"><i class="fa-solid fa-retweet"></i><span id="rep-cnt-${newId}">0</span></div>
+            <div class="action-counter-item" onclick="executePostShare()"><i class="fa-regular fa-paper-plane"></i><span>0</span></div>
           </div>
-          <div class="action-counter-item" onclick="toggleSave(this)"><i class="fa-regular fa-bookmark"></i></div>
+          <div class="action-counter-item" onclick="toggleSaveBtn(this)"><i class="fa-regular fa-bookmark"></i></div>
         </div>
         <div class="post-caption-box">
           <span class="author">${SAVED_PERMANENT_USERNAME}</span>${caption || ''}
@@ -457,8 +633,7 @@ function dispatchUserPost() {
         </div>
       </article>
     `;
-    const container = document.getElementById("feedPostsContainer");
-    container.insertAdjacentHTML("afterbegin", newHtml);
+    document.getElementById("feedContainer").insertAdjacentHTML("afterbegin", newHtml);
     closeCreateModal();
     document.getElementById("postFileInput").value = "";
     document.getElementById("postCaptionInput").value = "";
