@@ -6,37 +6,60 @@
   <title>Instagram</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
+    :root {
+      --bg-color: #000000;
+      --card-bg: #121212;
+      --card-sub-bg: #1a1a1a;
+      --border-color: #1c1c1c;
+      --text-color: #ffffff;
+      --sub-text: #888888;
+      --input-bg: #222222;
+      --hover-bg: #262626;
+      --brand-blue: #0095f6;
+    }
+
+    body.light-theme {
+      --bg-color: #ffffff;
+      --card-bg: #fafafa;
+      --card-sub-bg: #f0f0f0;
+      --border-color: #dbdbdb;
+      --text-color: #262626;
+      --sub-text: #737373;
+      --input-bg: #efefef;
+      --hover-bg: #e5e5e5;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: #000; color: #fff; padding-bottom: 50px; overflow-x: hidden; user-select: none; }
+    body { background: var(--bg-color); color: var(--text-color); padding-bottom: 50px; overflow-x: hidden; user-select: none; transition: background 0.2s ease, color 0.2s ease; }
 
-    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
+    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg-color); position: relative; }
 
-    /* Top Bar */
-    header.ig-header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 0.5px solid #1a1a1a; z-index: 100; }
-    .header-left i { font-size: 24px; cursor: pointer; color: #fff; }
-    .header-logo { font-size: 28px; font-family: 'Brush Script MT', cursive, sans-serif; font-weight: 500; letter-spacing: -0.5px; cursor: pointer; }
+    /* ================= TOP HEADER ================= */
+    header.ig-header { position: sticky; top: 0; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 0.5px solid var(--border-color); z-index: 100; }
+    .header-left i { font-size: 24px; cursor: pointer; color: var(--text-color); }
+    .header-logo { font-size: 28px; font-family: 'Brush Script MT', cursive, sans-serif; font-weight: 500; letter-spacing: -0.5px; cursor: pointer; color: var(--text-color); }
     .header-right { position: relative; display: flex; align-items: center; cursor: pointer; }
-    .header-right i { font-size: 23px; color: #fff; }
+    .header-right i { font-size: 23px; color: var(--text-color); }
     .header-notif-pill { position: absolute; top: -7px; right: -9px; background: #ff2d55; color: #fff; font-size: 10px; font-weight: 700; padding: 1.5px 5px; border-radius: 12px; display: flex; align-items: center; gap: 2px; }
 
-    /* Stories Tray */
-    .stories-tray { display: flex; gap: 14px; padding: 10px 12px 12px; overflow-x: auto; scrollbar-width: none; border-bottom: 0.5px solid #1a1a1a; background: #000; }
+    /* ================= STORIES TRAY ================= */
+    .stories-tray { display: flex; gap: 14px; padding: 10px 12px 12px; overflow-x: auto; scrollbar-width: none; border-bottom: 0.5px solid var(--border-color); background: var(--bg-color); }
     .stories-tray::-webkit-scrollbar { display: none; }
     .story-user-block { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 72px; cursor: pointer; }
     
     .story-ring-container { width: 72px; height: 72px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
     .story-ring-container.self-ring { background: transparent; }
-    .story-ring-container.self-ring img { border: 2px solid #262626; }
+    .story-ring-container.self-ring img { border: 2px solid var(--border-color); }
     
-    .story-avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #000; background: #161616; }
-    .story-self-plus-badge { position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #000; }
-    .story-self-plus-badge i { background: #fff; color: #000; font-size: 11px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+    .story-avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--bg-color); background: var(--card-bg); }
+    .story-self-plus-badge { position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px; background: var(--bg-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--bg-color); }
+    .story-self-plus-badge i { background: var(--text-color); color: var(--bg-color); font-size: 11px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
     
-    .story-username-label { font-size: 11.5px; color: #fff; max-width: 72px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
+    .story-username-label { font-size: 11.5px; color: var(--text-color); max-width: 72px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
 
-    /* Feed Cards */
+    /* ================= FEED SECTION ================= */
     .feed-container { display: flex; flex-direction: column; }
-    .feed-card { border-bottom: 0.5px solid #181818; padding-bottom: 12px; margin-bottom: 4px; }
+    .feed-card { border-bottom: 0.5px solid var(--border-color); padding-bottom: 12px; margin-bottom: 4px; background: var(--bg-color); }
     
     .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
     .post-header-left { display: flex; align-items: center; gap: 10px; cursor: pointer; }
@@ -45,15 +68,15 @@
     
     .post-user-meta { display: flex; flex-direction: column; }
     .post-username-row { display: flex; align-items: center; gap: 4px; }
-    .post-username { font-size: 13.5px; font-weight: 600; color: #fff; }
-    .verified-blue { color: #0095f6; font-size: 12px; }
+    .post-username { font-size: 13.5px; font-weight: 600; color: var(--text-color); }
+    .verified-blue { color: var(--brand-blue); font-size: 12px; }
     
-    .post-subtitle-ai { font-size: 11px; color: #999; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+    .post-subtitle-ai { font-size: 11px; color: var(--sub-text); display: flex; align-items: center; gap: 4px; margin-top: 1px; }
     
     .post-header-right { display: flex; align-items: center; gap: 12px; }
-    .post-follow-pill { background: transparent; border: 1px solid #363636; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
-    .post-follow-pill.active { background: #262626; border-color: transparent; }
-    .post-menu-bars { font-size: 18px; color: #fff; cursor: pointer; }
+    .post-follow-pill { background: transparent; border: 1px solid var(--sub-text); color: var(--text-color); font-size: 13px; font-weight: 600; padding: 4px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+    .post-follow-pill.active { background: var(--hover-bg); border-color: transparent; }
+    .post-menu-bars { font-size: 18px; color: var(--text-color); cursor: pointer; }
 
     /* Media Area */
     .post-media-stage { position: relative; width: 100%; aspect-ratio: 16/9; max-height: 480px; background: #0d0d0d; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
@@ -67,111 +90,139 @@
     /* Action Bar */
     .post-action-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 6px; }
     .post-action-left { display: flex; align-items: center; gap: 16px; }
-    .action-counter-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
-    .action-counter-item i { font-size: 21px; transition: transform 0.15s ease; }
+    .action-counter-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer; color: var(--text-color); }
+    .action-counter-item i { font-size: 21px; transition: transform 0.15s ease; color: var(--text-color); }
     .action-counter-item:active i { transform: scale(1.25); }
     .liked-red { color: #ff2d55 !important; }
-    .saved-white { color: #fff !important; }
+    .saved-white { color: var(--text-color) !important; }
     .reposted-green { color: #00ba63 !important; }
 
     /* Caption Box */
-    .post-caption-box { padding: 2px 14px; font-size: 13.5px; line-height: 1.4; }
+    .post-caption-box { padding: 2px 14px; font-size: 13.5px; line-height: 1.4; color: var(--text-color); }
     .post-caption-box span.author { font-weight: 600; margin-right: 6px; }
-    .post-caption-box span.more-link { color: #8e8e8e; cursor: pointer; }
-    .post-date-tag { font-size: 11px; color: #8e8e8e; margin-top: 5px; }
+    .post-caption-box span.more-link { color: var(--sub-text); cursor: pointer; }
+    .post-date-tag { font-size: 11px; color: var(--sub-text); margin-top: 5px; }
 
     /* Views */
     .app-view { display: none; }
     .app-view.active { display: block; }
 
-    /* Explore Grid */
+    /* ================= EXPLORE VIEW ================= */
     .explore-search-wrap { padding: 10px 14px; }
-    .explore-search-input { width: 100%; background: #262626; border: none; border-radius: 8px; padding: 10px 14px; color: #fff; outline: none; font-size: 14px; }
+    .explore-search-input { width: 100%; background: var(--input-bg); border: none; border-radius: 8px; padding: 10px 14px; color: var(--text-color); outline: none; font-size: 14px; }
     .explore-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
     .explore-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
 
-    /* Reels View */
-    .reels-screen-view { position: relative; height: calc(100vh - 50px); overflow: hidden; background: #000; }
+    /* ================= REELS SCREEN VIEW ================= */
+    .reels-screen-view { position: relative; height: calc(100vh - 50px); overflow: hidden; background: #000; touch-action: pan-y; }
     .reels-fullscreen-stage { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
     .reels-fullscreen-video { width: 100%; height: 100%; object-fit: cover; }
-    .reels-actions-column { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 16px; align-items: center; z-index: 30; }
+    .reels-actions-column { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 16px; align-items: center; z-index: 30; color: #fff; }
     .reels-action-item { display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 24px; cursor: pointer; text-shadow: 0 1px 4px rgba(0,0,0,0.8); }
     .reels-action-item span { font-size: 11.5px; font-weight: 600; }
 
-    /* Profile View */
+    /* ================= PROFILE VIEW ================= */
     .profile-canvas { padding: 16px; }
     .profile-top-row { display: flex; justify-content: space-between; align-items: center; }
     .profile-user-headline { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 6px; }
     .profile-stats-row { display: flex; align-items: center; justify-content: space-between; margin-top: 16px; }
     .profile-pfp-box { position: relative; width: 76px; height: 76px; cursor: pointer; }
-    .profile-pfp-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid #262626; }
-    .profile-pfp-cam { position: absolute; bottom: 0; right: 0; background: #0095f6; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 2px solid #000; }
+    .profile-pfp-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--border-color); }
+    .profile-pfp-cam { position: absolute; bottom: 0; right: 0; background: var(--brand-blue); width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 10px; border: 2px solid var(--bg-color); color: #fff; }
     .profile-numbers-grid { display: flex; gap: 20px; text-align: center; }
-    .profile-numbers-grid strong { display: block; font-size: 16px; }
-    .profile-numbers-grid span { font-size: 12px; color: #888; }
+    .profile-numbers-grid strong { display: block; font-size: 16px; color: var(--text-color); }
+    .profile-numbers-grid span { font-size: 12px; color: var(--sub-text); }
     .profile-bio-box { margin-top: 12px; }
-    .profile-btn-row { display: flex; gap: 8px; margin-top: 14px; }
-    .profile-btn-row button { flex: 1; padding: 8px; background: #262626; color: #fff; border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; }
-    .profile-posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 16px; }
+    .profile-btn-row { display: flex; gap: 8px; margin-top: 14px; margin-bottom: 12px; }
+    .profile-btn-row button { flex: 1; padding: 8px; background: var(--hover-bg); color: var(--text-color); border: none; border-radius: 8px; font-weight: 600; font-size: 13px; cursor: pointer; }
+    
+    /* Highlights */
+    .highlights-scroller { display: flex; gap: 14px; overflow-x: auto; padding: 6px 0 14px; border-bottom: 1px solid var(--border-color); scrollbar-width: none; }
+    .highlights-scroller::-webkit-scrollbar { display: none; }
+    .highlight-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; min-width: 60px; color: var(--text-color); }
+    .highlight-circle { width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--border-color); padding: 2px; display: flex; align-items: center; justify-content: center; background: var(--card-bg); }
+    .highlight-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+
+    .profile-posts-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 12px; }
     .profile-posts-grid img { width: 100%; aspect-ratio: 1/1; object-fit: cover; background: #111; cursor: pointer; }
 
-    /* Bottom Dock Bar */
-    nav.bottom-dock-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 48px; background: #000; border-top: 0.5px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 110; max-width: 480px; margin: 0 auto; }
-    nav.bottom-dock-bar i { font-size: 22px; color: #fff; cursor: pointer; }
-    .dock-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid #fff; cursor: pointer; }
+    /* ================= BOTTOM DOCK BAR ================= */
+    nav.bottom-dock-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 48px; background: var(--bg-color); border-top: 0.5px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 110; max-width: 480px; margin: 0 auto; }
+    nav.bottom-dock-bar i { font-size: 22px; color: var(--text-color); cursor: pointer; }
+    .dock-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid var(--text-color); cursor: pointer; }
 
-    /* Drawers & Sheets */
+    /* ================= DRAWERS & SHEETS ================= */
     .bottom-sheet { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 250; align-items: flex-end; justify-content: center; }
-    .bottom-sheet-content { background: #1a1a1a; width: 100%; max-width: 480px; border-radius: 16px 16px 0 0; padding: 18px 16px; border-top: 1px solid #333; max-height: 75vh; display: flex; flex-direction: column; }
+    .bottom-sheet-content { background: var(--card-sub-bg); color: var(--text-color); width: 100%; max-width: 480px; border-radius: 16px 16px 0 0; padding: 18px 16px; border-top: 1px solid var(--border-color); max-height: 75vh; display: flex; flex-direction: column; }
     .sheet-title { display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; margin-bottom: 14px; }
     .sheet-comments-list { flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px; font-size: 13px; }
     .comment-item { display: flex; gap: 10px; }
     .comment-item strong { margin-right: 4px; }
     .sheet-input-row { display: flex; gap: 10px; }
-    .sheet-input-row input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 9px 16px; color: #fff; outline: none; font-size: 13px; }
-    .sheet-input-row button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    .sheet-input-row input { flex: 1; background: var(--input-bg); border: none; border-radius: 20px; padding: 9px 16px; color: var(--text-color); outline: none; font-size: 13px; }
+    .sheet-input-row button { background: none; border: none; color: var(--brand-blue); font-weight: 600; cursor: pointer; }
 
     /* Modals */
     .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
-    .modal-box { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #333; }
+    .modal-box { background: var(--card-sub-bg); color: var(--text-color); width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid var(--border-color); }
     .modal-box h3 { margin-bottom: 12px; font-size: 16px; }
-    .modal-box input, .modal-box textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
-    .btn-submit { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
-    .close-btn { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #888; }
+    .modal-box input, .modal-box textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
+    .btn-submit { width: 100%; padding: 10px; background: var(--brand-blue); color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
+    .close-btn { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: var(--sub-text); }
+
+    /* Settings Drawer */
+    .settings-drawer { display: none; position: fixed; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 350; flex-direction: column; max-width: 480px; margin: 0 auto; overflow-y: auto; }
+    .settings-topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; background: var(--bg-color); z-index: 10; }
+    .settings-topbar h3 { font-size: 16px; font-weight: 600; }
+    .settings-topbar i { font-size: 18px; cursor: pointer; }
+    .settings-section-title { font-size: 12px; font-weight: 600; color: var(--sub-text); text-transform: uppercase; padding: 16px 16px 8px; letter-spacing: 0.5px; }
+    .settings-group { border-bottom: 1px solid var(--border-color); }
+    .settings-row { display: flex; align-items: center; justify-content: space-between; padding: 13px 16px; cursor: pointer; }
+    .settings-row:active { background: var(--hover-bg); }
+    .settings-row-left { display: flex; align-items: center; gap: 14px; font-size: 14px; font-weight: 500; }
+    .settings-row-left i { width: 22px; font-size: 18px; color: var(--text-color); text-align: center; }
+    .settings-row-right { display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--sub-text); }
+
+    .switch-toggle { position: relative; display: inline-block; width: 44px; height: 24px; }
+    .switch-toggle input { opacity: 0; width: 0; height: 0; }
+    .switch-slider { position: absolute; cursor: pointer; inset: 0; background-color: #333; transition: .3s; border-radius: 24px; }
+    .switch-slider:before { position: absolute; content: ""; height: 18px; width: 18px; left: 3px; bottom: 3px; background-color: white; transition: .3s; border-radius: 50%; }
+    input:checked + .switch-slider { background-color: var(--brand-blue); }
+    input:checked + .switch-slider:before { transform: translateX(20px); }
 
     /* Story Player */
     #storyPlayer { display: none; position: fixed; inset: 0; background: #000; z-index: 300; flex-direction: column; justify-content: center; }
     .story-wire { position: absolute; top: 8px; left: 0; right: 0; height: 3px; background: rgba(255,255,255,0.3); }
     .story-wire-fill { width: 0%; height: 100%; background: #fff; transition: width 4s linear; }
-    .story-player-header { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+    .story-player-header { position: absolute; top: 18px; left: 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #fff; }
     .story-player-header img { width: 34px; height: 34px; border-radius: 50%; }
     #storyPlayerImg { width: 100%; height: 100%; object-fit: contain; }
 
     /* Direct Messages View */
-    .dm-drawer { display: none; position: fixed; inset: 0; background: #000; z-index: 220; flex-direction: column; max-width: 480px; margin: 0 auto; }
-    .dm-header { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid #1a1a1a; }
+    .dm-drawer { display: none; position: fixed; inset: 0; background: var(--bg-color); color: var(--text-color); z-index: 220; flex-direction: column; max-width: 480px; margin: 0 auto; }
+    .dm-header { display: flex; align-items: center; justify-content: space-between; padding: 14px; border-bottom: 1px solid var(--border-color); }
     .dm-chat-scroll { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
     .chat-bubble { max-width: 75%; padding: 9px 14px; border-radius: 16px; font-size: 13px; }
     .chat-bubble.me { align-self: flex-end; background: #3797f0; color: #fff; }
-    .chat-bubble.them { align-self: flex-start; background: #262626; color: #fff; }
-    .dm-input-row { display: flex; padding: 10px; border-top: 1px solid #1a1a1a; gap: 10px; background: #000; }
-    .dm-input-row input { flex: 1; background: #262626; border: none; border-radius: 20px; padding: 8px 14px; color: #fff; outline: none; font-size: 13px; }
-    .dm-input-row button { background: none; border: none; color: #0095f6; font-weight: 600; cursor: pointer; }
+    .chat-bubble.them { align-self: flex-start; background: var(--hover-bg); color: var(--text-color); }
+    .dm-input-row { display: flex; padding: 10px; border-top: 1px solid var(--border-color); gap: 10px; background: var(--bg-color); }
+    .dm-input-row input { flex: 1; background: var(--input-bg); border: none; border-radius: 20px; padding: 8px 14px; color: var(--text-color); outline: none; font-size: 13px; }
+    .dm-input-row button { background: none; border: none; color: var(--brand-blue); font-weight: 600; cursor: pointer; }
 
-    /* Floating Toast */
-    .toast-msg { position: fixed; bottom: 65px; left: 50%; transform: translateX(-50%); background: rgba(38,38,38,0.95); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 300; display: none; pointer-events: none; border: 1px solid #333; }
+    /* Toast */
+    .toast-msg { position: fixed; bottom: 65px; left: 50%; transform: translateX(-50%); background: rgba(38,38,38,0.95); color: #fff; padding: 8px 16px; border-radius: 20px; font-size: 12px; z-index: 400; display: none; pointer-events: none; border: 1px solid #333; }
   </style>
 </head>
 <body>
 
 <div class="app-root">
-  <!-- Toast -->
-  <div class="toast-msg" id="toastBox">Link copied to clipboard!</div>
+  <!-- Toast Popup -->
+  <div class="toast-msg" id="toastBox">Action Successful</div>
 
   <!-- TOP HEADER -->
   <header class="ig-header">
     <div class="header-left" onclick="openCreateModal()">
-      <i class="fa-solid fa-plus"></i>
+      <i class="fa-solid fa-plus" title="Add Post"></i>
     </div>
     <div class="header-logo" onclick="switchNav('viewFeed'); window.scrollTo({top:0, behavior:'smooth'})">
       Instagram
@@ -341,7 +392,7 @@
     </div>
   </main>
 
-  <!-- TAB 2: REELS -->
+  <!-- TAB 2: REELS SCREEN -->
   <section id="viewReels" class="app-view">
     <div class="reels-screen-view" id="reelsScreen">
       <div class="reels-fullscreen-stage" onclick="toggleReelsPlayPause()">
@@ -379,15 +430,16 @@
     <div class="explore-grid" id="exploreGrid"></div>
   </section>
 
-  <!-- TAB 4: PROFILE -->
+  <!-- TAB 4: PROFILE WITH SETTINGS -->
   <section id="viewProfile" class="app-view">
     <div class="profile-canvas">
       <div class="profile-top-row">
         <div class="profile-user-headline">
           <span id="profileTitleUsername">Subbhubhai.official</span>
           <i class="fa-solid fa-circle-check verified-blue"></i>
+          <i class="fa-solid fa-lock" id="privateAccountLockIcon" style="display:none; font-size:12px; margin-left:4px; color:var(--sub-text);"></i>
         </div>
-        <i class="fa-solid fa-gear" style="font-size: 20px; cursor:pointer;" onclick="openProfileSettingsSheet()"></i>
+        <i class="fa-solid fa-bars" style="font-size: 20px; cursor:pointer;" onclick="openSettingsDrawer()" title="Settings and Privacy"></i>
       </div>
 
       <div class="profile-stats-row">
@@ -404,12 +456,28 @@
 
       <div class="profile-bio-box">
         <h4 id="profileHeroName">Subbhubhai.official</h4>
-        <p id="profileHeroBio" style="color:#aaa; font-size:13px; margin-top:2px;">Official Creator & Tech Explorer ⚡</p>
+        <p id="profileHeroBio" style="color:var(--sub-text); font-size:13px; margin-top:2px;">Official Creator & Tech Explorer ⚡</p>
       </div>
 
       <div class="profile-btn-row">
         <button onclick="openEditProfileModal()">Edit Profile</button>
         <button onclick="executePostShare('Check out Subbhubhai.official on Instagram!')">Share Profile</button>
+      </div>
+
+      <!-- Highlights -->
+      <div class="highlights-scroller">
+        <div class="highlight-item" onclick="launchStoryViewer('Travel ✈️', 'https://picsum.photos/800/1200?random=81', userProfile.avatar)">
+          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=81" /></div>
+          <span>Travel ✈️</span>
+        </div>
+        <div class="highlight-item" onclick="launchStoryViewer('Vibes ⚡', 'https://picsum.photos/800/1200?random=82', userProfile.avatar)">
+          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=82" /></div>
+          <span>Vibes ⚡</span>
+        </div>
+        <div class="highlight-item" onclick="launchStoryViewer('Fitness 🏋️', 'https://picsum.photos/800/1200?random=83', userProfile.avatar)">
+          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=83" /></div>
+          <span>Fitness 🏋️</span>
+        </div>
       </div>
 
       <div class="profile-posts-grid" id="profileGrid"></div>
@@ -444,9 +512,9 @@
     <div class="modal-box">
       <i class="fa-solid fa-xmark close-btn" onclick="closeEditProfileModal()"></i>
       <h3>Edit Profile</h3>
-      <label style="font-size:12px; color:#888;">Display Name</label>
+      <label style="font-size:12px; color:var(--sub-text);">Display Name</label>
       <input type="text" id="editDisplayNameField" />
-      <label style="font-size:12px; color:#888;">Bio Description</label>
+      <label style="font-size:12px; color:var(--sub-text);">Bio Description</label>
       <textarea id="editBioField" rows="3"></textarea>
       <button class="btn-submit" onclick="saveProfileChanges()">Save Changes</button>
     </div>
@@ -467,16 +535,16 @@
     </div>
   </div>
 
-  <!-- DRAWER: OPTIONS -->
+  <!-- DRAWER: POST OPTIONS -->
   <div class="bottom-sheet" id="optionsSheet">
     <div class="bottom-sheet-content" style="gap:12px;">
       <div class="sheet-title">
         <span>Post Options</span>
         <i class="fa-solid fa-xmark" style="cursor:pointer;" onclick="closeOptionsSheet()"></i>
       </div>
-      <button class="btn-submit" style="background:#262626;" onclick="executePostShare('Post link'); closeOptionsSheet();">Share Link</button>
-      <button class="btn-submit" style="background:#262626;" onclick="showToast('Post link copied!'); closeOptionsSheet();">Copy Link</button>
-      <button class="btn-submit" style="background:#262626; color:#ff2d55;" onclick="showToast('Post Reported'); closeOptionsSheet();">Report</button>
+      <button class="btn-submit" style="background:var(--hover-bg); color:var(--text-color);" onclick="executePostShare('Post link'); closeOptionsSheet();">Share Link</button>
+      <button class="btn-submit" style="background:var(--hover-bg); color:var(--text-color);" onclick="showToast('Post link copied!'); closeOptionsSheet();">Copy Link</button>
+      <button class="btn-submit" style="background:var(--hover-bg); color:#ff2d55;" onclick="showToast('Post Reported'); closeOptionsSheet();">Report</button>
     </div>
   </div>
 
@@ -491,16 +559,74 @@
         <div style="display:flex; align-items:center; justify-content:space-between;">
           <div style="display:flex; align-items:center; gap:10px;">
             <img src="https://picsum.photos/100/100?random=2" style="width:38px; height:38px; border-radius:50%;" />
-            <div><strong>samviieeetttt____</strong> liked your story. <span style="color:#777; font-size:11px;">2m</span></div>
+            <div><strong>samviieeetttt____</strong> liked your story. <span style="color:var(--sub-text); font-size:11px;">2m</span></div>
           </div>
           <i class="fa-solid fa-heart" style="color:#ff2d55;"></i>
         </div>
         <div style="display:flex; align-items:center; justify-content:space-between;">
           <div style="display:flex; align-items:center; gap:10px;">
             <img src="https://picsum.photos/100/100?random=3" style="width:38px; height:38px; border-radius:50%;" />
-            <div><strong>__mr_ramesh_3...</strong> started following you. <span style="color:#777; font-size:11px;">1h</span></div>
+            <div><strong>__mr_ramesh_3...</strong> started following you. <span style="color:var(--sub-text); font-size:11px;">1h</span></div>
           </div>
           <button class="post-follow-pill active" onclick="this.innerText='Following'">Follow</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS & PRIVACY DRAWER -->
+  <div class="settings-drawer" id="settingsDrawer">
+    <div class="settings-topbar">
+      <i class="fa-solid fa-arrow-left" onclick="closeSettingsDrawer()"></i>
+      <h3>Settings and privacy</h3>
+      <div style="width: 18px;"></div>
+    </div>
+
+    <div class="settings-section-title">Your app and media</div>
+    <div class="settings-group">
+      <div class="settings-row">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-moon"></i>
+          <span>Dark Mode</span>
+        </div>
+        <div class="settings-row-right">
+          <label class="switch-toggle">
+            <input type="checkbox" id="toggleDarkModeCheckbox" checked onchange="handleThemeToggle(this)" />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section-title">Account Privacy</div>
+    <div class="settings-group">
+      <div class="settings-row">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-lock"></i>
+          <span>Private Account</span>
+        </div>
+        <div class="settings-row-right">
+          <label class="switch-toggle">
+            <input type="checkbox" id="togglePrivateAccountCheckbox" onchange="handlePrivateAccountToggle(this)" />
+            <span class="switch-slider"></span>
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="settings-section-title">System & Storage</div>
+    <div class="settings-group">
+      <div class="settings-row" onclick="clearAppCache()">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-trash-can" style="color:#ed4956;"></i>
+          <span>Clear Cache</span>
+        </div>
+        <div class="settings-row-right"><span id="cacheSizeText">1.2 MB</span></div>
+      </div>
+      <div class="settings-row" onclick="handleAppLogout()">
+        <div class="settings-row-left">
+          <i class="fa-solid fa-arrow-right-from-bracket" style="color:#ed4956;"></i>
+          <span style="color:#ed4956;">Log out</span>
         </div>
       </div>
     </div>
@@ -521,11 +647,11 @@
     <div class="dm-header">
       <i class="fa-solid fa-arrow-left" style="font-size:20px; cursor:pointer;" onclick="closeDirectMessenger()"></i>
       <h4>Messages</h4>
-      <i class="fa-solid fa-pen-to-square" style="cursor:pointer;" onclick="showToast('Start new direct conversation')"></i>
+      <i class="fa-solid fa-pen-to-square" style="cursor:pointer;" onclick="showToast('New direct conversation')"></i>
     </div>
     <div class="dm-chat-scroll" id="dmChatScroll">
-      <div class="chat-bubble them">Hey Subbhu! All buttons & features are live ⚡</div>
-      <div class="chat-bubble them">Engineered with real state persistence and responsive modules!</div>
+      <div class="chat-bubble them">Hey Subbhu! Ultimate Master build is 100% active ⚡💙</div>
+      <div class="chat-bubble them">All modules, buttons & storage locks are fully functioning!</div>
     </div>
     <div class="dm-input-row">
       <input type="text" id="dmInput" placeholder="Message..." onkeydown="if(event.key==='Enter') sendDMMessage()" />
@@ -539,16 +665,19 @@
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp") || "https://picsum.photos/200/200?random=1";
 const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhubhai.official";
 const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
+const SAVED_THEME = localStorage.getItem("pf_permanent_theme") || "dark";
+const SAVED_IS_PRIVATE = localStorage.getItem("pf_permanent_private") === "true";
 
 let userProfile = {
   name: SAVED_PERMANENT_USERNAME,
   bio: SAVED_PERMANENT_BIO,
   avatar: SAVED_PERMANENT_DP,
   followers: "500M",
-  isVerified: true
+  isVerified: true,
+  isPrivate: SAVED_IS_PRIVATE
 };
 
-// Initial Elements Sync
+// Initial DOM Sync
 document.getElementById("userStoryAvatar").src = userProfile.avatar;
 document.getElementById("dockPfp").src = userProfile.avatar;
 document.getElementById("profileMainPic").src = userProfile.avatar;
@@ -558,15 +687,14 @@ document.getElementById("profileHeroBio").innerText = userProfile.bio;
 document.getElementById("editDisplayNameField").value = userProfile.name;
 document.getElementById("editBioField").value = userProfile.bio;
 
-// Persistent Posts Array
 let userCreatedPosts = JSON.parse(localStorage.getItem("pf_user_posts") || "[]");
 
-// Toast Utility
+// Toast Notification
 function showToast(msg) {
   const toast = document.getElementById("toastBox");
   toast.innerText = msg;
   toast.style.display = "block";
-  setTimeout(() => { toast.style.display = "none"; }, 2200);
+  setTimeout(() => { toast.style.display = "none"; }, 2000);
 }
 
 // ==================== TAB NAVIGATION ====================
@@ -587,8 +715,7 @@ function switchNav(viewId) {
   if (viewId === "viewExplore") renderExploreGrid();
 }
 
-// ==================== BUTTON ACTIONS ====================
-// 1. Follow Button
+// ==================== FEED INTERACTIONS ====================
 function toggleFollowBtn(btn) {
   if (btn.innerText === "Follow") {
     btn.innerText = "Following";
@@ -601,7 +728,6 @@ function toggleFollowBtn(btn) {
   }
 }
 
-// 2. Audio Toggle
 function toggleAudioState(btn) {
   const icon = btn.querySelector("i");
   if (icon.classList.contains("fa-volume-xmark")) {
@@ -613,7 +739,6 @@ function toggleAudioState(btn) {
   }
 }
 
-// 3. Like Button
 function toggleLikeBtn(iconId, countId) {
   const icon = document.getElementById(iconId);
   const count = document.getElementById(countId);
@@ -626,7 +751,6 @@ function toggleLikeBtn(iconId, countId) {
   }
 }
 
-// 4. Double Tap Heart Burst
 function fireBurstDoubleTap(iconId, burstId, countId) {
   const burst = document.getElementById(burstId);
   burst.classList.add("pop");
@@ -636,22 +760,19 @@ function fireBurstDoubleTap(iconId, burstId, countId) {
   icon.className = "fa-solid fa-heart liked-red";
 }
 
-// 5. Repost Action
 function toggleRepost(iconId, countId) {
   const icon = document.getElementById(iconId);
   icon.classList.toggle("reposted-green");
   showToast(icon.classList.contains("reposted-green") ? "🔁 Reposted to your feed!" : "Repost removed");
 }
 
-// 6. Save Bookmark
 function toggleSaveBtn(btn) {
   const icon = btn.querySelector("i");
   icon.classList.toggle("fa-solid");
   icon.classList.toggle("saved-white");
-  showToast(icon.classList.contains("fa-solid") ? "Saved to your bookmarks" : "Removed from bookmarks");
+  showToast(icon.classList.contains("fa-solid") ? "Saved to bookmarks" : "Removed from bookmarks");
 }
 
-// 7. Post Share
 function executePostShare(title) {
   if (navigator.share) {
     navigator.share({ title: title || 'Instagram Post', url: window.location.href }).catch(() => {});
@@ -661,13 +782,11 @@ function executePostShare(title) {
   }
 }
 
-// 8. Caption Expand
 function expandPostCaption(link) {
-  link.parentElement.innerHTML += "<br><span style='color:#ccc; font-size:12px;'>Explore ancient open-world mechanics with intense combat, immersive weather cycles, and tactical gameplay.</span>";
+  link.parentElement.innerHTML += "<br><span style='color:var(--sub-text); font-size:12px;'>Explore ancient open-world mechanics with intense combat, immersive weather cycles, and tactical gameplay.</span>";
   link.remove();
 }
 
-// 9. Options Sheet
 function openOptionsSheet(username) {
   document.getElementById("optionsSheet").style.display = "flex";
 }
@@ -675,7 +794,7 @@ function closeOptionsSheet() {
   document.getElementById("optionsSheet").style.display = "none";
 }
 
-// 10. Comments Drawer Engine
+// Comments Engine
 let activeCommentPostId = 1;
 const sampleComments = {
   1: [{user: "alex_gamer", text: "Visuals are insane 🔥"}, {user: "dev_pro", text: "Game looks next gen"}],
@@ -711,15 +830,7 @@ function postUserComment() {
   showToast("Comment posted!");
 }
 
-// 11. Notifications Tray
-function openNotificationsTray() {
-  document.getElementById("notifSheet").style.display = "flex";
-}
-function closeNotificationsSheet() {
-  document.getElementById("notifSheet").style.display = "none";
-}
-
-// 12. Fullscreen Story Viewer
+// Story Viewer
 let storyTimeout = null;
 function launchStoryViewer(user, img, avatar) {
   const player = document.getElementById("storyPlayer");
@@ -742,7 +853,11 @@ function dismissStoryViewer() {
   document.getElementById("storyWireFill").style.width = "0%";
 }
 
-// 13. Direct Messages
+// Notifications
+function openNotificationsTray() { document.getElementById("notifSheet").style.display = "flex"; }
+function closeNotificationsSheet() { document.getElementById("notifSheet").style.display = "none"; }
+
+// Direct Messages
 function openDirectMessenger() { document.getElementById("dmDrawer").style.display = "flex"; }
 function closeDirectMessenger() { document.getElementById("dmDrawer").style.display = "none"; }
 
@@ -762,7 +877,7 @@ function sendDMMessage() {
   }, 500);
 }
 
-// 14. Reels Screen Controllers
+// Reels Engine
 const REELS_POOL = [
   "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
   "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
@@ -796,7 +911,7 @@ function advanceNextReel() {
   vid.play().catch(() => {});
 }
 
-// 15. Explore Search & Grid
+// Explore Grid
 const EXPLORE_DATA = [
   "https://picsum.photos/400/400?random=11",
   "https://picsum.photos/400/400?random=12",
@@ -812,7 +927,7 @@ const EXPLORE_DATA = [
 function renderExploreGrid() {
   const grid = document.getElementById("exploreGrid");
   grid.innerHTML = EXPLORE_DATA.map(url => `
-    <img src="${url}" onclick="showToast('Photo opened in full screen')" />
+    <img src="${url}" onclick="showToast('Photo view')" />
   `).join("");
 }
 
@@ -823,11 +938,11 @@ function handleExploreLiveFilter(val) {
     return;
   }
   grid.innerHTML = EXPLORE_DATA.slice(0, 3).map(url => `
-    <img src="${url}" onclick="showToast('Result matched!')" />
+    <img src="${url}" onclick="showToast('Result matched')" />
   `).join("");
 }
 
-// 16. Profile Render & Edit
+// Profile Section
 function renderProfileGrid() {
   const grid = document.getElementById("profileGrid");
   const defaultItems = [
@@ -862,10 +977,6 @@ function saveProfileChanges() {
   showToast("Profile changes saved permanently! 💙");
 }
 
-function openProfileSettingsSheet() {
-  showToast("Settings: 500M Followers, Verified Blue Tick & Dark Theme active");
-}
-
 function quickEditDP() {
   document.getElementById("directDpInput").click();
 }
@@ -886,7 +997,43 @@ function handleDirectDPChange(event) {
   reader.readAsDataURL(file);
 }
 
-// 17. Post Creation Engine
+// Settings Drawer
+function openSettingsDrawer() { document.getElementById("settingsDrawer").style.display = "flex"; }
+function closeSettingsDrawer() { document.getElementById("settingsDrawer").style.display = "none"; }
+
+function applyTheme(theme) {
+  if (theme === "light") {
+    document.body.classList.add("light-theme");
+    document.getElementById("toggleDarkModeCheckbox").checked = false;
+  } else {
+    document.body.classList.remove("light-theme");
+    document.getElementById("toggleDarkModeCheckbox").checked = true;
+  }
+}
+
+function handleThemeToggle(checkbox) {
+  const newTheme = checkbox.checked ? "dark" : "light";
+  localStorage.setItem("pf_permanent_theme", newTheme);
+  applyTheme(newTheme);
+}
+
+function handlePrivateAccountToggle(checkbox) {
+  userProfile.isPrivate = checkbox.checked;
+  localStorage.setItem("pf_permanent_private", userProfile.isPrivate ? "true" : "false");
+  document.getElementById("privateAccountLockIcon").style.display = userProfile.isPrivate ? "inline-block" : "none";
+  showToast(userProfile.isPrivate ? "🔒 Account is now Private" : "🌍 Account is now Public");
+}
+
+function clearAppCache() {
+  document.getElementById("cacheSizeText").innerText = "0 KB";
+  showToast("🧹 Cache Cleared! Posts & Profile safe.");
+}
+
+function handleAppLogout() {
+  if (confirm("Log out of PicFlow?")) window.location.reload();
+}
+
+// Post Upload Creation
 function openCreateModal() { document.getElementById("uploadModal").style.display = "flex"; }
 function closeCreateModal() { document.getElementById("uploadModal").style.display = "none"; }
 
@@ -894,7 +1041,7 @@ function dispatchUserPost() {
   const file = document.getElementById("postFileInput").files[0];
   const caption = document.getElementById("postCaptionInput").value;
   if (!file) {
-    alert("Please select a photo from gallery!");
+    alert("Please select a photo!");
     return;
   }
   const reader = new FileReader();
@@ -967,6 +1114,9 @@ function dispatchUserPost() {
 
 // Initial Boot
 window.addEventListener("DOMContentLoaded", () => {
+  applyTheme(SAVED_THEME);
+  document.getElementById("togglePrivateAccountCheckbox").checked = SAVED_IS_PRIVATE;
+  document.getElementById("privateAccountLockIcon").style.display = SAVED_IS_PRIVATE ? "inline-block" : "none";
   renderProfileGrid();
   renderExploreGrid();
 });
