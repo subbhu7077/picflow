@@ -3,779 +3,469 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>PicFlow - Verified Official</title>
+  <title>Instagram</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <style>
-    :root {
-      --bg-color: #000000;
-      --card-bg: #121212;
-      --card-sub-bg: #1a1a1a;
-      --border-color: #1c1c1c;
-      --text-color: #ffffff;
-      --sub-text: #888888;
-      --input-bg: #222222;
-      --hover-bg: #262626;
-      --brand-blue: #0095f6;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background: #000; color: #fff; padding-bottom: 50px; overflow-x: hidden; }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
-    body { background: var(--bg-color); color: var(--text-color); padding-bottom: 58px; overflow-x: hidden; }
+    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: #000; position: relative; }
 
-    .app-root { max-width: 480px; margin: 0 auto; min-height: 100vh; background: var(--bg-color); position: relative; }
+    /* ================= 1:1 TOP HEADER ================= */
+    header.ig-header { position: sticky; top: 0; background: #000; display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; border-bottom: 0.5px solid #1a1a1a; z-index: 100; }
+    .header-left i { font-size: 24px; cursor: pointer; color: #fff; }
+    .header-logo { font-size: 28px; font-family: 'Brush Script MT', cursive, sans-serif; font-weight: 500; letter-spacing: -0.5px; cursor: pointer; }
+    .header-right { position: relative; display: flex; align-items: center; cursor: pointer; }
+    .header-right i { font-size: 23px; color: #fff; }
+    .header-notif-pill { position: absolute; top: -7px; right: -9px; background: #ff2d55; color: #fff; font-size: 10px; font-weight: 700; padding: 1.5px 5px; border-radius: 12px; display: flex; align-items: center; gap: 2px; }
 
-    /* Top Bar */
-    header { position: sticky; top: 0; background: var(--bg-color); display: flex; justify-content: space-between; align-items: center; padding: 12px 16px; border-bottom: 1px solid var(--border-color); z-index: 90; }
-    .logo { font-size: 26px; font-weight: bold; font-family: 'Brush Script MT', cursive, sans-serif; cursor: pointer; color: var(--text-color); }
-    .header-actions { display: flex; gap: 20px; font-size: 21px; align-items: center; }
-    .header-actions i { cursor: pointer; position: relative; color: var(--text-color); }
+    /* ================= 1:1 STORIES TRAY ================= */
+    .stories-tray { display: flex; gap: 14px; padding: 10px 12px 12px; overflow-x: auto; scrollbar-width: none; border-bottom: 0.5px solid #1a1a1a; background: #000; }
+    .stories-tray::-webkit-scrollbar { display: none; }
+    .story-user-block { display: flex; flex-direction: column; align-items: center; gap: 5px; min-width: 72px; cursor: pointer; }
+    
+    .story-ring-container { width: 72px; height: 72px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
+    .story-ring-container.self-ring { background: transparent; }
+    .story-ring-container.self-ring img { border: 2px solid #262626; }
+    
+    .story-avatar-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid #000; background: #161616; }
+    .story-self-plus-badge { position: absolute; bottom: 2px; right: 2px; width: 20px; height: 20px; background: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1.5px solid #000; }
+    .story-self-plus-badge i { background: #fff; color: #000; font-size: 11px; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+    
+    .story-username-label { font-size: 11.5px; color: #fff; max-width: 72px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; }
 
-    .verified-tick { color: var(--brand-blue); font-size: 13px; margin-left: 4px; display: inline-flex; align-items: center; }
+    /* ================= FEED SECTION ================= */
+    .feed-container { display: flex; flex-direction: column; }
+    .feed-card { border-bottom: 0.5px solid #181818; padding-bottom: 12px; margin-bottom: 4px; }
+    
+    /* Post Header */
+    .post-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
+    .post-header-left { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .post-avatar-wrap { width: 34px; height: 34px; border-radius: 50%; position: relative; }
+    .post-avatar { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+    
+    .post-user-meta { display: flex; flex-direction: column; }
+    .post-username-row { display: flex; align-items: center; gap: 4px; }
+    .post-username { font-size: 13.5px; font-weight: 600; color: #fff; }
+    .verified-blue { color: #0095f6; font-size: 12px; }
+    
+    .post-subtitle-ai { font-size: 11px; color: #999; display: flex; align-items: center; gap: 4px; margin-top: 1px; }
+    
+    .post-header-right { display: flex; align-items: center; gap: 12px; }
+    .post-follow-pill { background: transparent; border: 1px solid #363636; color: #fff; font-size: 13px; font-weight: 600; padding: 4px 16px; border-radius: 8px; cursor: pointer; transition: all 0.2s ease; }
+    .post-follow-pill.active { background: #262626; border-color: transparent; }
+    .post-menu-bars { font-size: 18px; color: #fff; cursor: pointer; }
 
-    .tab-section { display: none; }
-    .tab-section.active { display: block; }
-
-    /* Stories Bar */
-    .stories-scroller { display: flex; gap: 14px; padding: 12px 14px; overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border-color); background: var(--bg-color); }
-    .stories-scroller::-webkit-scrollbar { display: none; }
-    .story-slot { display: flex; flex-direction: column; align-items: center; gap: 5px; font-size: 11px; cursor: pointer; min-width: 66px; }
-    .story-ring-wrap { width: 66px; height: 66px; border-radius: 50%; padding: 2.5px; background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; position: relative; }
-    .story-ring-wrap.self-empty { background: transparent; border: 1.5px dashed var(--sub-text); }
-    .story-thumb-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2px solid var(--bg-color); background: var(--card-bg); }
-    .story-add-badge { position: absolute; bottom: 0; right: 0; width: 20px; height: 20px; background: var(--brand-blue); border-radius: 50%; border: 2px solid var(--bg-color); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; color: #fff; }
-
-    /* Mind Bar */
-    .whats-on-mind { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid var(--border-color); background: var(--card-bg); cursor: pointer; }
-    .mind-avatar { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
-    .mind-input-faux { flex: 1; background: var(--input-bg); border-radius: 20px; padding: 9px 16px; color: var(--sub-text); font-size: 13px; }
-
-    /* Feed Posts */
-    .post-wall { display: flex; flex-direction: column; width: 100%; }
-    .post-block { border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 4px; background: var(--bg-color); }
-    .post-top { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
-    .post-user-info { display: flex; align-items: center; gap: 10px; cursor: pointer; }
-    .post-user-pfp { width: 34px; height: 34px; border-radius: 50%; object-fit: cover; }
-    .post-user-text { display: flex; flex-direction: column; }
-    .post-author-row { display: flex; align-items: center; gap: 2px; }
-    .post-author { font-size: 13px; font-weight: 600; color: var(--text-color); }
-
-    .post-stage { position: relative; width: 100%; aspect-ratio: 1/1; background: #111; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .post-stage img { width: 100%; height: 100%; object-fit: cover; display: block; }
-    .heart-burst { position: absolute; font-size: 85px; color: #ff3040; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 10; }
+    /* Media Area */
+    .post-media-stage { position: relative; width: 100%; aspect-ratio: 16/9; max-height: 480px; background: #0d0d0d; display: flex; align-items: center; justify-content: center; overflow: hidden; cursor: pointer; }
+    .post-media-stage img, .post-media-stage video { width: 100%; height: 100%; object-fit: cover; }
+    
+    .media-sound-btn { position: absolute; bottom: 12px; right: 12px; width: 30px; height: 30px; border-radius: 50%; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; z-index: 10; backdrop-filter: blur(4px); }
+    
+    .heart-burst { position: absolute; font-size: 85px; color: #ff2d55; opacity: 0; transform: scale(0.3); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); pointer-events: none; z-index: 20; }
     .heart-burst.pop { opacity: 0.95; transform: scale(1.15); }
 
-    .post-action-bar { display: flex; justify-content: space-between; padding: 10px 14px 6px; font-size: 22px; color: var(--text-color); }
-    .post-action-left { display: flex; gap: 18px; }
-    .post-action-bar i { cursor: pointer; transition: transform 0.1s ease; }
-    .liked-red { color: #ed4956 !important; }
-    .saved-gold { color: var(--brand-blue) !important; }
+    /* Action Bar */
+    .post-action-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px 6px; }
+    .post-action-left { display: flex; align-items: center; gap: 16px; }
+    .action-counter-item { display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .action-counter-item i { font-size: 21px; }
+    .liked-red { color: #ff2d55 !important; }
+    .saved-white { color: #fff !important; }
 
-    .post-caption-box { padding: 0 14px; font-size: 13px; line-height: 1.4; color: var(--text-color); }
-    .likes-stat { font-weight: 600; margin-bottom: 4px; }
-    .caption-content span { font-weight: 600; margin-right: 6px; }
+    /* Caption & Details */
+    .post-caption-box { padding: 2px 14px; font-size: 13.5px; line-height: 1.4; }
+    .post-caption-box span.author { font-weight: 600; margin-right: 6px; }
+    .post-caption-box span.more-link { color: #8e8e8e; cursor: pointer; }
+    .post-date-tag { font-size: 11px; color: #8e8e8e; margin-top: 5px; }
 
-    /* ================= IN-FEED REEL CARD (INSTAGRAM STYLE) ================= */
-    .infeed-reel-card { border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 8px; background: var(--bg-color); }
-    .infeed-reel-header { display: flex; justify-content: space-between; align-items: center; padding: 10px 14px; }
-    .infeed-reel-tag { font-size: 13px; font-weight: 700; display: flex; align-items: center; gap: 6px; color: #fff; }
-    .infeed-reel-tag i { color: #ff2b54; font-size: 15px; }
-    
-    .infeed-reel-stage { position: relative; width: 100%; aspect-ratio: 9/14; max-height: 520px; background: #000; overflow: hidden; display: flex; align-items: center; justify-content: center; cursor: pointer; }
-    .infeed-reel-video { width: 100%; height: 100%; object-fit: cover; }
-    
-    .infeed-reel-sound-pill { position: absolute; bottom: 14px; right: 14px; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.65); display: flex; align-items: center; justify-content: center; font-size: 13px; color: #fff; z-index: 15; backdrop-filter: blur(4px); }
-    .infeed-reel-bottom-info { position: absolute; bottom: 14px; left: 14px; right: 60px; z-index: 15; text-shadow: 0 1px 4px rgba(0,0,0,0.9); }
-    .infeed-reel-author { font-size: 13px; font-weight: 700; color: #fff; display: flex; align-items: center; gap: 4px; margin-bottom: 4px; }
-    .infeed-reel-caption { font-size: 12.5px; line-height: 1.35; color: #eee; text-overflow: ellipsis; overflow: hidden; white-space: nowrap; }
-    .infeed-reel-music { font-size: 11px; color: #ccc; display: flex; align-items: center; gap: 5px; margin-top: 4px; }
+    /* ================= 1:1 BOTTOM NAVIGATION DOCK ================= */
+    nav.bottom-dock-bar { position: fixed; bottom: 0; left: 0; right: 0; height: 48px; background: #000; border-top: 0.5px solid #1a1a1a; display: flex; justify-content: space-around; align-items: center; z-index: 110; max-width: 480px; margin: 0 auto; }
+    nav.bottom-dock-bar i { font-size: 22px; color: #fff; cursor: pointer; }
+    .dock-avatar-circle { width: 26px; height: 26px; border-radius: 50%; object-fit: cover; border: 1.5px solid #fff; cursor: pointer; }
 
-    /* Fullscreen Reels Tab (For bottom clapperboard icon) */
-    #reelsTab { position: relative; height: calc(100vh - 58px); overflow: hidden; background: #000; }
-    .reel-viewport { position: relative; width: 100%; height: 100%; overflow: hidden; touch-action: pan-y; }
-    .reel-video-wrapper { position: relative; width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #000; }
-    .reel-video-element { width: 100%; height: 100%; object-fit: contain; }
-    .reel-sidebar-actions { position: absolute; bottom: 20px; right: 14px; display: flex; flex-direction: column; gap: 18px; align-items: center; z-index: 20; color: #fff; }
-    .reel-action-bubble { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 25px; cursor: pointer; }
-    .reel-action-bubble span { font-size: 12px; font-weight: 500; }
+    /* Views */
+    .app-view { display: none; }
+    .app-view.active { display: block; }
 
-    /* Explore Tab */
-    .explore-search-wrap { padding: 12px 14px; }
-    .explore-search-input { width: 100%; background: var(--input-bg); border: none; border-radius: 8px; padding: 10px 14px; color: var(--text-color); outline: none; font-size: 14px; }
-    .explore-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; }
-    .explore-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
-
-    /* Profile Tab */
-    .profile-canvas { padding: 18px 16px; }
-    .profile-top-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .profile-username-tag { font-size: 18px; font-weight: bold; display: flex; align-items: center; gap: 4px; }
-    
-    .profile-bio-header { display: flex; align-items: center; justify-content: space-between; }
-    .profile-hero-pic-wrap { position: relative; width: 84px; height: 84px; cursor: pointer; }
-    .profile-hero-pic { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 2.5px solid var(--border-color); background: var(--card-bg); }
-    .profile-camera-badge { position: absolute; bottom: 2px; right: 2px; background: var(--brand-blue); width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; border: 2px solid var(--bg-color); color: #fff; }
-    .profile-metrics-deck { display: flex; gap: 22px; text-align: center; }
-    .profile-metrics-deck strong { display: block; font-size: 16px; color: var(--text-color); }
-    .profile-metrics-deck span { font-size: 12px; color: var(--sub-text); }
-    .profile-bio-textblock { margin-top: 14px; }
-    .profile-name-row { display: flex; align-items: center; gap: 6px; }
-    .profile-name-row h4 { font-size: 15px; font-weight: 700; color: var(--text-color); }
-    .profile-bio-textblock p { font-size: 13px; color: var(--sub-text); margin-top: 2px; }
-    
-    .profile-action-btns-row { display: flex; gap: 8px; margin-top: 14px; margin-bottom: 14px; }
-    .profile-control-btn { flex: 1; padding: 8px; background: var(--hover-bg); color: var(--text-color); font-weight: 600; border: none; border-radius: 8px; cursor: pointer; font-size: 13px; }
-
-    /* Highlights Section */
-    .highlights-scroller { display: flex; gap: 14px; overflow-x: auto; padding: 8px 0 14px; border-bottom: 1px solid var(--border-color); scrollbar-width: none; }
-    .highlights-scroller::-webkit-scrollbar { display: none; }
-    .highlight-item { display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11px; cursor: pointer; min-width: 60px; }
-    .highlight-circle { width: 56px; height: 56px; border-radius: 50%; border: 1.5px solid var(--border-color); padding: 2px; display: flex; align-items: center; justify-content: center; background: var(--card-bg); }
-    .highlight-img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-
-    .profile-grid-wall { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; margin-top: 12px; }
-    .profile-grid-wall img { width: 100%; aspect-ratio: 1/1; object-fit: cover; cursor: pointer; background: #111; }
-
-    /* Bottom Navigation Dock */
-    nav.bottom-dock { position: fixed; bottom: 0; left: 0; right: 0; height: 52px; background: var(--bg-color); border-top: 1px solid var(--border-color); display: flex; justify-content: space-around; align-items: center; z-index: 95; max-width: 480px; margin: 0 auto; }
-    nav.bottom-dock i { font-size: 21px; color: var(--text-color); cursor: pointer; }
-    .profile-dock-icon { width: 25px; height: 25px; border-radius: 50%; border: 1.5px solid var(--text-color); object-fit: cover; cursor: pointer; }
-
-    /* Modals */
-    .modal-overlay-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
-    .modal-sheet-inner { background: var(--card-sub-bg); color: var(--text-color); width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid var(--border-color); }
-    .modal-sheet-inner h3 { margin-bottom: 14px; font-size: 16px; }
-    .modal-sheet-inner input, .modal-sheet-inner textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--border-color); color: var(--text-color); padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
-    .btn-theme-blue { width: 100%; padding: 10px; background: var(--brand-blue); color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
-    .close-sheet-icon { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: var(--sub-text); }
+    /* Modal for Quick Post */
+    .modal-backdrop { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.85); z-index: 200; align-items: center; justify-content: center; padding: 16px; }
+    .modal-box { background: #1a1a1a; width: 100%; max-width: 400px; border-radius: 12px; padding: 20px; position: relative; border: 1px solid #333; }
+    .modal-box h3 { margin-bottom: 12px; font-size: 16px; }
+    .modal-box input, .modal-box textarea { width: 100%; background: #262626; border: 1px solid #333; color: #fff; padding: 10px; border-radius: 6px; margin-bottom: 12px; outline: none; font-size: 13px; }
+    .btn-submit { width: 100%; padding: 10px; background: #0095f6; color: #fff; font-weight: 600; border: none; border-radius: 6px; cursor: pointer; }
+    .close-btn { position: absolute; top: 16px; right: 16px; font-size: 18px; cursor: pointer; color: #888; }
   </style>
 </head>
 <body>
 
 <div class="app-root">
-  <!-- Top Header -->
-  <header>
-    <div class="logo" onclick="switchView('feedTab'); window.scrollTo({top: 0, behavior: 'smooth'});">PicFlow</div>
-    <div class="header-actions">
-      <i class="fa-regular fa-heart" onclick="alert('All verified notifications loaded!')"></i>
-      <i class="fa-brands fa-facebook-messenger" onclick="alert('Direct chat loaded')"></i>
+  <!-- ================= 1:1 EXACT TOP HEADER ================= -->
+  <header class="ig-header">
+    <div class="header-left" onclick="openCreateModal()">
+      <i class="fa-solid fa-plus"></i>
+    </div>
+    <div class="header-logo" onclick="window.scrollTo({top:0, behavior:'smooth'})">
+      Instagram
+    </div>
+    <div class="header-right" onclick="alert('Notification: 1 person liked your post!')">
+      <i class="fa-regular fa-heart"></i>
+      <div class="header-notif-pill">
+        <i class="fa-solid fa-user" style="font-size: 8px;"></i> 1
+      </div>
     </div>
   </header>
 
-  <!-- TAB 1: FEED (POSTS + IN-FEED REELS CARD TOGETHER) -->
-  <section id="feedTab" class="tab-section active">
+  <!-- ================= TAB 1: HOME FEED ================= -->
+  <main id="viewFeed" class="app-view active">
     <!-- Stories Carousel -->
-    <div class="stories-scroller" id="storiesTray"></div>
-
-    <!-- What's on your mind box -->
-    <div class="whats-on-mind" onclick="openCreatePostSheet()">
-      <img src="https://picsum.photos/200/200?random=1" class="mind-avatar" id="mindBarAvatar" />
-      <div class="mind-input-faux">What's on your mind?</div>
-    </div>
-
-    <!-- Feed Wall (Regular Posts + In-Feed Reels) -->
-    <div class="post-wall" id="postsContainer"></div>
-  </section>
-
-  <!-- TAB 2: EXPLORE -->
-  <section id="exploreTab" class="tab-section">
-    <div class="explore-search-wrap">
-      <input type="text" class="explore-search-input" placeholder="🔍 Search creators, photos..." oninput="handleExploreSearch(this.value)" />
-    </div>
-    <div class="explore-grid-wall" id="exploreGridWall"></div>
-  </section>
-
-  <!-- TAB 3: FULLSCREEN REELS (ACCESSED VIA CLAPPERBOARD DOCK ICON) -->
-  <section id="reelsTab" class="tab-section">
-    <div class="reel-viewport" id="fullscreenReelViewport">
-      <div class="reel-video-wrapper" onclick="handleFullscreenReelTap()" ondblclick="handleFullscreenReelDoubleTap()">
-        <video class="reel-video-element" id="fullscreenReelVideo" playsinline loop preload="auto"></video>
-        <i class="fa-solid fa-heart heart-burst" id="fullscreenBurstHeart"></i>
+    <div class="stories-tray">
+      <!-- Slot 1: Your Story -->
+      <div class="story-user-block" onclick="openCreateModal()">
+        <div class="story-ring-container self-ring">
+          <img src="https://picsum.photos/200/200?random=1" class="story-avatar-img" id="userStoryAvatar" />
+          <div class="story-self-plus-badge">
+            <i class="fa-solid fa-plus"></i>
+          </div>
+        </div>
+        <span class="story-username-label">Your story</span>
       </div>
 
-      <div class="reel-sidebar-actions">
-        <div class="reel-action-bubble" onclick="toggleFullscreenLike()">
-          <i class="fa-solid fa-heart" id="fullscreenLikeIcon"></i>
-          <span>28K</span>
+      <!-- Slot 2: samviieeetttt_... -->
+      <div class="story-user-block" onclick="viewStory('samviieeetttt____', 'https://picsum.photos/800/1200?random=21')">
+        <div class="story-ring-container">
+          <img src="https://picsum.photos/200/200?random=2" class="story-avatar-img" />
         </div>
-        <div class="reel-action-bubble" onclick="alert('Comments: 46')">
-          <i class="fa-regular fa-comment"></i>
-          <span>46</span>
+        <span class="story-username-label">samviieeetttt_...</span>
+      </div>
+
+      <!-- Slot 3: __mr_ramesh_3... -->
+      <div class="story-user-block" onclick="viewStory('__mr_ramesh_3...', 'https://picsum.photos/800/1200?random=22')">
+        <div class="story-ring-container">
+          <img src="https://picsum.photos/200/200?random=3" class="story-avatar-img" />
         </div>
-        <div class="reel-action-bubble" onclick="sharePost()">
-          <i class="fa-regular fa-paper-plane"></i>
-          <span>1,568</span>
+        <span class="story-username-label">__mr_ramesh_3...</span>
+      </div>
+
+      <!-- Slot 4: bhoi91382 -->
+      <div class="story-user-block" onclick="viewStory('bhoi91382', 'https://picsum.photos/800/1200?random=23')">
+        <div class="story-ring-container">
+          <img src="https://picsum.photos/200/200?random=4" class="story-avatar-img" />
         </div>
-        <div class="reel-action-bubble" onclick="advanceFullscreenReel(1)">
-          <i class="fa-solid fa-angles-down"></i>
-          <span>Next</span>
-        </div>
+        <span class="story-username-label">bhoi91382</span>
       </div>
     </div>
-  </section>
 
-  <!-- TAB 4: PROFILE -->
-  <section id="profileTab" class="tab-section">
-    <div class="profile-canvas">
-      <div class="profile-top-header-row">
-        <div class="profile-username-tag">
-          <span id="profileTopUsername">Subbhubhai.official</span>
-          <i class="fa-solid fa-circle-check verified-tick"></i>
+    <!-- Feed Wall -->
+    <div class="feed-container" id="feedPostsContainer">
+      <!-- POST 1: EXACT MATCH faizan_playz1 -->
+      <article class="feed-card" id="post-1">
+        <div class="post-header">
+          <div class="post-header-left">
+            <div class="post-avatar-wrap">
+              <img src="https://picsum.photos/100/100?random=5" class="post-avatar" />
+            </div>
+            <div class="post-user-meta">
+              <span class="post-username">faizan_playz1</span>
+              <div class="post-subtitle-ai">
+                <i class="fa-regular fa-comment-dots"></i> Translate with AI
+              </div>
+            </div>
+          </div>
+          <div class="post-header-right">
+            <button class="post-follow-pill" onclick="toggleFollow(this)">Follow</button>
+            <i class="fa-solid fa-bars post-menu-bars" onclick="alert('Post options')"></i>
+          </div>
         </div>
-        <i class="fa-solid fa-gear" onclick="alert('Settings & Privacy: All configurations active!')" style="font-size:20px; cursor:pointer;"></i>
-      </div>
 
-      <div class="profile-bio-header">
-        <div class="profile-hero-pic-wrap" onclick="quickChangeDP()">
-          <img src="https://picsum.photos/200/200?random=1" class="profile-hero-pic" id="profileHeroPic" />
-          <div class="profile-camera-badge"><i class="fa-solid fa-camera"></i></div>
+        <div class="post-media-stage" ondblclick="handleDoubleTapLike('like-icon-1', 'burst-1', 'like-cnt-1')">
+          <img src="https://picsum.photos/800/500?random=81" loading="lazy" id="media-img-1" />
+          <i class="fa-solid fa-heart heart-burst" id="burst-1"></i>
+          <div class="media-sound-btn" onclick="toggleSound(this)">
+            <i class="fa-solid fa-volume-xmark"></i>
+          </div>
         </div>
-        <div class="profile-metrics-deck">
-          <div><strong id="profilePostCountNumber">1</strong><span>Posts</span></div>
-          <div><strong id="profileFollowersNum">500M</strong><span>Followers</span></div>
-          <div><strong>248</strong><span>Following</span></div>
-        </div>
-      </div>
-      <div class="profile-bio-textblock">
-        <div class="profile-name-row">
-          <h4 id="profileHeroName">Subbhubhai.official</h4>
-          <i class="fa-solid fa-circle-check verified-tick"></i>
-        </div>
-        <p id="profileHeroBio">Official Creator & Tech Explorer ⚡</p>
-      </div>
-      
-      <div class="profile-action-btns-row">
-        <button class="profile-control-btn" onclick="openProfileEditSheet()">Edit Profile</button>
-        <button class="profile-control-btn" onclick="sharePost()">Share Profile</button>
-      </div>
 
-      <!-- Highlights -->
-      <div class="highlights-scroller">
-        <div class="highlight-item" onclick="alert('Viewing Travel highlights ✈️')">
-          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=81" /></div>
-          <span>Travel ✈️</span>
+        <div class="post-action-row">
+          <div class="post-action-left">
+            <div class="action-counter-item" onclick="toggleSingleLike('like-icon-1', 'like-cnt-1')">
+              <i class="fa-regular fa-heart" id="like-icon-1"></i>
+              <span id="like-cnt-1">32.7K</span>
+            </div>
+            <div class="action-counter-item" onclick="alert('View all 211 comments')">
+              <i class="fa-regular fa-comment"></i>
+              <span>211</span>
+            </div>
+            <div class="action-counter-item" onclick="alert('Reposted!')">
+              <i class="fa-solid fa-retweet"></i>
+              <span>1,652</span>
+            </div>
+            <div class="action-counter-item" onclick="sharePostLink()">
+              <i class="fa-regular fa-paper-plane"></i>
+              <span>12.8K</span>
+            </div>
+          </div>
+          <div class="action-counter-item" onclick="toggleSave(this)">
+            <i class="fa-regular fa-bookmark"></i>
+          </div>
         </div>
-        <div class="highlight-item" onclick="alert('Viewing Vibes highlights ⚡')">
-          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=82" /></div>
-          <span>Vibes ⚡</span>
+
+        <div class="post-caption-box">
+          <span class="author">faizan_playz1</span>Where Winds Meet Is Built Different. 🔥 <span class="more-link">... more</span>
+          <div class="post-date-tag">August 7 • See translation</div>
         </div>
-        <div class="highlight-item" onclick="alert('Viewing Fitness highlights 🏋️')">
-          <div class="highlight-circle"><img class="highlight-img" src="https://picsum.photos/100/100?random=83" /></div>
-          <span>Fitness 🏋️</span>
+      </article>
+
+      <!-- POST 2: EXACT MATCH techplusgadgets -->
+      <article class="feed-card" id="post-2">
+        <div class="post-header">
+          <div class="post-header-left">
+            <div class="post-avatar-wrap" style="padding:1.5px; background:#ff2d55; border-radius:50%;">
+              <img src="https://picsum.photos/100/100?random=6" class="post-avatar" style="border:1.5px solid #000;" />
+            </div>
+            <div class="post-user-meta">
+              <div class="post-username-row">
+                <span class="post-username">techplusgadgets</span>
+                <i class="fa-solid fa-circle-check verified-blue"></i>
+              </div>
+              <div class="post-subtitle-ai">
+                <i class="fa-regular fa-square"></i> Made with Edits
+              </div>
+            </div>
+          </div>
+          <div class="post-header-right">
+            <button class="post-follow-pill" onclick="toggleFollow(this)">Follow</button>
+            <i class="fa-solid fa-bars post-menu-bars" onclick="alert('Post options')"></i>
+          </div>
         </div>
-      </div>
+
+        <div class="post-media-stage" ondblclick="handleDoubleTapLike('like-icon-2', 'burst-2', 'like-cnt-2')">
+          <img src="https://picsum.photos/800/500?random=82" loading="lazy" />
+          <i class="fa-solid fa-heart heart-burst" id="burst-2"></i>
+          <div class="media-sound-btn" onclick="toggleSound(this)">
+            <i class="fa-solid fa-volume-xmark"></i>
+          </div>
+        </div>
+
+        <div class="post-action-row">
+          <div class="post-action-left">
+            <div class="action-counter-item" onclick="toggleSingleLike('like-icon-2', 'like-cnt-2')">
+              <i class="fa-solid fa-heart liked-red" id="like-icon-2"></i>
+              <span id="like-cnt-2">48.2K</span>
+            </div>
+            <div class="action-counter-item" onclick="alert('View all 540 comments')">
+              <i class="fa-regular fa-comment"></i>
+              <span>540</span>
+            </div>
+            <div class="action-counter-item" onclick="alert('Reposted!')">
+              <i class="fa-solid fa-retweet"></i>
+              <span>2,140</span>
+            </div>
+            <div class="action-counter-item" onclick="sharePostLink()">
+              <i class="fa-regular fa-paper-plane"></i>
+              <span>18.4K</span>
+            </div>
+          </div>
+          <div class="action-counter-item" onclick="toggleSave(this)">
+            <i class="fa-regular fa-bookmark"></i>
+          </div>
+        </div>
+
+        <div class="post-caption-box">
+          <span class="author">techplusgadgets</span>Slow Laptop ❌ Solution ✅ Boost your speed easily! <span class="more-link">... more</span>
+          <div class="post-date-tag">JUST NOW • See translation</div>
+        </div>
+      </article>
     </div>
-    <div class="profile-grid-wall" id="profileGridWall"></div>
+  </main>
+
+  <!-- ================= TAB 2: PROFILE ================= -->
+  <section id="viewProfile" class="app-view">
+    <div style="padding: 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <h3 id="profileTitleUsername">Subbhubhai.official <i class="fa-solid fa-circle-check verified-blue"></i></h3>
+        <i class="fa-solid fa-bars" onclick="alert('Settings loaded')"></i>
+      </div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:16px;">
+        <img id="profileMainPic" src="https://picsum.photos/200/200?random=1" style="width:76px; height:76px; border-radius:50%; object-fit:cover; border:2px solid #262626;" />
+        <div style="display:flex; gap:20px; text-align:center;">
+          <div><strong id="postCount">2</strong><br><span style="font-size:12px; color:#888;">Posts</span></div>
+          <div><strong>500M</strong><br><span style="font-size:12px; color:#888;">Followers</span></div>
+          <div><strong>248</strong><br><span style="font-size:12px; color:#888;">Following</span></div>
+        </div>
+      </div>
+      <div style="margin-top:12px;">
+        <h4>Subbhubhai.official</h4>
+        <p style="color:#aaa; font-size:13px;">Official Creator & Tech Explorer ⚡</p>
+      </div>
+      <button style="width:100%; margin-top:14px; padding:8px; background:#262626; color:#fff; border:none; border-radius:8px; font-weight:600;" onclick="openCreateModal()">Create Post</button>
+    </div>
   </section>
 
-  <!-- Bottom Dock -->
-  <nav class="bottom-dock">
-    <i class="fa-solid fa-house" onclick="switchView('feedTab')"></i>
-    <i class="fa-solid fa-magnifying-glass" onclick="switchView('exploreTab')"></i>
-    <i class="fa-regular fa-square-plus" onclick="openCreatePostSheet()"></i>
-    <i class="fa-solid fa-clapperboard" onclick="switchView('reelsTab')"></i>
-    <img src="https://picsum.photos/200/200?random=1" class="profile-dock-icon" id="profileDockAvatar" onclick="switchView('profileTab')" />
+  <!-- ================= 1:1 EXACT BOTTOM NAVIGATION BAR ================= -->
+  <nav class="bottom-dock-bar">
+    <!-- Home -->
+    <i class="fa-solid fa-house" onclick="switchNav('viewFeed')"></i>
+    <!-- Reels -->
+    <i class="fa-solid fa-clapperboard" onclick="alert('Opening Reels player')"></i>
+    <!-- Direct Messenger -->
+    <i class="fa-regular fa-paper-plane" onclick="alert('Direct Messages open')"></i>
+    <!-- Search -->
+    <i class="fa-solid fa-magnifying-glass" onclick="alert('Explore & Search')"></i>
+    <!-- Profile -->
+    <img src="https://picsum.photos/200/200?random=1" class="dock-avatar-circle" id="dockPfp" onclick="switchNav('viewProfile')" />
   </nav>
 
-  <!-- Hidden DP Input -->
-  <input type="file" id="directDpFileInput" accept="image/*" style="display:none;" onchange="handleDirectDP(event)" />
-
-  <!-- Create Post Modal -->
-  <div class="modal-overlay-backdrop" id="createPostModal">
-    <div class="modal-sheet-inner">
-      <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeCreatePostSheet()"></i>
-      <h3>Create New Post</h3>
-      <input type="file" id="postImageUploadInput" accept="image/*" />
-      <textarea id="postCaptionTextInput" placeholder="Write a caption..." rows="3"></textarea>
-      <button class="btn-theme-blue" id="btnPublishPost" onclick="dispatchNewPost()">Share Post</button>
-    </div>
-  </div>
-
-  <!-- Edit Profile Modal -->
-  <div class="modal-overlay-backdrop" id="editProfileModal">
-    <div class="modal-sheet-inner">
-      <i class="fa-solid fa-xmark close-sheet-icon" onclick="closeProfileEditSheet()"></i>
-      <h3>Edit Profile</h3>
-      <label style="font-size:12px; color:var(--sub-text);">Change DP</label>
-      <input type="file" id="editProfilePicFile" accept="image/*" />
-      <label style="font-size:12px; color:var(--sub-text);">Username</label>
-      <input type="text" id="editProfileDisplayName" placeholder="Display Name" />
-      <label style="font-size:12px; color:var(--sub-text);">Bio</label>
-      <textarea id="editProfileBioDetails" placeholder="Bio description" rows="3"></textarea>
-      <button class="btn-theme-blue" onclick="saveProfileDetails()">Save Profile Changes</button>
+  <!-- Quick Upload Modal -->
+  <div class="modal-backdrop" id="uploadModal">
+    <div class="modal-box">
+      <i class="fa-solid fa-xmark close-btn" onclick="closeCreateModal()"></i>
+      <h3>New Post</h3>
+      <input type="file" id="postFileInput" accept="image/*" />
+      <textarea id="postCaptionInput" placeholder="Write a caption..." rows="3"></textarea>
+      <button class="btn-submit" onclick="dispatchUserPost()">Share to Feed</button>
     </div>
   </div>
 </div>
 
 <script>
-// ==================== INDEXEDDB FOR BULLETPROOF MEDIA ====================
-let db;
-const DB_NAME = "PicFlowFeedReelsDB_v31";
-const STORE_NAME = "posts_store";
-
-function initDB(callback) {
-  const req = indexedDB.open(DB_NAME, 1);
-  req.onupgradeneeded = function(e) {
-    db = e.target.result;
-    if (!db.objectStoreNames.contains(STORE_NAME)) {
-      db.createObjectStore(STORE_NAME, { keyPath: "id" });
-    }
-  };
-  req.onsuccess = function(e) {
-    db = e.target.result;
-    callback();
-  };
-  req.onerror = function() { callback(); };
-}
-
-function savePostToDB(postObj, callback) {
-  if (!db) return callback();
-  const tx = db.transaction([STORE_NAME], "readwrite");
-  tx.objectStore(STORE_NAME).put(postObj);
-  tx.oncomplete = () => callback();
-  tx.onerror = () => callback();
-}
-
-function getAllPostsFromDB(callback) {
-  if (!db) return callback([]);
-  const tx = db.transaction([STORE_NAME], "readonly");
-  const req = tx.objectStore(STORE_NAME).getAll();
-  req.onsuccess = () => callback(req.result || []);
-  req.onerror = () => callback([]);
-}
-
-// ==================== PERMANENT STATE ====================
+// ==================== STATE MANAGEMENT ====================
 const SAVED_PERMANENT_DP = localStorage.getItem("pf_permanent_dp") || "https://picsum.photos/200/200?random=1";
 const SAVED_PERMANENT_USERNAME = localStorage.getItem("pf_permanent_username") || "Subbhubhai.official";
-const SAVED_PERMANENT_BIO = localStorage.getItem("pf_permanent_bio") || "Official Creator & Tech Explorer ⚡";
 
-let userProfile = {
-  name: SAVED_PERMANENT_USERNAME,
-  bio: SAVED_PERMANENT_BIO,
-  avatar: SAVED_PERMANENT_DP,
-  followers: "500M",
-  isVerified: true
-};
+document.getElementById("userStoryAvatar").src = SAVED_PERMANENT_DP;
+document.getElementById("dockPfp").src = SAVED_PERMANENT_DP;
+document.getElementById("profileMainPic").src = SAVED_PERMANENT_DP;
 
-// Seed Feed Post
-const SEED_DEFAULT_POST = {
-  id: 101,
-  type: "photo",
-  username: userProfile.name,
-  avatar: userProfile.avatar,
-  image: "https://picsum.photos/800/800?random=181",
-  caption: "Official Verified Creator Vibes ⚡💙",
-  likes: 1284,
-  liked: false
-};
+function switchNav(viewId) {
+  document.querySelectorAll(".app-view").forEach(v => v.classList.remove("active"));
+  document.getElementById(viewId).classList.add("active");
+  window.scrollTo({top: 0, behavior: "smooth"});
+}
 
-// In-Feed Official Reel Card
-const INFEED_REEL_CARD = {
-  id: "reel_infeed_1",
-  type: "reel",
-  user: "ezybeacar",
-  avatar: "https://picsum.photos/100/100?random=10",
-  video: "https://assets.mixkit.co/videos/preview/mixkit-driving-through-the-streets-of-a-modern-city-at-night-42284-large.mp4",
-  caption: "Desert off-roading SUV test 🚙💨 挣很多钱 去很多地方....",
-  music: "UMPSTYLE (Slowed) TV • Original Audio",
-  likes: "28K",
-  comments: "46",
-  liked: true
-};
-
-let globalPosts = [];
-
-const REEL_DATABASE = [
-  INFEED_REEL_CARD,
-  {
-    id: "reel_2",
-    type: "reel",
-    user: "Subbhubhai.official",
-    avatar: userProfile.avatar,
-    video: "https://assets.mixkit.co/videos/preview/mixkit-vertical-view-of-waves-coming-to-the-shore-41586-large.mp4",
-    caption: "Sunset ocean waves 🌊✨ Sound on!",
-    music: "Apna Bana Le - Arijit Singh",
-    likes: "45.2k",
-    comments: "312",
-    liked: false
-  }
-];
-
-let stories = [
-  { id: 1, user: "Your story", avatar: userProfile.avatar, img: "https://picsum.photos/800/1200?random=191" },
-  { id: 2, user: "neha_v", avatar: "https://picsum.photos/200/200?random=3", img: "https://picsum.photos/800/1200?random=192" },
-  { id: 3, user: "rahul_k", avatar: "https://picsum.photos/200/200?random=4", img: "https://picsum.photos/800/1200?random=193" }
-];
-
-// Switch Tabs
-function switchView(viewId) {
-  document.querySelectorAll(".tab-section").forEach(sec => sec.classList.remove("active"));
-  const el = document.getElementById(viewId);
-  if (el) el.classList.add("active");
-  window.scrollTo({ top: 0, behavior: "smooth" });
-
-  if (viewId === "exploreTab") renderExploreGrid();
-  if (viewId === "profileTab") renderProfileSection();
-
-  // Fullscreen reel control
-  const fsVideo = document.getElementById("fullscreenReelVideo");
-  if (viewId === "reelsTab") {
-    fsVideo.play().catch(() => {});
+function toggleFollow(btn) {
+  if (btn.innerText === "Follow") {
+    btn.innerText = "Following";
+    btn.classList.add("active");
   } else {
-    fsVideo.pause();
+    btn.innerText = "Follow";
+    btn.classList.remove("active");
   }
 }
 
-// Stories Tray
-function renderStories() {
-  const container = document.getElementById("storiesTray");
-  if (!container) return;
-  container.innerHTML = `
-    <div class="story-slot" onclick="alert('Create Story')">
-      <div class="story-ring-wrap self-empty">
-        <img class="story-thumb-img" src="${userProfile.avatar}" />
-        <div class="story-add-badge">+</div>
-      </div>
-      <span>Your story</span>
-    </div>
-  ` + stories.map(s => `
-    <div class="story-slot" onclick="alert('Viewing story of ${s.user}')">
-      <div class="story-ring-wrap">
-        <img class="story-thumb-img" src="${s.avatar}" />
-      </div>
-      <span>${s.user}</span>
-    </div>
-  `).join("");
-}
-
-// ==================== FEED (POSTS + IN-FEED REELS) ====================
-function renderFeed() {
-  const wall = document.getElementById("postsContainer");
-  if (!wall) return;
-
-  // Insert In-Feed Reel Card directly after top posts
-  let feedList = [...globalPosts];
-  if (!feedList.length) feedList = [SEED_DEFAULT_POST];
-  
-  // Inject In-Feed Reel smoothly at position 1
-  feedList.splice(1, 0, INFEED_REEL_CARD);
-
-  wall.innerHTML = feedList.map(item => {
-    if (item.type === "reel") {
-      // IN-FEED REEL CARD
-      return `
-        <article class="infeed-reel-card" id="card-${item.id}">
-          <div class="infeed-reel-header">
-            <div class="infeed-reel-tag">
-              <i class="fa-solid fa-clapperboard"></i>
-              <span>Reels</span>
-            </div>
-            <i class="fa-solid fa-ellipsis" style="color:var(--sub-text); cursor:pointer;"></i>
-          </div>
-
-          <div class="infeed-reel-stage" onclick="toggleInfeedReelAudio('infeed-video-${item.id}')">
-            <video class="infeed-reel-video" id="infeed-video-${item.id}" src="${item.video}" playsinline loop autoplay muted></video>
-            
-            <div class="infeed-reel-sound-pill" id="sound-pill-${item.id}">
-              <i class="fa-solid fa-volume-xmark" id="sound-icon-${item.id}"></i>
-            </div>
-
-            <div class="infeed-reel-bottom-info">
-              <div class="infeed-reel-author">
-                <img src="${item.avatar}" style="width:24px; height:24px; border-radius:50%; object-fit:cover;" />
-                <span>${item.user}</span>
-                <i class="fa-solid fa-circle-check verified-tick" style="font-size:11px;"></i>
-              </div>
-              <p class="infeed-reel-caption">${item.caption}</p>
-              <div class="infeed-reel-music"><i class="fa-solid fa-music"></i> ${item.music}</div>
-            </div>
-          </div>
-
-          <div class="post-action-bar">
-            <div class="post-action-left">
-              <i class="fa-solid fa-heart liked-red" onclick="this.classList.toggle('liked-red')"></i>
-              <i class="fa-regular fa-comment" onclick="alert('Reel comments: 46')"></i>
-              <i class="fa-regular fa-paper-plane" onclick="sharePost()"></i>
-            </div>
-            <i class="fa-regular fa-bookmark" onclick="this.classList.toggle('fa-solid')"></i>
-          </div>
-
-          <div class="post-caption-box">
-            <div class="likes-stat">${item.likes} likes</div>
-          </div>
-        </article>
-      `;
-    } else {
-      // REGULAR PHOTO POST
-      return `
-        <article class="post-block" id="post-${item.id}">
-          <div class="post-top">
-            <div class="post-user-info" onclick="switchView('profileTab')">
-              <img src="${item.avatar}" class="post-user-pfp" />
-              <div class="post-user-text">
-                <div class="post-author-row">
-                  <span class="post-author">${item.username}</span>
-                  <i class="fa-solid fa-circle-check verified-tick"></i>
-                </div>
-              </div>
-            </div>
-            <i class="fa-solid fa-ellipsis" style="color:var(--sub-text); cursor:pointer;"></i>
-          </div>
-
-          <div class="post-stage" ondblclick="fireDoubleTapHeart(${item.id})">
-            <img src="${item.image}" loading="lazy" />
-            <i class="fa-solid fa-heart heart-burst" id="burst-${item.id}"></i>
-          </div>
-
-          <div class="post-action-bar">
-            <div class="post-action-left">
-              <i class="${item.liked ? 'fa-solid fa-heart liked-red' : 'fa-regular fa-heart'}" onclick="togglePostLike(${item.id})"></i>
-              <i class="fa-regular fa-comment" onclick="alert('Comment added!')"></i>
-              <i class="fa-regular fa-paper-plane" onclick="sharePost()"></i>
-            </div>
-            <i class="fa-regular fa-bookmark" onclick="this.classList.toggle('fa-solid')"></i>
-          </div>
-
-          <div class="post-caption-box">
-            <div class="likes-stat">${item.likes || 1} likes</div>
-            <div class="caption-content"><span>${item.username}</span>${item.caption || ''}</div>
-          </div>
-        </article>
-      `;
-    }
-  }).join("");
-}
-
-function toggleInfeedReelAudio(videoId) {
-  const vid = document.getElementById(videoId);
-  if (!vid) return;
-  vid.muted = !vid.muted;
-  const icon = document.querySelector(`#${videoId.replace('infeed-video-', 'sound-icon-')}`);
-  if (icon) {
-    icon.className = vid.muted ? "fa-solid fa-volume-xmark" : "fa-solid fa-volume-high";
-  }
-}
-
-function togglePostLike(id) {
-  const p = globalPosts.find(item => item.id === id) || SEED_DEFAULT_POST;
-  p.liked = !p.liked;
-  p.likes = (p.likes || 1) + (p.liked ? 1 : -1);
-  savePostToDB(p, () => {});
-  renderFeed();
-}
-
-function fireDoubleTapHeart(id) {
-  const burst = document.getElementById(`burst-${id}`);
-  if (burst) {
-    burst.classList.add("pop");
-    setTimeout(() => burst.classList.remove("pop"), 500);
-  }
-  const p = globalPosts.find(item => item.id === id) || SEED_DEFAULT_POST;
-  if (!p.liked) {
-    p.liked = true;
-    p.likes = (p.likes || 0) + 1;
-    savePostToDB(p, () => {});
-    renderFeed();
-  }
-}
-
-function sharePost() {
-  if (navigator.share) {
-    navigator.share({ title: 'PicFlow', url: window.location.href }).catch(() => {});
+function toggleSound(btn) {
+  const icon = btn.querySelector("i");
+  if (icon.classList.contains("fa-volume-xmark")) {
+    icon.className = "fa-solid fa-volume-high";
   } else {
-    navigator.clipboard.writeText(window.location.href);
-    alert("Link copied to clipboard! 🔗");
+    icon.className = "fa-solid fa-volume-xmark";
   }
 }
 
-// ==================== FULLSCREEN REELS TAB CONTROLLERS ====================
-let fullscreenIndex = 0;
-const fsVideoEl = document.getElementById("fullscreenReelVideo");
-
-function mountFullscreenReel(idx) {
-  const data = REEL_DATABASE[idx];
-  fsVideoEl.src = data.video;
-  fsVideoEl.muted = false;
-  document.getElementById("fullscreenLikeIcon").className = data.liked ? "fa-solid fa-heart liked-red" : "fa-solid fa-heart";
-  fsVideoEl.play().catch(() => {});
+function toggleSingleLike(iconId, countId) {
+  const icon = document.getElementById(iconId);
+  const count = document.getElementById(countId);
+  if (icon.classList.contains("liked-red")) {
+    icon.className = "fa-regular fa-heart";
+  } else {
+    icon.className = "fa-solid fa-heart liked-red";
+  }
 }
 
-function handleFullscreenReelTap() {
-  if (fsVideoEl.paused) fsVideoEl.play();
-  else fsVideoEl.pause();
-}
-
-function handleFullscreenReelDoubleTap() {
-  const burst = document.getElementById("fullscreenBurstHeart");
+function handleDoubleTapLike(iconId, burstId, countId) {
+  const burst = document.getElementById(burstId);
   burst.classList.add("pop");
   setTimeout(() => burst.classList.remove("pop"), 500);
-  document.getElementById("fullscreenLikeIcon").className = "fa-solid fa-heart liked-red";
+
+  const icon = document.getElementById(iconId);
+  icon.className = "fa-solid fa-heart liked-red";
 }
 
-function toggleFullscreenLike() {
-  const icon = document.getElementById("fullscreenLikeIcon");
-  icon.classList.toggle("liked-red");
+function toggleSave(btn) {
+  const icon = btn.querySelector("i");
+  icon.classList.toggle("fa-solid");
+  icon.classList.toggle("saved-white");
 }
 
-function advanceFullscreenReel(step) {
-  fullscreenIndex = (fullscreenIndex + step + REEL_DATABASE.length) % REEL_DATABASE.length;
-  mountFullscreenReel(fullscreenIndex);
-}
-
-// ==================== PROFILE & UPLOAD ====================
-function renderProfileSection() {
-  document.getElementById("profileHeroName").innerText = userProfile.name;
-  document.getElementById("profileTopUsername").innerText = userProfile.name;
-  document.getElementById("profileHeroBio").innerText = userProfile.bio;
-  document.getElementById("profileHeroPic").src = userProfile.avatar;
-  document.getElementById("profileDockAvatar").src = userProfile.avatar;
-  document.getElementById("mindBarAvatar").src = userProfile.avatar;
-
-  const displayList = globalPosts.length ? globalPosts : [SEED_DEFAULT_POST];
-  document.getElementById("profilePostCountNumber").innerText = displayList.length;
-
-  const grid = document.getElementById("profileGridWall");
-  if (grid) {
-    grid.innerHTML = displayList.map(p => `<img src="${p.image}" onclick="switchView('feedTab')" />`).join("");
+function sharePostLink() {
+  if (navigator.share) {
+    navigator.share({ title: 'Instagram', url: window.location.href }).catch(() => {});
+  } else {
+    navigator.clipboard.writeText(window.location.href);
+    alert("Post link copied to clipboard! 🔗");
   }
 }
 
-function openCreatePostSheet() { document.getElementById("createPostModal").style.display = "flex"; }
-function closeCreatePostSheet() { document.getElementById("createPostModal").style.display = "none"; }
+function viewStory(user, img) {
+  alert("Viewing story of: " + user);
+}
 
-function dispatchNewPost() {
-  const fileInput = document.getElementById("postImageUploadInput");
-  const file = fileInput.files[0];
-  const captionInput = document.getElementById("postCaptionTextInput");
-  const btn = document.getElementById("btnPublishPost");
+// Upload modal
+function openCreateModal() { document.getElementById("uploadModal").style.display = "flex"; }
+function closeCreateModal() { document.getElementById("uploadModal").style.display = "none"; }
 
+function dispatchUserPost() {
+  const file = document.getElementById("postFileInput").files[0];
+  const caption = document.getElementById("postCaptionInput").value;
   if (!file) {
-    alert("Please choose an image!");
+    alert("Please choose a photo from gallery!");
     return;
   }
-
-  btn.innerText = "Sharing...";
-  btn.disabled = true;
-
   const reader = new FileReader();
   reader.onload = function(e) {
-    const newPost = {
-      id: Date.now(),
-      type: "photo",
-      username: userProfile.name,
-      avatar: userProfile.avatar,
-      image: e.target.result,
-      caption: captionInput.value || "",
-      likes: 0,
-      liked: false
-    };
-
-    savePostToDB(newPost, function() {
-      globalPosts.unshift(newPost);
-      renderFeed();
-      renderProfileSection();
-
-      closeCreatePostSheet();
-      btn.innerText = "Share Post";
-      btn.disabled = false;
-      fileInput.value = "";
-      captionInput.value = "";
-
-      switchView("feedTab");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    });
+    const newId = Date.now();
+    const newHtml = `
+      <article class="feed-card" id="post-${newId}">
+        <div class="post-header">
+          <div class="post-header-left">
+            <div class="post-avatar-wrap">
+              <img src="${SAVED_PERMANENT_DP}" class="post-avatar" />
+            </div>
+            <div class="post-user-meta">
+              <div class="post-username-row">
+                <span class="post-username">${SAVED_PERMANENT_USERNAME}</span>
+                <i class="fa-solid fa-circle-check verified-blue"></i>
+              </div>
+              <div class="post-subtitle-ai"><i class="fa-regular fa-comment-dots"></i> Translate with AI</div>
+            </div>
+          </div>
+          <div class="post-header-right">
+            <button class="post-follow-pill active">Following</button>
+            <i class="fa-solid fa-bars post-menu-bars"></i>
+          </div>
+        </div>
+        <div class="post-media-stage" ondblclick="handleDoubleTapLike('like-icon-${newId}', 'burst-${newId}', 'like-cnt-${newId}')">
+          <img src="${e.target.result}" loading="lazy" />
+          <i class="fa-solid fa-heart heart-burst" id="burst-${newId}"></i>
+          <div class="media-sound-btn" onclick="toggleSound(this)"><i class="fa-solid fa-volume-xmark"></i></div>
+        </div>
+        <div class="post-action-row">
+          <div class="post-action-left">
+            <div class="action-counter-item" onclick="toggleSingleLike('like-icon-${newId}', 'like-cnt-${newId}')">
+              <i class="fa-regular fa-heart" id="like-icon-${newId}"></i>
+              <span id="like-cnt-${newId}">1</span>
+            </div>
+            <div class="action-counter-item"><i class="fa-regular fa-comment"></i><span>0</span></div>
+            <div class="action-counter-item"><i class="fa-solid fa-retweet"></i><span>0</span></div>
+            <div class="action-counter-item" onclick="sharePostLink()"><i class="fa-regular fa-paper-plane"></i><span>0</span></div>
+          </div>
+          <div class="action-counter-item" onclick="toggleSave(this)"><i class="fa-regular fa-bookmark"></i></div>
+        </div>
+        <div class="post-caption-box">
+          <span class="author">${SAVED_PERMANENT_USERNAME}</span>${caption || ''}
+          <div class="post-date-tag">JUST NOW • See translation</div>
+        </div>
+      </article>
+    `;
+    const container = document.getElementById("feedPostsContainer");
+    container.insertAdjacentHTML("afterbegin", newHtml);
+    closeCreateModal();
+    document.getElementById("postFileInput").value = "";
+    document.getElementById("postCaptionInput").value = "";
+    switchNav("viewFeed");
   };
   reader.readAsDataURL(file);
 }
-
-function openProfileEditSheet() {
-  document.getElementById("editProfileDisplayName").value = userProfile.name;
-  document.getElementById("editProfileBioDetails").value = userProfile.bio;
-  document.getElementById("editProfileModal").style.display = "flex";
-}
-function closeProfileEditSheet() { document.getElementById("editProfileModal").style.display = "none"; }
-
-function saveProfileDetails() {
-  const name = document.getElementById("editProfileDisplayName").value.trim();
-  const bio = document.getElementById("editProfileBioDetails").value.trim();
-  const picFile = document.getElementById("editProfilePicFile").files[0];
-
-  if (name) userProfile.name = name;
-  if (bio) userProfile.bio = bio;
-
-  localStorage.setItem("pf_permanent_username", userProfile.name);
-  localStorage.setItem("pf_permanent_bio", userProfile.bio);
-
-  if (picFile) {
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      userProfile.avatar = e.target.result;
-      localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-      renderProfileSection();
-      renderFeed();
-      closeProfileEditSheet();
-      alert("Profile permanently saved! 💙");
-    };
-    reader.readAsDataURL(picFile);
-  } else {
-    renderProfileSection();
-    renderFeed();
-    closeProfileEditSheet();
-    alert("Profile permanently saved! 💙");
-  }
-}
-
-function quickChangeDP() { document.getElementById("directDpFileInput").click(); }
-
-function handleDirectDP(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    userProfile.avatar = e.target.result;
-    localStorage.setItem("pf_permanent_dp", userProfile.avatar);
-    renderProfileSection();
-    renderFeed();
-    alert("DP updated! 📸");
-  };
-  reader.readAsDataURL(file);
-}
-
-// Explore Grid
-const EXPLORE_PHOTOS = [
-  "https://picsum.photos/400/400?random=11",
-  "https://picsum.photos/400/400?random=12",
-  "https://picsum.photos/400/400?random=13",
-  "https://picsum.photos/400/400?random=14",
-  "https://picsum.photos/400/400?random=15",
-  "https://picsum.photos/400/400?random=16"
-];
-
-function renderExploreGrid() {
-  const wall = document.getElementById("exploreGridWall");
-  if (!wall) return;
-  wall.innerHTML = EXPLORE_PHOTOS.map(url => `<img src="${url}" onclick="alert('Photo view!')" />`).join("");
-}
-
-function handleExploreSearch(q) {
-  const wall = document.getElementById("exploreGridWall");
-  if (!q) { renderExploreGrid(); return; }
-  wall.innerHTML = EXPLORE_PHOTOS.slice(0, 3).map(url => `<img src="${url}" />`).join("");
-}
-
-// ==================== INITIAL BOOT ====================
-window.addEventListener("DOMContentLoaded", () => {
-  renderProfileSection();
-  renderStories();
-  initDB(function() {
-    getAllPostsFromDB(function(savedPosts) {
-      if (savedPosts && savedPosts.length) {
-        globalPosts = savedPosts.sort((a, b) => b.id - a.id);
-      }
-      renderFeed();
-      renderProfileSection();
-    });
-  });
-  mountFullscreenReel(0);
-});
 </script>
 </body>
 </html>
